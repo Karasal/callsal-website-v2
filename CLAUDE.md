@@ -56,16 +56,14 @@ callsal-website-v2/
 - Copy/messaging (same words, new skin)
 
 ## Build Sequence Status
-- [x] Phase 1: Scaffold + Core Shell ✅ (commit 5394e88)
-- [ ] Phase 2: Hero Section (The Money Shot)
-- [ ] Phase 3: Services ("The Armory")
-- [ ] Phase 4: Video Portfolio
-- [ ] Phase 5: Meet Salman
-- [ ] Phase 6: The Offer
-- [ ] Phase 7: Booking System
-- [ ] Phase 8: Auth + Client Hub
-- [ ] Phase 9: Polish
-- [ ] Phase 10: Deploy + Migrate
+- [x] Phase 1: Scaffold + Core Shell ✅
+- [x] Phase 2-4: Hero, Armory, VideoPortfolio ✅
+- [x] Phase 5: Meet Salman ✅
+- [x] Phase 6: The Offer ✅
+- [x] Phase 7: Booking System ✅
+- [x] Phase 8: Auth + Dashboard + Onboarding ✅
+- [x] Phase 9: Supporting Components ✅ (orphan v1 files confirmed unused)
+- [x] Phase 10: Polish + Deploy ✅
 
 ## Key Decisions
 - Syne font chosen over Space Grotesk — bolder, more distinctive for 2026 aesthetic
