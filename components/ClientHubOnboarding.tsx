@@ -106,18 +106,18 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
     } finally { setIsSubmitting(false) }
   }
 
-  const inputClass = "w-full bg-white/5 border-2 border-white/10 rounded-xl p-3 text-sm text-white outline-none focus:border-[#CCFF00] transition-all placeholder:text-white/20"
+  const inputClass = "w-full bg-gray-100 border-2 border-gray-200 rounded-xl p-3 text-sm text-gray-900 outline-none focus:border-[#CCFF00] transition-all placeholder:text-gray-400"
 
   const steps = [
     { icon: Sparkles, title: `Welcome, ${user?.name || 'there'}!`, subtitle: "Thanks for meeting with me! Now let's get to know YOU and your business so we can create an amazing video together.",
-      content: (<div className="text-center"><p className="text-sm text-white/40 mb-8">This should take about 5 minutes. Your answers help me prepare for your shoot.</p></div>),
+      content: (<div className="text-center"><p className="text-sm text-gray-500 mb-8">This should take about 5 minutes. Your answers help me prepare for your shoot.</p></div>),
       buttonText: "Let's Begin" },
     { icon: Building2, title: "What's your business name?", subtitle: "The name your customers know you by",
       content: (<input ref={inputRef} type="text" value={formData.businessName} onChange={(e) => updateField('businessName', e.target.value)} placeholder="e.g. Peak Performance Gym" className={inputClass} style={{ borderColor: formData.businessName ? '#CCFF00' : undefined }} />) },
     { icon: Building2, title: "What industry are you in?", subtitle: "This helps us tailor the video style",
       content: (<div className="grid grid-cols-2 gap-2 max-h-[280px] overflow-y-auto">{INDUSTRIES.map(industry => (
         <button key={industry} onClick={() => updateField('industry', industry)}
-          className={`p-3 text-left text-sm rounded-xl transition-all ${formData.industry === industry ? 'bg-[#CCFF00]/10 border border-[#CCFF00] text-[#CCFF00]' : 'glass border border-white/10 text-white/60'}`}>{industry}</button>
+          className={`p-3 text-left text-sm rounded-xl transition-all ${formData.industry === industry ? 'bg-[#CCFF00]/20 border border-[#CCFF00] text-gray-900 font-medium' : 'glass border border-gray-200 text-gray-600'}`}>{industry}</button>
       ))}</div>) },
     { icon: Building2, title: "What's your website?", subtitle: "Optional - helps us research your brand", optional: true,
       content: (<input ref={inputRef} type="url" value={formData.website} onChange={(e) => updateField('website', e.target.value)} placeholder="https://yourbusiness.com" className={inputClass} style={{ borderColor: formData.website ? '#CCFF00' : undefined }} />) },
@@ -129,21 +129,21 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
       content: (<textarea ref={inputRef} value={formData.specialOffer} onChange={(e) => updateField('specialOffer', e.target.value)} placeholder="e.g. 50% off first month, Free consultation..." rows={2} className={`${inputClass} resize-none`} style={{ borderColor: formData.specialOffer.length > 10 ? '#CCFF00' : undefined }} />) },
     { icon: Calendar, title: "Schedule your first shoot", subtitle: "Pick a day and time for your first 2-hour session",
       content: (<div className="space-y-3">
-        <div><label className="block text-xs uppercase tracking-wider mb-1 text-white/40">Preferred Date</label>
+        <div><label className="block text-xs uppercase tracking-wider mb-1 text-gray-500">Preferred Date</label>
           <input ref={inputRef} type="date" value={formData.shootDay1.date} onChange={(e) => updateNestedField('shootDay1', 'date', e.target.value)} min={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]} className={inputClass} style={{ borderColor: formData.shootDay1.date ? '#CCFF00' : undefined }} /></div>
-        <div><label className="block text-xs uppercase tracking-wider mb-1 text-white/40">Time Preference</label>
+        <div><label className="block text-xs uppercase tracking-wider mb-1 text-gray-500">Time Preference</label>
           <div className="grid grid-cols-2 gap-1.5">{TIME_PREFERENCES.map(opt => (
             <button key={opt.value} onClick={() => updateNestedField('shootDay1', 'timePreference', opt.value)}
-              className={`p-2 text-xs text-left rounded-lg transition-all ${formData.shootDay1.timePreference === opt.value ? 'bg-[#CCFF00]/10 border border-[#CCFF00] text-[#CCFF00]' : 'glass border border-white/10 text-white/60'}`}>{opt.label}</button>
+              className={`p-2 text-xs text-left rounded-lg transition-all ${formData.shootDay1.timePreference === opt.value ? 'bg-[#CCFF00]/20 border border-[#CCFF00] text-gray-900 font-medium' : 'glass border border-gray-200 text-gray-600'}`}>{opt.label}</button>
           ))}</div></div></div>) },
     { icon: Calendar, title: "Schedule your second shoot", subtitle: "Pick a day and time for your second 2-hour session", hint: "We recommend scheduling shoots a few days apart",
       content: (<div className="space-y-3">
-        <div><label className="block text-xs uppercase tracking-wider mb-1 text-white/40">Preferred Date</label>
+        <div><label className="block text-xs uppercase tracking-wider mb-1 text-gray-500">Preferred Date</label>
           <input ref={inputRef} type="date" value={formData.shootDay2.date} onChange={(e) => updateNestedField('shootDay2', 'date', e.target.value)} min={formData.shootDay1.date || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]} className={inputClass} style={{ borderColor: formData.shootDay2.date ? '#CCFF00' : undefined }} /></div>
-        <div><label className="block text-xs uppercase tracking-wider mb-1 text-white/40">Time Preference</label>
+        <div><label className="block text-xs uppercase tracking-wider mb-1 text-gray-500">Time Preference</label>
           <div className="grid grid-cols-2 gap-1.5">{TIME_PREFERENCES.map(opt => (
             <button key={opt.value} onClick={() => updateNestedField('shootDay2', 'timePreference', opt.value)}
-              className={`p-2 text-xs text-left rounded-lg transition-all ${formData.shootDay2.timePreference === opt.value ? 'bg-[#CCFF00]/10 border border-[#CCFF00] text-[#CCFF00]' : 'glass border border-white/10 text-white/60'}`}>{opt.label}</button>
+              className={`p-2 text-xs text-left rounded-lg transition-all ${formData.shootDay2.timePreference === opt.value ? 'bg-[#CCFF00]/20 border border-[#CCFF00] text-gray-900 font-medium' : 'glass border border-gray-200 text-gray-600'}`}>{opt.label}</button>
           ))}</div></div></div>) },
     { icon: Phone, title: "Best number to reach you?", subtitle: "We'll text you shoot reminders and updates",
       content: (<input ref={inputRef} type="tel" value={formData.phone} onChange={(e) => updateField('phone', e.target.value)} placeholder="(403) 555-1234" className={inputClass} style={{ borderColor: formData.phone.length >= 10 ? '#CCFF00' : undefined }} />) },
@@ -166,15 +166,15 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
   const progress = ((step) / (steps.length - 1)) * 100
 
   return (
-    <div className="h-screen flex flex-col items-center justify-center relative overflow-hidden px-4 py-8 bg-black">
+    <div className="h-screen flex flex-col items-center justify-center relative overflow-hidden px-4 py-8 bg-white">
       {/* Progress Bar */}
-      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-white/10">
+      <div className="fixed top-0 left-0 right-0 h-1 z-50 bg-gray-200">
         <motion.div className="h-full bg-[#CCFF00]" style={{ boxShadow: '0 0 20px rgba(204, 255, 0, 0.3)' }} initial={{ width: 0 }} animate={{ width: `${progress}%` }} transition={{ duration: 0.3 }} />
       </div>
 
       {/* Step Counter */}
       <div className="fixed top-3 right-4 z-50">
-        <span className="text-xs font-body text-white/40">{step + 1} / {steps.length}</span>
+        <span className="text-xs font-body text-gray-500">{step + 1} / {steps.length}</span>
       </div>
 
       {/* Main Content */}
@@ -187,17 +187,17 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
               <Icon size={22} className="text-[#CCFF00]" />
             </motion.div>
 
-            <h1 className="text-xl md:text-2xl font-display font-bold text-white mb-1 shrink-0">{currentStep.title}</h1>
-            <p className="text-sm text-white/60 mb-4 shrink-0">{currentStep.subtitle}</p>
+            <h1 className="text-xl md:text-2xl font-display font-bold text-gray-900 mb-1 shrink-0">{currentStep.title}</h1>
+            <p className="text-sm text-gray-600 mb-4 shrink-0">{currentStep.subtitle}</p>
 
             <div className="text-left mb-4 flex-1 min-h-0 overflow-y-auto">{currentStep.content}</div>
 
-            {currentStep.hint && <p className="text-xs mb-3 shrink-0 text-white/40">{currentStep.hint}</p>}
-            {submitError && <p className="text-sm mb-3 text-red-400 shrink-0">{submitError}</p>}
+            {currentStep.hint && <p className="text-xs mb-3 shrink-0 text-gray-500">{currentStep.hint}</p>}
+            {submitError && <p className="text-sm mb-3 text-red-500 shrink-0">{submitError}</p>}
 
             <div className="flex items-center justify-between gap-4 shrink-0 mt-2">
               {step > 0 ? (
-                <button onClick={prevStep} className="flex items-center gap-1.5 px-4 py-2 text-sm btn-glass rounded-lg"><ArrowLeft size={14} /> Back</button>
+                <button onClick={prevStep} className="flex items-center gap-1.5 px-4 py-2 text-sm btn-glass rounded-lg text-gray-700"><ArrowLeft size={14} /> Back</button>
               ) : <div />}
 
               {step === steps.length - 1 ? (
@@ -207,20 +207,20 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
                 </button>
               ) : (
                 <button onClick={nextStep} disabled={!canAdvance()}
-                  className={`flex items-center gap-1.5 px-6 py-2 text-sm font-bold rounded-lg transition-all ${canAdvance() ? 'btn-primary' : 'bg-white/5 text-white/30 cursor-not-allowed'}`}
+                  className={`flex items-center gap-1.5 px-6 py-2 text-sm font-bold rounded-lg transition-all ${canAdvance() ? 'btn-primary' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}`}
                   style={canAdvance() ? { boxShadow: '0 0 20px rgba(204, 255, 0, 0.3)' } : {}}>
                   {currentStep.buttonText || 'Continue'} <ArrowRight size={14} />
                 </button>
               )}
             </div>
 
-            {currentStep.optional && <p className="text-xs mt-2 shrink-0 text-white/40">Press Enter to skip</p>}
+            {currentStep.optional && <p className="text-xs mt-2 shrink-0 text-gray-500">Press Enter to skip</p>}
           </motion.div>
         </AnimatePresence>
       </div>
 
       <style>{`
-        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+        input[type="date"]::-webkit-calendar-picker-indicator { cursor: pointer; }
       `}</style>
     </div>
   )
@@ -228,9 +228,9 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
 
 function ReviewItem({ label, value, truncate }: { label: string; value: string; truncate?: boolean }) {
   return (
-    <div className="glass rounded-lg p-2 text-left">
-      <p className="text-[10px] uppercase tracking-wider mb-0.5 text-white/40">{label}</p>
-      <p className={`text-xs text-white ${truncate ? 'line-clamp-1' : ''}`}>{value}</p>
+    <div className="glass rounded-lg p-2 text-left border border-gray-200">
+      <p className="text-[10px] uppercase tracking-wider mb-0.5 text-gray-500">{label}</p>
+      <p className={`text-xs text-gray-900 ${truncate ? 'line-clamp-1' : ''}`}>{value}</p>
     </div>
   )
 }

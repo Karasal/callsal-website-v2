@@ -14,8 +14,8 @@
     <link rel="canonical" href="https://callsal.app/" />
 
     <!-- Theme & App Meta -->
-    <meta name="theme-color" content="#000000" />
-    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="application-name" content="CALL SAL" />
 
     <!-- Open Graph / Facebook -->
@@ -139,6 +139,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   </head>
   <body>
+    <!-- SVG Filters for Glass Displacement Effect -->
+    <svg style="position:absolute;width:0;height:0;pointer-events:none" aria-hidden="true">
+      <defs>
+        <filter id="glass-displacement">
+          <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+      </defs>
+    </svg>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

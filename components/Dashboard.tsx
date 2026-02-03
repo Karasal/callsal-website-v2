@@ -108,16 +108,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center"><AlertTriangle size={24} className="text-red-500" /></div>
                 <div>
-                  <h3 className="text-xl font-display font-black text-white uppercase tracking-tight">CANCEL BOOKING</h3>
-                  <p className="text-xs font-display text-white/40 uppercase tracking-wide">This action cannot be undone</p>
+                  <h3 className="text-xl font-display font-black text-gray-900 uppercase tracking-tight">CANCEL BOOKING</h3>
+                  <p className="text-xs font-display text-gray-400 uppercase tracking-wide">This action cannot be undone</p>
                 </div>
               </div>
               <div className="glass rounded-xl p-4 mb-6">
-                <p className="text-sm font-display font-bold text-white uppercase tracking-tight mb-2">{cancelModal.name}</p>
-                <p className="text-xs font-display text-white/50 uppercase">{formatDate(cancelModal.date)} at {formatTime(cancelModal.time)}</p>
-                <p className="text-xs font-display text-white/30 uppercase mt-2">{cancelModal.email}</p>
+                <p className="text-sm font-display font-bold text-gray-900 uppercase tracking-tight mb-2">{cancelModal.name}</p>
+                <p className="text-xs font-display text-gray-500 uppercase">{formatDate(cancelModal.date)} at {formatTime(cancelModal.time)}</p>
+                <p className="text-xs font-display text-gray-400 uppercase mt-2">{cancelModal.email}</p>
               </div>
-              <p className="text-sm font-display text-white/60 uppercase tracking-wide mb-8">This will remove the booking from your dashboard.</p>
+              <p className="text-sm font-display text-gray-500 uppercase tracking-wide mb-8">This will remove the booking from your dashboard.</p>
               <div className="flex gap-3">
                 <button onClick={() => setCancelModal(null)} className="flex-1 btn-glass px-6 py-4 text-[10px] tracking-widest uppercase">KEEP BOOKING</button>
                 <button onClick={() => handleCancelBooking(cancelModal.id)} className="flex-1 px-6 py-4 bg-red-500 rounded-xl text-white font-display font-black text-[10px] tracking-widest uppercase hover:bg-red-600 transition-all flex items-center justify-center gap-2">
@@ -131,14 +131,14 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
 
       {/* Header */}
       <div className="mb-16">
-        <span className="text-[12px] font-body tracking-[1em] text-white/50 uppercase font-black block mb-8 leading-none">BOOKING MANAGEMENT</span>
-        <h2 className="text-7xl md:text-8xl font-display font-black text-white uppercase tracking-tighter gradient-text leading-[0.85]">BOOKINGS.</h2>
+        <span className="text-[12px] font-body tracking-[1em] text-gray-500 uppercase font-black block mb-8 leading-none">BOOKING MANAGEMENT</span>
+        <h2 className="text-7xl md:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter gradient-text leading-[0.85]">BOOKINGS.</h2>
       </div>
 
       {/* Actions */}
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-4">
-          <div className="text-sm font-display font-black text-white/40 uppercase tracking-widest">
+          <div className="text-sm font-display font-black text-gray-400 uppercase tracking-widest">
             {bookings.length} UPCOMING {bookings.length === 1 ? 'BOOKING' : 'BOOKINGS'}
           </div>
           <a href="https://crm.callsal.app" className="btn-primary px-4 py-2 text-[9px] tracking-widest uppercase flex items-center gap-2">
@@ -153,12 +153,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
       {error && <div className="mb-8 p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm font-display uppercase tracking-wide">{error}</div>}
 
       {loading && bookings.length === 0 ? (
-        <div className="flex items-center justify-center py-32"><Loader2 className="animate-spin text-white/40" size={40} /></div>
+        <div className="flex items-center justify-center py-32"><Loader2 className="animate-spin text-gray-400" size={40} /></div>
       ) : bookings.length === 0 ? (
         <div className="glass rounded-2xl p-20 text-center">
-          <Calendar size={56} className="mx-auto mb-8 text-white/20" />
-          <p className="text-xl font-display font-black text-white/40 uppercase tracking-wide mb-2">NO UPCOMING BOOKINGS</p>
-          <p className="text-xs font-display text-white/20 uppercase tracking-wide">Bookings from callsal.app will appear here</p>
+          <Calendar size={56} className="mx-auto mb-8 text-gray-300" />
+          <p className="text-xl font-display font-black text-gray-400 uppercase tracking-wide mb-2">NO UPCOMING BOOKINGS</p>
+          <p className="text-xs font-display text-gray-300 uppercase tracking-wide">Bookings from callsal.app will appear here</p>
         </div>
       ) : (
         <AnimatePresence mode="popLayout">
@@ -172,33 +172,33 @@ export const Dashboard: React.FC<DashboardProps> = ({ user }) => {
                   className={`glass rounded-2xl p-6 lg:p-8 border-l-4 ${
                     booking.status === 'pending' ? 'border-yellow-500 bg-yellow-500/5' :
                     booking.status === 'confirmed' ? 'border-green-500 bg-green-500/5' :
-                    'border-white/20 bg-white/5'
+                    'border-gray-200 bg-gray-100/50'
                   }`}
                 >
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center gap-3 mb-4">
                         <span className={`px-3 py-1 rounded-lg text-[9px] font-display font-black uppercase tracking-widest ${
-                          booking.status === 'pending' ? 'bg-yellow-500/20 text-yellow-500' :
-                          booking.status === 'confirmed' ? 'bg-green-500/20 text-green-500' :
-                          'bg-white/10 text-white/60'
+                          booking.status === 'pending' ? 'bg-yellow-500/20 text-yellow-600' :
+                          booking.status === 'confirmed' ? 'bg-green-500/20 text-green-600' :
+                          'bg-gray-200 text-gray-500'
                         }`}>{booking.status.toUpperCase()}</span>
-                        <span className="flex items-center gap-1 px-3 py-1 glass rounded-lg text-[9px] font-display font-black text-white/60 uppercase tracking-widest">
+                        <span className="flex items-center gap-1 px-3 py-1 glass rounded-lg text-[9px] font-display font-black text-gray-500 uppercase tracking-widest">
                           {getMeetingIcon(booking.meetingType)}<span className="ml-1">{booking.meetingType}</span>
                         </span>
                       </div>
-                      <h4 className="text-xl font-display font-black text-white uppercase tracking-tight mb-3">{booking.name}</h4>
+                      <h4 className="text-xl font-display font-black text-gray-900 uppercase tracking-tight mb-3">{booking.name}</h4>
                       <div className="flex flex-wrap items-center gap-4 text-sm font-display text-[#CCFF00] uppercase tracking-wide mb-4">
                         <span className="flex items-center gap-2"><Calendar size={14} />{formatDate(booking.date)}</span>
                         <span className="flex items-center gap-2"><Clock size={14} />{formatTime(booking.time)}</span>
                       </div>
-                      <div className="space-y-1 text-sm font-display text-white/60 uppercase tracking-wide mb-4">
-                        <div className="flex items-center gap-2"><Mail size={12} className="text-white/30" />{booking.email}</div>
-                        {booking.phone && <div className="flex items-center gap-2"><Phone size={12} className="text-white/30" />{booking.phone}</div>}
+                      <div className="space-y-1 text-sm font-display text-gray-500 uppercase tracking-wide mb-4">
+                        <div className="flex items-center gap-2"><Mail size={12} className="text-gray-400" />{booking.email}</div>
+                        {booking.phone && <div className="flex items-center gap-2"><Phone size={12} className="text-gray-400" />{booking.phone}</div>}
                       </div>
                       {booking.notes && (
                         <div className="p-4 glass rounded-xl border-l-2 border-[#CCFF00]/30">
-                          <p className="text-sm font-display text-white/70 leading-relaxed">{booking.notes}</p>
+                          <p className="text-sm font-display text-gray-600 leading-relaxed">{booking.notes}</p>
                         </div>
                       )}
                     </div>

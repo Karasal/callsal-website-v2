@@ -23,11 +23,11 @@ const VideoModal = ({ id, title, onClose, isMobile }: { id: string, title: strin
     className="fixed inset-0 bg-black/98 z-[500] flex items-center justify-center p-4 lg:p-12 backdrop-blur-3xl"
     onClick={onClose}
   >
-    <button onClick={onClose} className="absolute top-6 right-6 text-white/40 hover:text-white z-10">
+    <button onClick={onClose} className="absolute top-6 right-6 text-white/60 hover:text-white z-10">
       <X size={32} />
     </button>
     <div className="max-w-6xl w-full">
-      <div className="aspect-video w-full bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+      <div className="aspect-video w-full bg-black rounded-xl overflow-hidden border border-gray-200 shadow-2xl">
         <iframe
           src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`}
           title={title}
@@ -93,17 +93,17 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00] shrink-0" />
               <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-body tracking-[0.2em] sm:tracking-[0.5em] uppercase font-black gradient-text">FOR CALGARY & SURROUNDING AREAS</span>
             </div>
-            <h1 ref={heroRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.85]">
+            <h1 ref={heroRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-[0.85]">
               <span className="text-red-500" style={{ WebkitTextFillColor: '#CCFF00' }}>FREE</span><span style={glowStyle}> VIDEO.</span><br />
               <span style={glowStyle}>ZERO CATCH.</span>
             </h1>
           </motion.div>
 
-          <motion.p variants={mobileItemVariants} className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-white/80 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
+          <motion.p variants={mobileItemVariants} className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-gray-500 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
             A <span className="text-red-500">NETFLIX</span>-QUALITY <span className="text-red-500">CINEMATIC</span> FOR YOUR <span className="text-red-500">BUSINESS</span>.<br />
             SHOT ON A <span className="text-red-500">RED KOMODO-X</span> CINEMA CAMERA.<br />
             <span className="text-red-500">EDITED</span>, COLOUR <span className="text-red-500">GRADED</span>, AND <span className="text-red-500">SOUNDTRACKED</span>.
-            <span className="text-white font-black block mt-3 sm:mt-4">COMPLETELY FREE.</span>
+            <span className="text-gray-900 font-black block mt-3 sm:mt-4">COMPLETELY FREE.</span>
           </motion.p>
 
           <motion.div variants={mobileItemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6">
@@ -135,8 +135,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   alt={activeProject.title}
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 border-2 border-white/40 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
-                    <Play className="text-white ml-1" size={32} />
+                  <div className="w-20 h-20 border-2 border-gray-200 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
+                    <Play className="text-gray-900 ml-1" size={32} />
                   </div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
@@ -155,7 +155,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           <motion.div variants={mobileItemVariants} className="max-w-4xl">
             <div className="flex items-center gap-4 mb-8">
               <Heart size={24} className="text-black" />
-              <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em] text-black/40">A QUICK WORD FROM SAL</span>
+              <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em] text-gray-400">A QUICK WORD FROM SAL</span>
             </div>
             <h2 ref={storyRef} style={storyGlowStyle} className="inline-block text-2xl sm:text-4xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-[1] mb-6 sm:mb-10">
               "IF YOU'RE GOING TO INVITE YOURSELF OVER —<br /><span className="bg-black text-white px-2 sm:px-3 py-1 inline-block mt-2 rounded-lg">COME BEARING GIFTS.</span>"
@@ -163,7 +163,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           </motion.div>
 
           <motion.div variants={mobileItemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-black/70">
+            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-500">
               <p>
                 HEY, I'M <span className="text-red-500">SAL</span>. MY WIFE AND I JUST MOVED OUR <span className="text-red-500">YOUNG FAMILY OF FIVE</span> FROM ONTARIO TO <span className="text-red-500">CALGARY</span>.
                 THREE KIDS UNDER SIX, A <span className="text-red-500">DREAM</span> OF BUILDING SOMETHING <span className="text-red-500">MEANINGFUL</span>, AND <span className="text-red-500">ZERO CONNECTIONS</span> IN THIS CITY.
@@ -176,7 +176,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 THEN <span className="text-red-500">AI</span> HAPPENED.
               </p>
             </div>
-            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-black/70">
+            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-500">
               <p>
                 <span className="text-red-500">I REALIZED</span>: IF I <span className="text-red-500">COMBINE</span> WHAT I KNOW ABOUT <span className="text-red-500">MARKETING</span> WITH WHAT <span className="text-red-500">AI</span> CAN DO,
                 I CAN HELP <span className="text-red-500">BUSINESS OWNERS</span> IN WAYS THAT <span className="text-red-500">USED TO COST A FORTUNE</span>.
@@ -198,21 +198,21 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-6">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE DEAL</span>
-          <h2 ref={whatYouGetRef} style={whatYouGetGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+          <h2 ref={whatYouGetRef} style={whatYouGetGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
             WHAT YOU GET.
           </h2>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* The Meeting */}
-          <motion.div variants={mobileItemVariants} className="glass rounded-2xl p-6 sm:p-10 lg:p-16 group hover:bg-white/[0.08] transition-all">
+          <motion.div variants={mobileItemVariants} className="glass rounded-2xl p-6 sm:p-10 lg:p-16 group hover:bg-black/[0.05] transition-all">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 glass rounded-xl flex items-center justify-center">
-                <Users size={24} className="text-white" />
+                <Users size={24} className="text-gray-900" />
               </div>
               <span className="text-xs sm:text-[10px] font-body font-black tracking-[0.3em] text-red-500 uppercase">PART 1: THE MEETING</span>
             </div>
-            <h3 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-8 leading-none">
+            <h3 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-8 leading-none">
               30 MINUTES<br />WITH ME.
             </h3>
             <div className="space-y-4">
@@ -225,7 +225,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-4 glass rounded-xl">
                   <CheckCircle size={16} className="text-red-500 mt-1 shrink-0" />
-                  <span className="text-white/60 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
+                  <span className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
@@ -239,7 +239,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               </div>
               <span className="text-xs sm:text-[10px] font-body font-black tracking-[0.3em] text-red-500 uppercase">PART 2: YOUR FREE GIFT</span>
             </div>
-            <h3 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-8 leading-none">
+            <h3 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-8 leading-none">
               A CINEMATIC<br />FOR YOUR BUSINESS.
             </h3>
             <div className="space-y-4">
@@ -253,7 +253,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-4 bg-black/20 border border-[#CCFF00]/10 rounded-xl">
                   <CheckCircle size={16} className="text-red-500 mt-1 shrink-0" />
-                  <span className="text-white/70 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
+                  <span className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
@@ -291,7 +291,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               { label: "SAME TOOLS AS", value: "NETFLIX & MARVEL" }
             ].map((item, i) => (
               <div key={i} className="bg-black text-white p-4 sm:p-6 lg:p-8 rounded-xl">
-                <span className="text-[9px] sm:text-[10px] font-body text-white/40 uppercase tracking-widest block mb-2 font-black">
+                <span className="text-[9px] sm:text-[10px] font-body text-gray-400 uppercase tracking-widest block mb-2 font-black">
                   {item.label}
                 </span>
                 <p className="text-lg sm:text-xl lg:text-3xl font-display font-black uppercase tracking-tighter">
@@ -307,7 +307,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block mb-6">THE NUMBERS</span>
-          <h2 ref={simpleMathRef} style={simpleMathGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+          <h2 ref={simpleMathRef} style={simpleMathGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
             SIMPLE MATH.
           </h2>
         </motion.div>
@@ -322,15 +322,15 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <motion.div
               key={i}
               variants={mobileItemVariants}
-              className="glass rounded-2xl p-4 sm:p-8 lg:p-12 text-center group hover:bg-white/[0.08] transition-all"
+              className="glass rounded-2xl p-4 sm:p-8 lg:p-12 text-center group hover:bg-black/[0.05] transition-all"
             >
               <span style={{ color: item.color }} className="text-3xl sm:text-4xl lg:text-7xl font-display font-black block mb-2 sm:mb-4">
                 {item.number}
               </span>
-              <span className="text-[10px] sm:text-xs lg:text-sm font-display font-black text-white uppercase tracking-tight block mb-1 sm:mb-2">
+              <span className="text-[10px] sm:text-xs lg:text-sm font-display font-black text-gray-900 uppercase tracking-tight block mb-1 sm:mb-2">
                 {item.label}
               </span>
-              <span className="text-[8px] sm:text-[9px] font-body text-white/40 uppercase tracking-wider sm:tracking-widest font-black">
+              <span className="text-[8px] sm:text-[9px] font-body text-gray-400 uppercase tracking-wider sm:tracking-widest font-black">
                 {item.sub}
               </span>
             </motion.div>
@@ -343,10 +343,10 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
         <motion.div variants={mobileItemVariants} className="flex items-center gap-4">
           <div className="w-12 h-[1px] bg-[#CCFF00]" />
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black">THE PROCESS</span>
-          <div className="flex-1 h-[1px] bg-white/10" />
+          <div className="flex-1 h-[1px] bg-gray-200" />
         </motion.div>
 
-        <h2 ref={howItWorksRef} style={howItWorksGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+        <h2 ref={howItWorksRef} style={howItWorksGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
           HOW IT WORKS.
         </h2>
 
@@ -360,21 +360,21 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <motion.div
               key={i}
               variants={mobileItemVariants}
-              className="glass rounded-2xl p-5 sm:p-8 lg:p-10 flex items-start gap-4 sm:gap-6 lg:gap-8 group hover:bg-white/[0.08] transition-all"
+              className="glass rounded-2xl p-5 sm:p-8 lg:p-10 flex items-start gap-4 sm:gap-6 lg:gap-8 group hover:bg-black/[0.05] transition-all"
             >
               <div className="flex flex-col items-center gap-3 sm:gap-4 shrink-0">
                 <span className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-red-500">
                   {item.step}
                 </span>
-                <div className="w-10 h-10 sm:w-12 sm:h-12 glass rounded-xl flex items-center justify-center text-white/40">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 glass rounded-xl flex items-center justify-center text-gray-400">
                   {item.icon}
                 </div>
               </div>
               <div className="min-w-0">
-                <h4 className="text-base sm:text-lg lg:text-2xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
+                <h4 className="text-base sm:text-lg lg:text-2xl font-display font-black text-gray-900 uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
                   {item.title}
                 </h4>
-                <p className="text-white/50 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
+                <p className="text-gray-500 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
                   {item.desc}
                 </p>
               </div>
@@ -388,7 +388,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
         <motion.div variants={mobileItemVariants} className="space-y-10">
           <div className="space-y-4">
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE FIT</span>
-            <h3 ref={perfectForYouRef} style={perfectForYouGlow} className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">
+            <h3 ref={perfectForYouRef} style={perfectForYouGlow} className="text-3xl lg:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
               THIS IS PERFECT<br />FOR YOU IF...
             </h3>
           </div>
@@ -406,7 +406,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-4 p-5 glass rounded-xl transition-all">
                 <ChevronRight size={16} className="text-red-500 mt-1 shrink-0" />
-                <p className="text-white/60 text-xs font-display font-bold uppercase leading-relaxed">{item}</p>
+                <p className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</p>
               </div>
             ))}
           </div>
@@ -417,7 +417,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-4">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">QUESTIONS</span>
-          <h2 ref={wonderingRef} style={wonderingGlow} className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter">
+          <h2 ref={wonderingRef} style={wonderingGlow} className="text-3xl lg:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter">
             YOU MIGHT BE WONDERING...
           </h2>
         </motion.div>
@@ -431,11 +431,11 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             { q: "I'M NOT IN CALGARY. CAN YOU STILL HELP?", a: "FOR THE VIDEO, I NEED TO BE THERE IN PERSON. BUT FOR AI CONSULTING? WE CAN ABSOLUTELY DO THAT OVER ZOOM. AND IF YOU'RE EVER IN CALGARY, THE VIDEO OFFER STILL STANDS." },
             { q: "HOW LONG IS THE FINISHED VIDEO?", a: "USUALLY 60-90 SECONDS — PERFECT FOR INSTAGRAM, TIKTOK, LINKEDIN, OR YOUR WEBSITE. LONG ENOUGH TO TELL YOUR STORY, SHORT ENOUGH TO HOLD ATTENTION." }
           ].map((item, i) => (
-            <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-5 sm:p-8 lg:p-10 group hover:bg-white/[0.08] transition-all">
-              <h4 className="text-sm sm:text-base lg:text-xl font-display font-black text-white uppercase tracking-tight mb-3 sm:mb-4">
+            <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-5 sm:p-8 lg:p-10 group hover:bg-black/[0.05] transition-all">
+              <h4 className="text-sm sm:text-base lg:text-xl font-display font-black text-gray-900 uppercase tracking-tight mb-3 sm:mb-4">
                 {item.q}
               </h4>
-              <p className="text-white/50 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
+              <p className="text-gray-500 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
                 {item.a}
               </p>
             </motion.div>
@@ -458,7 +458,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <span className="bg-black text-white px-2 sm:px-4 inline-block mt-2 rounded-lg">SOMETHING GREAT.</span>
           </h3>
 
-          <p className="text-base lg:text-xl font-display font-medium text-black/50 uppercase leading-relaxed tracking-wide max-w-2xl mx-auto">
+          <p className="text-base lg:text-xl font-display font-medium text-gray-500 uppercase leading-relaxed tracking-wide max-w-2xl mx-auto">
             30 MINUTES OF YOUR TIME. A FREE NETFLIX-QUALITY VIDEO. ZERO OBLIGATION.
             THE WORST THAT HAPPENS IS YOU GET A FREE VIDEO AND SOME GOOD IDEAS.
           </p>
@@ -478,14 +478,14 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             </a>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-black/10">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-gray-200">
             <div className="flex items-center gap-2 sm:gap-3">
-              <Mail size={14} className="text-black/40" />
-              <span className="text-[9px] sm:text-[10px] font-body font-black text-black/40 uppercase tracking-wider sm:tracking-widest">INFO@CALLSAL.APP</span>
+              <Mail size={14} className="text-gray-400" />
+              <span className="text-[9px] sm:text-[10px] font-body font-black text-gray-400 uppercase tracking-wider sm:tracking-widest">INFO@CALLSAL.APP</span>
             </div>
             <div className="flex items-center gap-2 sm:gap-3">
-              <Phone size={14} className="text-black/40" />
-              <span className="text-[9px] sm:text-[10px] font-body font-black text-black/40 uppercase tracking-wider sm:tracking-widest">905-749-0266</span>
+              <Phone size={14} className="text-gray-400" />
+              <span className="text-[9px] sm:text-[10px] font-body font-black text-gray-400 uppercase tracking-wider sm:tracking-widest">905-749-0266</span>
             </div>
           </div>
         </motion.div>
@@ -499,7 +499,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black">RECENT WORKS</span>
             <div className="w-12 h-[1px] bg-[#CCFF00]" />
           </div>
-          <h2 ref={cinematicsRef} style={cinematicsGlow} className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter">CINEMATICS.</h2>
+          <h2 ref={cinematicsRef} style={cinematicsGlow} className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-gray-900 uppercase tracking-tighter">CINEMATICS.</h2>
         </motion.div>
 
         <div id="offer-video-player" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 scroll-mt-20">
@@ -515,8 +515,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 alt={activeProject.title}
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 lg:w-28 lg:h-28 border-2 border-white/40 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
-                  <Play className="text-white ml-1" size={40} />
+                <div className="w-20 h-20 lg:w-28 lg:h-28 border-2 border-gray-200 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
+                  <Play className="text-gray-900 ml-1" size={40} />
                 </div>
               </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between opacity-0 group-hover:opacity-100 transition-all">
@@ -524,7 +524,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   <span className="text-[11px] sm:text-[9px] font-body text-red-500 uppercase font-black block mb-1">PROJECT_VIEW</span>
                   <h4 className="text-2xl font-display font-black text-white uppercase tracking-tighter">{activeProject.title}</h4>
                 </div>
-                <span className="text-[11px] sm:text-[9px] font-body text-white/50 uppercase tracking-widest">{activeProject.company}</span>
+                <span className="text-[11px] sm:text-[9px] font-body text-gray-400 uppercase tracking-widest">{activeProject.company}</span>
               </div>
             </div>
 
@@ -539,8 +539,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
                   <span className="text-[11px] sm:text-[9px] font-body tracking-[0.3em] text-red-500 uppercase font-black">CASE STUDY</span>
                 </div>
-                <h4 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-4 leading-none">{activeProject.title}</h4>
-                <p className="text-sm lg:text-base font-display font-medium text-white/50 uppercase leading-relaxed tracking-wide">
+                <h4 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-4 leading-none">{activeProject.title}</h4>
+                <p className="text-sm lg:text-base font-display font-medium text-gray-500 uppercase leading-relaxed tracking-wide">
                   {activeProject.description}
                 </p>
                 <div className="mt-8">
@@ -568,12 +568,12 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   }}
                   className={`w-full p-4 sm:p-5 lg:p-6 text-left rounded-xl border transition-all flex items-center justify-between group ${
                     activeProject.id === p.id
-                      ? 'bg-white text-black border-white'
-                      : 'glass border-white/10 text-white hover:border-white/40'
+                      ? 'bg-gray-900 text-white border-gray-900'
+                      : 'glass border-gray-200 text-gray-900 hover:border-gray-400'
                   }`}
                 >
                   <div className="min-w-0">
-                    <p className={`text-[8px] sm:text-[9px] font-body font-black uppercase mb-1 ${activeProject.id === p.id ? 'text-black/40' : 'text-white/40'}`}>{p.company}</p>
+                    <p className={`text-[8px] sm:text-[9px] font-body font-black uppercase mb-1 ${activeProject.id === p.id ? 'text-gray-400' : 'text-gray-400'}`}>{p.company}</p>
                     <p className="font-display font-black uppercase text-[11px] sm:text-xs lg:text-sm truncate">{p.title}</p>
                   </div>
                   <ChevronRight size={14} className={`shrink-0 transition-transform ${activeProject.id === p.id ? 'translate-x-1' : ''}`} />
@@ -604,7 +604,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
 
       {/* ========== FOOTER QUOTE ========== */}
       <motion.div variants={mobileItemVariants} className="text-center pt-8">
-        <p className="text-white/20 text-xs font-body uppercase tracking-widest max-w-xl mx-auto leading-relaxed">
+        <p className="text-gray-300 text-xs font-body uppercase tracking-widest max-w-xl mx-auto leading-relaxed">
           "I MOVED MY FAMILY ACROSS THE COUNTRY TO BUILD SOMETHING MEANINGFUL.
           I'M BETTING ON MYSELF, AND I'M BETTING THAT IF I HELP ENOUGH PEOPLE,
           GOOD THINGS WILL HAPPEN." — SAL

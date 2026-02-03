@@ -77,13 +77,13 @@ export function useProximityGlow(elementRef: RefObject<HTMLElement>, maxDistance
     }
   }, []);
 
-  // Generate glow style
+  // Generate glow style - works for dark text on light background
   const glowStyle = {
     textShadow: intensity > 0.05 ? `
-      0 ${8 * intensity}px ${20 * intensity}px rgba(0, 240, 255, ${0.7 * intensity}),
-      0 ${15 * intensity}px ${40 * intensity}px rgba(0, 240, 255, ${0.4 * intensity}),
-      0 ${-8 * intensity}px ${20 * intensity}px rgba(204, 255, 0, ${0.6 * intensity}),
-      0 ${-15 * intensity}px ${40 * intensity}px rgba(204, 255, 0, ${0.3 * intensity})
+      0 ${4 * intensity}px ${12 * intensity}px rgba(0, 240, 255, ${0.5 * intensity}),
+      0 ${8 * intensity}px ${24 * intensity}px rgba(0, 240, 255, ${0.25 * intensity}),
+      0 ${-4 * intensity}px ${12 * intensity}px rgba(204, 255, 0, ${0.4 * intensity}),
+      0 ${-8 * intensity}px ${24 * intensity}px rgba(204, 255, 0, ${0.2 * intensity})
     ` : 'none',
     transition: 'text-shadow 0.2s ease-out',
   } as React.CSSProperties;

@@ -44,28 +44,28 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
               <div className="w-12 h-[1px] bg-[#CCFF00]" />
               <span className="text-[10px] lg:text-[11px] font-body tracking-[0.5em] uppercase font-black gradient-text">THE HUMAN ELEMENT</span>
             </div>
-            <h1 ref={heroRef} className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.8]">
+            <h1 ref={heroRef} className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-[0.8]">
               <span className="text-[#CCFF00]" style={{ WebkitTextFillColor: '#CCFF00' }}>HEY</span><span style={glowStyle}> - I'M</span> <br /> <span className="text-[#CCFF00]" style={{ WebkitTextFillColor: '#CCFF00' }}>SALMAN</span><span style={glowStyle}>.</span>
             </h1>
           </motion.div>
 
-          <motion.p variants={mobileItemVariants} className="text-lg lg:text-2xl font-display font-medium text-white/80 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-6">
+          <motion.p variants={mobileItemVariants} className="text-lg lg:text-2xl font-display font-medium text-gray-700 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-6">
             I LIKE <span className="text-[#CCFF00]">WONDERFUL</span> PEOPLE THAT DO <span className="text-[#CCFF00]">INCREDIBLE</span> THINGS. I WANT TO BE YOUR <span className="text-[#CCFF00]">BIGGEST FAN</span>, AND #1 SUPPORTER. BUT ALSO I LIVE IN <span className="text-[#CCFF00]">2026</span>. IT'S A LITTLE ROUGH OUT HERE RIGHT NOW - AND THE <span className="text-[#CCFF00]">BEST WAY</span> TO BE OF <span className="text-[#CCFF00]">SERVICE</span> IS TO HELP YOU GET <span className="text-[#CCFF00]">ULTRA-PRODUCTIVE</span>, <span className="text-[#CCFF00]">SAVE</span> A TON OF MONEY AND <span className="text-[#CCFF00]">MAKE</span> WHOLE LOT MORE. LET'S <span className="text-[#CCFF00]">WIN BACK YOUR TIME</span> SO YOU CAN <span className="text-[#CCFF00]">FOCUS</span> ON THE THINGS THAT <span className="text-[#CCFF00]">TRULY MATTER</span>.
-            <span className="text-white/40 block mt-4">"NOW THAT'S <span className="text-[#CCFF00]">THE KIND OF GUY</span> YOU WANT TO <span className="text-[#CCFF00]">HIRE!</span>"</span>
+            <span className="text-gray-400 block mt-4">"NOW THAT'S <span className="text-[#CCFF00]">THE KIND OF GUY</span> YOU WANT TO <span className="text-[#CCFF00]">HIRE!</span>"</span>
           </motion.p>
 
           <motion.div variants={mobileItemVariants} className="flex flex-wrap gap-4">
-            <a href="tel:905-749-0266" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-white/10 transition-colors">
+            <a href="tel:905-749-0266" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-black/[0.05] transition-colors">
                <Phone size={16} className="text-[#CCFF00]" />
-               <span className="text-[9px] font-body font-black text-white/60 uppercase tracking-widest">905-749-0266</span>
+               <span className="text-[9px] font-body font-black text-gray-500 uppercase tracking-widest">905-749-0266</span>
             </a>
-            <a href="mailto:info@callsal.app" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-white/10 transition-colors">
+            <a href="mailto:info@callsal.app" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-black/[0.05] transition-colors">
                <Mail size={16} className="text-[#CCFF00]" />
-               <span className="text-[9px] font-body font-black text-white/60 uppercase tracking-widest">INFO@CALLSAL.APP</span>
+               <span className="text-[9px] font-body font-black text-gray-500 uppercase tracking-widest">INFO@CALLSAL.APP</span>
             </a>
-            <a href="https://maps.google.com/?q=Calgary,AB,Canada" target="_blank" rel="noopener noreferrer" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-white/10 transition-colors">
+            <a href="https://maps.google.com/?q=Calgary,AB,Canada" target="_blank" rel="noopener noreferrer" className="px-5 py-3 glass rounded-xl flex items-center gap-2 hover:bg-black/[0.05] transition-colors">
                <MapPin size={16} className="text-[#CCFF00]" />
-               <span className="text-[9px] font-body font-black text-white/60 uppercase tracking-widest">CALGARY, AB</span>
+               <span className="text-[9px] font-body font-black text-gray-500 uppercase tracking-widest">CALGARY, AB</span>
             </a>
           </motion.div>
         </div>
@@ -97,19 +97,19 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <div className="space-y-12">
             <motion.div variants={mobileItemVariants} className="space-y-6">
-              <h2 ref={grandExperimentRef} style={grandExperimentGlow} className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none"><span className="text-[1.2em]">THE</span> GRAND <br /><span className="text-[0.8em]">EXPERIMENT.</span></h2>
+              <h2 ref={grandExperimentRef} style={grandExperimentGlow} className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none"><span className="text-[1.2em]">THE</span> GRAND <br /><span className="text-[0.8em]">EXPERIMENT.</span></h2>
               <div className="w-24 h-1 bg-[#CCFF00]" />
             </motion.div>
 
-            <motion.div variants={mobileItemVariants} className="space-y-8 text-white/60 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide">
+            <motion.div variants={mobileItemVariants} className="space-y-8 text-gray-500 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide">
               <p>
-                I HAVE CARRIED A <span className="text-white">LIFELONG PASSION</span> FOR FILMS AND THE RAW POWER OF STORYTELLING. MY CAREER AS A DIGITAL CONTENT PRODUCER AND MARKETER HAS LED ME TO A SINGULAR REALIZATION: THE WORLD HAS CHANGED, AND THE <span className="text-[#CCFF00]">OLD RULES</span> NO LONGER APPLY.
+                I HAVE CARRIED A <span className="text-gray-900">LIFELONG PASSION</span> FOR FILMS AND THE RAW POWER OF STORYTELLING. MY CAREER AS A DIGITAL CONTENT PRODUCER AND MARKETER HAS LED ME TO A SINGULAR REALIZATION: THE WORLD HAS CHANGED, AND THE <span className="text-[#CCFF00]">OLD RULES</span> NO LONGER APPLY.
               </p>
               <p>
                 I DISCOVERED THAT THE FUTURE OF SCALABLE SUCCESS LIES AT THE INTERSECTION OF <span className="text-[#CCFF00]">AUTHENTIC FILMMAKING</span>, AND <span className="text-[#CCFF00]">AGENTIC WORKFLOWS</span>. THESE AREN'T JUST TRENDS; THEY ARE THE ENGINES OF THE NEW ECONOMY.
               </p>
               <p>
-                TODAY, I HELP ADVENTUROUS BUSINESS OWNERS <span className="text-white underline decoration-[#CCFF00] decoration-4 underline-offset-8">RAPIDLY TRANSFORM</span> THEIR COMPANIES INTO ELITE, AI-POWERED ORGANIZATIONS. WE ARE TURNING SLOW, TEDIOUS BUSYWORK INTO HIGH-SPEED, AUTOMATED WORKFLOWS THAT RUN WHILE YOU SLEEP.
+                TODAY, I HELP ADVENTUROUS BUSINESS OWNERS <span className="text-gray-900 underline decoration-[#CCFF00] decoration-4 underline-offset-8">RAPIDLY TRANSFORM</span> THEIR COMPANIES INTO ELITE, AI-POWERED ORGANIZATIONS. WE ARE TURNING SLOW, TEDIOUS BUSYWORK INTO HIGH-SPEED, AUTOMATED WORKFLOWS THAT RUN WHILE YOU SLEEP.
               </p>
             </motion.div>
           </div>
@@ -121,11 +121,11 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
               { icon: <Clock size={48} />, title: "TIME SOVEREIGNTY", desc: "WE WIN BACK THE HOURS YOU LOSE TO THE GRIND. FOCUS ON YOUR VISION, NOT THE SPREADSHEETS." },
               { icon: <Film size={48} />, title: "CINEMATIC TRUTH", desc: "DOCUMENTING THE LIFE AND LEGACY OF THOSE MAKING THE EXPERIMENT OF LIFE EXCITING." },
             ].map((card, i) => (
-              <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-8 flex flex-col justify-between group hover:bg-white/10 transition-all duration-700 min-h-[280px]">
+              <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-8 flex flex-col justify-between group hover:bg-black/[0.05] transition-all duration-700 min-h-[280px]">
                 <span className="text-[#CCFF00] mb-auto">{card.icon}</span>
                 <div>
-                  <h4 className="text-base lg:text-lg font-display font-black text-white uppercase leading-tight mb-4">{card.title}</h4>
-                  <p className="text-[10px] font-body text-white/40 uppercase font-black leading-tight">{card.desc}</p>
+                  <h4 className="text-base lg:text-lg font-display font-black text-gray-900 uppercase leading-tight mb-4">{card.title}</h4>
+                  <p className="text-[10px] font-body text-gray-400 uppercase font-black leading-tight">{card.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -133,8 +133,8 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         </div>
       </section>
 
-      {/* 3. PHILOSOPHY / THE "WHY" */}
-      <section className="glass-strong rounded-2xl text-white overflow-hidden relative">
+      {/* 3. PHILOSOPHY / THE "WHY" - Keep dark for contrast */}
+      <section className="glass-strong rounded-2xl text-gray-900 overflow-hidden relative">
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
            <Quote size={400} />
         </div>
@@ -149,24 +149,24 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
                 WE CARE FOR EACH OTHER. WE CO-OPERATE, AND WE COMPETE.<br />
                 BUT THE CONSTANT IS <span className="border-b-4 border-[#CCFF00] font-bold">HUMANITY</span> — WE DO IT ALL FOR <span className="bg-[#CCFF00] text-black px-2 rounded-lg font-bold">"US"</span>.
               </p>
-              <p className="text-white/50 font-body font-medium normal-case text-base lg:text-xl leading-relaxed">
+              <p className="text-gray-500 font-body font-medium normal-case text-base lg:text-xl leading-relaxed">
                 Filmmaking is one of the last beautiful arts to preserve and document the life and legacy of the people who made this grand experiment of life just a little bit more exciting.
               </p>
             </div>
           </motion.div>
 
-          <motion.div variants={mobileItemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/20 pt-16">
+          <motion.div variants={mobileItemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-gray-200 pt-16">
             <div className="space-y-4">
               <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE GOAL</span>
-              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">Do well in this world, be of great value and service, and be tremendously rewarded.</p>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-gray-700">Do well in this world, be of great value and service, and be tremendously rewarded.</p>
             </div>
             <div className="space-y-4">
               <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE REWARD</span>
-              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">An exciting, fulfilling life of experiences, friendships, & meaning.</p>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-gray-700">An exciting, fulfilling life of experiences, friendships, & meaning.</p>
             </div>
             <div className="space-y-4">
               <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE MISSION</span>
-              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">Be the person people call when they "need something done right - now!"</p>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-gray-700">Be the person people call when they "need something done right - now!"</p>
             </div>
           </motion.div>
         </div>
@@ -176,10 +176,10 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
       <section className="text-center space-y-16">
         <motion.div variants={mobileItemVariants} className="max-w-4xl mx-auto space-y-8">
           <span className="text-[11px] font-body tracking-[1em] text-[#CCFF00] uppercase font-black block">THE INVITATION</span>
-          <h2 ref={inviteRef} style={inviteGlowStyle} className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none whitespace-nowrap">
+          <h2 ref={inviteRef} style={inviteGlowStyle} className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none whitespace-nowrap">
             INVITE ME IN.
           </h2>
-          <p className="text-lg lg:text-2xl font-display font-medium text-white/50 uppercase leading-relaxed tracking-wide">
+          <p className="text-lg lg:text-2xl font-display font-medium text-gray-500 uppercase leading-relaxed tracking-wide">
             I WANT TO BE <span className="text-[#CCFF00]">THE ONE TO HELP YOU</span> NAVIGATE THIS <span className="text-[#CCFF00]">NEW ERA</span> OF <span className="text-[#CCFF00]">AI</span> AND <span className="text-[#CCFF00]">CINEMATIC</span> BRANDING.
             I DON'T JUST WANT TO BE A VENDOR—I WANT TO BE <span className="text-[#CCFF00]">THE ONE WHO WATCHES YOU SCALE TO HEIGHTS</span> YOU PREVIOUSLY THOUGHT <span className="text-[#CCFF00]">IMPOSSIBLE</span>.
           </p>
@@ -201,22 +201,22 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         </motion.div>
 
         {/* Closing Stat Grid */}
-        <motion.div variants={mobileItemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-20 border-t border-white/10">
+        <motion.div variants={mobileItemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-8 pt-20 border-t border-gray-200">
            <div className="space-y-2">
               <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#00F0FF' }}>12+</p>
-              <p className="text-[9px] font-body text-white/40 uppercase tracking-widest font-black">YEARS OF INNOVATION</p>
+              <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">YEARS OF INNOVATION</p>
            </div>
            <div className="space-y-2">
               <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#CCFF00' }}>200+</p>
-              <p className="text-[9px] font-body text-white/40 uppercase tracking-widest font-black">STORIES TOLD</p>
+              <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">STORIES TOLD</p>
            </div>
            <div className="space-y-2">
               <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#B400FF' }}>100%</p>
-              <p className="text-[9px] font-body text-white/40 uppercase tracking-widest font-black">HUMAN CENTERED</p>
+              <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">HUMAN CENTERED</p>
            </div>
            <div className="space-y-2">
               <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#FF5A00' }}>∞</p>
-              <p className="text-[9px] font-body text-white/40 uppercase tracking-widest font-black">POSSIBILITIES</p>
+              <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">POSSIBILITIES</p>
            </div>
         </motion.div>
       </section>
