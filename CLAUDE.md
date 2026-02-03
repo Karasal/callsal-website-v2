@@ -418,3 +418,68 @@ User is considering a **major aesthetic pivot**:
 - Explore light mode conversion (white bg, black text, glassmorphism on light)
 - Consider subtle background gridlines
 - Test current scroll parallax on production
+
+---
+
+## Session Log: Feb 3, 2026 (Session 5 — Scroll UX + Compact Header)
+
+### What was done
+Complete overhaul of scroll behavior and header/nav components for clean, smooth UX.
+
+#### Scroll Behavior Overhaul
+- **Problem**: Scroll down was smooth, scroll up was janky (instant blip + CSS transitions fighting)
+- **Solution**: Smooth scroll BOTH directions with direction-aware animations
+- **Direction tracking**: `scrollDirection` state tracks 'forward' vs 'backward'
+- **Forward (scroll down)**: Choreographed entrance animation
+- **Backward (scroll up)**: Simple slide-off (header slides UP, nav slides DOWN)
+- **No more instant scroll** — everything smooth and reversible
+
+#### Header Redesign (Desktop)
+- **Before**: Full-width bar with logo, contact, time, call button
+- **After**: Compact pill in top-left corner (`left-6 top-6 rounded-full`)
+- **Logo with phone icon**: Clickable to call (tel: link)
+- **Condensed info**: `905-749-0266 | CALGARY, AB | 3:45 PM MST`
+- **No expansion animation** — stays as a compact pill always
+
+#### Header (Mobile)
+- Full-width bar with logo+phone and hamburger menu
+- Same slide animation as desktop
+
+#### Nav Fixes
+- **Overflow fixed**: Changed from percentage-based width to `left-6 right-6` (proper margins)
+- **Gradient indicator**: Now positioned inside `<nav>` element (under tabs, not under branding)
+- **Three-column layout**: Branding (left) | Tabs (center) | Auth (right)
+- **Simplified animation**: No more pill morphing, just slide in/out
+
+#### Animation System
+- **Forward entrance**:
+  - Header/Nav appear (0.15-0.40 scroll progress)
+  - Content fades in (0.35-0.55)
+  - Gradient indicator expands (0.50-0.75)
+- **Backward exit**:
+  - Header: `translateY = (1 - scrollProgress) * -100` (slides up)
+  - Nav: `translateY = (1 - scrollProgress) * 100` (slides down)
+  - Full width maintained (no pill shrinking)
+
+### Files Changed
+- `App.tsx` — scrollDirection state, direction tracking, simplified snap behavior
+- `components/GlassHeader.tsx` — Complete rewrite: compact pill, phone icon, condensed info
+- `components/GlassNav.tsx` — Separate desktop/mobile, fixed overflow, indicator position
+- `components/Hero.tsx` — Removed isReturning prop (no longer needed)
+
+### Commits (Session 5)
+```
+b68cea7 Scroll UX overhaul: smooth bidirectional transitions + compact header
+```
+
+### Key Decisions
+- Smooth scroll both ways > instant blip (less jarring)
+- Direction-aware animations > symmetric reversible animations (different UX going back)
+- Compact header pill > full-width bar (less screen real estate, cleaner look)
+- Phone icon in logo > separate call button (more intuitive)
+
+### Ready for next session
+- Test on production (Vercel auto-deploy)
+- Fine-tune animation timing if needed
+- Consider adding email to header pill if space allows
+- Mobile menu could use polish
