@@ -9,13 +9,8 @@ import { Hero } from './components/Hero';
 import { MeetSalman } from './components/MeetSalman';
 import { TheOffer } from './components/TheOffer';
 import { BookingPage } from './components/BookingPage';
-
-const Placeholder = ({ name }: { name: string }) => (
-  <div className="glass p-12 text-center">
-    <h2 className="font-display text-3xl font-bold gradient-text mb-4">{name}</h2>
-    <p className="text-white/60 font-body">Component coming in next phase.</p>
-  </div>
-);
+import { AuthModal } from './components/AuthModal';
+import { Dashboard } from './components/Dashboard';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -99,8 +94,8 @@ const App: React.FC = () => {
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
-        return <Placeholder name="Dashboard" />;
-      default: return <Placeholder name="Hero" />;
+        return <Dashboard user={currentUser} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} />;
     }
   };
 
@@ -129,6 +124,11 @@ const App: React.FC = () => {
           </AnimatePresence>
         )}
       </main>
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onSuccess={(user) => { setCurrentUser(user); setActiveTab('dashboard'); }}
+      />
       <GlassNav
         activeTab={activeTab}
         setActiveTab={handleNavigation}
