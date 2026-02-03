@@ -1,0 +1,11 @@
+# robots.txt for callsal.app
+# Allow all crawlers full access
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://callsal.app/sitemap.xml
+
+# Disallow admin/private areas
+Disallow: /api/
