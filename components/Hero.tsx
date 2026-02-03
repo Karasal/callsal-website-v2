@@ -74,12 +74,12 @@ const ProximityHeroText = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { glowStyle } = useProximityGlow(containerRef);
 
-  const baseClasses = "text-[18vw] sm:text-6xl md:text-7xl lg:text-[4.5rem] xl:text-[7rem] font-display font-extrabold leading-[0.85] tracking-tighter uppercase flex flex-col items-start";
+  const baseClasses = "text-[15vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] font-display font-extrabold leading-[0.85] tracking-tighter uppercase flex flex-col items-start";
   const limeStyle = { color: '#CCFF00', WebkitTextFillColor: '#CCFF00' } as React.CSSProperties;
   const whiteProximityStyle = { color: '#ffffff', WebkitTextFillColor: '#ffffff', ...glowStyle } as React.CSSProperties;
 
   return (
-    <div ref={containerRef} className="mb-6 lg:mb-4">
+    <div ref={containerRef} className="mb-4 lg:mb-3">
       <h1 className={baseClasses}>
         <span className="block sm:whitespace-nowrap">
           <span style={whiteProximityStyle}>"</span>
@@ -87,7 +87,7 @@ const ProximityHeroText = () => {
           <span style={whiteProximityStyle}> - IT'S</span>
         </span>
         <span className="block sm:whitespace-nowrap" style={whiteProximityStyle}>YOUR NEW</span>
-        <span className="block sm:whitespace-nowrap pb-4 sm:pb-10 lg:pb-4">
+        <span className="block sm:whitespace-nowrap pb-2 sm:pb-4 lg:pb-2">
           <span style={whiteProximityStyle}>PAL, </span>
           <span style={limeStyle}>SAL</span>
           <span style={whiteProximityStyle}>!"</span>
@@ -99,7 +99,7 @@ const ProximityHeroText = () => {
 
 const PixelNerdSal = ({ state }: { state: 'idle' | 'typing' | 'happy' }) => {
   return (
-    <div className="relative w-24 h-24 sm:w-32 sm:h-32 bg-black/80 border border-[#CCFF00]/40 overflow-hidden p-2 flex items-center justify-center rounded-2xl shrink-0 glow-lime">
+    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-black/80 border border-[#CCFF00]/40 overflow-hidden p-2 flex items-center justify-center rounded-xl shrink-0 glow-lime">
       <div className="absolute inset-0 z-0 opacity-10 bg-[linear-gradient(rgba(204,255,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(204,255,0,0.1)_1px,transparent_1px)] bg-[size:4px_4px]" />
       <motion.svg
         viewBox="0 0 100 100"
@@ -169,15 +169,15 @@ const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) =
   };
 
   return (
-    <div className="glass-strong w-full flex flex-col overflow-hidden h-[550px] lg:h-[600px] relative">
-      <div className="p-4 sm:p-6 border-b border-white/10 flex flex-col sm:flex-row items-center gap-6 z-20 shrink-0">
+    <div className="glass-strong w-full flex flex-col overflow-hidden h-[480px] lg:h-[520px] relative">
+      <div className="p-3 sm:p-4 border-b border-white/10 flex flex-col sm:flex-row items-center gap-4 z-20 shrink-0">
         <PixelNerdSal state={isTyping ? 'typing' : (messages.length > 1 ? 'happy' : 'idle')} />
         <div className="flex-1 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-3 mb-1">
+          <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
             <div className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
-            <span className="text-[12px] font-display font-bold tracking-widest text-[#CCFF00] uppercase">SAL_BOT ONLINE</span>
+            <span className="text-[10px] font-display font-bold tracking-widest text-[#CCFF00] uppercase">SAL_BOT ONLINE</span>
           </div>
-          <p className="text-[10px] font-body text-white/40 uppercase leading-tight max-w-[200px]">
+          <p className="text-[9px] font-body text-white/40 uppercase leading-tight max-w-[180px]">
             NEURAL ENGINE: READY<br />
             ADVISORY MODE: ACTIVE<br />
             STATUS: AWAITING INPUT
@@ -185,7 +185,7 @@ const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) =
         </div>
       </div>
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 sm:p-8 space-y-6 font-body text-[11px] sm:text-xs no-scrollbar">
+        <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4 font-body text-[10px] sm:text-[11px] no-scrollbar">
           <AnimatePresence initial={false}>
             {messages.map((m, i) => (
               <motion.div
@@ -195,23 +195,23 @@ const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) =
                 className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 {m.role === 'cta' ? (
-                  <div className="flex flex-col gap-3 items-start">
-                    <p className="text-[10px] font-body text-white/50 uppercase tracking-widest">{m.text}</p>
+                  <div className="flex flex-col gap-2 items-start">
+                    <p className="text-[9px] font-body text-white/50 uppercase tracking-widest">{m.text}</p>
                     <button
                       onClick={onConsultation}
-                      className="btn-primary text-[11px] px-6 py-3"
+                      className="btn-primary text-[10px] px-4 py-2"
                     >
                       Book Free Consultation →
                     </button>
                   </div>
                 ) : (
-                  <div className={`max-w-[85%] p-4 rounded-xl ${
+                  <div className={`max-w-[85%] p-3 rounded-lg ${
                     m.role === 'user'
                     ? 'bg-[#CCFF00] text-black font-bold'
                     : 'glass text-white/90'
                   }`}>
                     {m.text.split('\n').map((line, idx) => (
-                      <p key={idx} className="mb-2 last:mb-0 leading-relaxed">{line}</p>
+                      <p key={idx} className="mb-1.5 last:mb-0 leading-snug">{line}</p>
                     ))}
                   </div>
                 )}
@@ -224,20 +224,20 @@ const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) =
             </div>
           )}
         </div>
-        <div className="p-4 sm:p-6 border-t border-white/10 shrink-0">
+        <div className="p-3 sm:p-4 border-t border-white/10 shrink-0">
           <div className="relative">
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAudit()}
               placeholder="Ask me how I can help..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl py-3 sm:py-4 px-4 pr-12 focus:outline-none focus:border-[#CCFF00]/50 text-sm font-body text-white placeholder:text-white/20"
+              className="w-full bg-white/5 border border-white/10 rounded-lg py-2.5 sm:py-3 px-3 pr-10 focus:outline-none focus:border-[#CCFF00]/50 text-[12px] font-body text-white placeholder:text-white/20"
             />
-            <button onClick={handleAudit} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#CCFF00] hover:scale-125 transition-transform p-2">
-              <ChevronRight size={28} />
+            <button onClick={handleAudit} className="absolute right-1 top-1/2 -translate-y-1/2 text-[#CCFF00] hover:scale-110 transition-transform p-1.5">
+              <ChevronRight size={22} />
             </button>
           </div>
-          <div className="mt-4 flex justify-between items-center opacity-20">
+          <div className="mt-2 flex justify-between items-center opacity-20">
             <span className="text-[7px] font-body uppercase">encrypted session</span>
             <span className="text-[7px] font-body uppercase">256-bit ssl</span>
           </div>
@@ -1091,39 +1091,39 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }>
   return (
     <div className="relative">
       <div className="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-20 lg:space-y-32">
-        <div className="min-h-[75vh] lg:min-h-0 lg:h-[calc(100dvh-144px)] flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-center gap-8 lg:gap-12 xl:gap-20 relative pt-4 pb-10 lg:pt-0 lg:pb-0">
-          <div className="z-10 flex-1 w-full max-w-4xl text-left self-start lg:self-center">
+        <div className="min-h-[70vh] lg:min-h-0 lg:h-[calc(100dvh-160px)] flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-6 lg:gap-8 xl:gap-12 relative pt-2 pb-8 lg:pt-0 lg:pb-0">
+          <div className="z-10 flex-1 w-full max-w-3xl text-left self-start lg:self-center">
             <motion.div {...(isMobile ? {} : { initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.8 } })}>
-              <div className="mb-6 lg:mb-4 flex items-center gap-4 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
-                <div className="w-12 h-[2px] bg-[#CCFF00]" />
-                <span className="text-[9px] sm:text-[11px] font-body tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold block leading-tight group-hover:underline gradient-text">
+              <div className="mb-3 lg:mb-2 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
+                <div className="w-8 h-[2px] bg-[#CCFF00]" />
+                <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline gradient-text">
                   HOW I HELP YOU GROW [?]
                 </span>
               </div>
               <ProximityHeroText />
-              <div className="text-[3.2vw] sm:text-lg md:text-xl lg:text-xl xl:text-2xl text-white/60 mb-8 lg:mb-6 leading-tight font-display font-medium border-l-2 border-[#CCFF00] pl-6 sm:pl-8 flex flex-col items-start gap-1">
+              <div className="text-[3vw] sm:text-base md:text-lg lg:text-lg xl:text-xl text-white/60 mb-5 lg:mb-4 leading-snug font-display font-medium border-l-2 border-[#CCFF00] pl-4 sm:pl-6 flex flex-col items-start gap-0.5">
                 <span className="block sm:whitespace-nowrap"><span className="text-[#CCFF00]">AI</span> IS CHANGING <span className="text-[#CCFF00]">EVERYTHING</span>.</span>
                 <span className="block sm:whitespace-nowrap">YOUR <span className="text-[#CCFF00]">COMPETITION</span> IS ALREADY <span className="text-[#CCFF00]">PREPARING</span>.</span>
                 <span className="block sm:whitespace-nowrap">I'M HERE TO MAKE SURE YOU <span className="text-[#CCFF00]">GET THERE FIRST</span>.</span>
               </div>
-              <div className="flex flex-row sm:flex-wrap gap-3 sm:gap-6 mb-4 lg:mb-6">
-                <button onClick={onStart} className="flex-1 sm:flex-none btn-primary px-4 py-3 sm:px-10 sm:py-6 text-[10px] sm:text-xs tracking-[0.2em]">
+              <div className="flex flex-row sm:flex-wrap gap-3 sm:gap-4 mb-3 lg:mb-4">
+                <button onClick={onStart} className="flex-1 sm:flex-none btn-primary px-4 py-2.5 sm:px-8 sm:py-4 text-[10px] sm:text-[11px] tracking-[0.15em]">
                   <span className="sm:hidden">DISCOVER</span>
                   <span className="hidden sm:inline">SEE MY PROCESS</span>
                 </button>
-                <button onClick={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} className="flex-1 sm:flex-none btn-glass px-4 py-3 sm:px-10 sm:py-6 text-[10px] sm:text-xs tracking-[0.2em]">
+                <button onClick={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} className="flex-1 sm:flex-none btn-glass px-4 py-2.5 sm:px-8 sm:py-4 text-[10px] sm:text-[11px] tracking-[0.15em]">
                   <span className="sm:hidden">CINEMATICS</span>
                   <span className="hidden sm:inline">VIEW CINEMATICS</span>
                 </button>
               </div>
               {!isSalBotExpanded && (
-                <motion.button {...(isMobile ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 } })} onClick={() => setIsSalBotExpanded(true)} className="lg:hidden w-full py-5 btn-primary text-xs tracking-[0.2em] mb-12">
+                <motion.button {...(isMobile ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 } })} onClick={() => setIsSalBotExpanded(true)} className="lg:hidden w-full py-3 btn-primary text-[11px] tracking-[0.15em] mb-8">
                   LAUNCH SAL BOT
                 </motion.button>
               )}
             </motion.div>
           </div>
-          <div className={`z-10 flex-1 w-full lg:max-w-[440px] xl:max-w-[520px] ${!isSalBotExpanded ? 'hidden lg:block' : 'block'}`}>
+          <div className={`z-10 w-full lg:w-[380px] xl:w-[420px] 2xl:w-[460px] shrink-0 ${!isSalBotExpanded ? 'hidden lg:block' : 'block'}`}>
             <motion.div {...(isMobile ? {} : { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.8, delay: 0.2 } })}>
               <IntegratedSalBot onConsultation={onConsultation} />
             </motion.div>
