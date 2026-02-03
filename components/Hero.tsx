@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useProximityGlow } from '../hooks/useProximityGlow';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, ChevronRight, X, Activity, Target, Terminal, Cpu, Layers, Database, Shield, Bot, GitBranch, TrendingUp, MonitorPlay, Heart, Radio, Camera, Award, Star, Info, Zap, Settings, HardDrive, Share2, Eye, Focus, Move, Film, UserCheck, Clapperboard, Monitor, Sparkles, Smile as SmileIcon, Box, Compass, MousePointer2, MessageSquare, Hammer, Laptop, Video, Smartphone, CheckCircle, Code, Server, Link, ShieldCheck, Search, Globe, Brain, ShieldAlert, FileCheck, ClipboardList, Briefcase } from 'lucide-react';
+import { Play, ChevronRight, X, Activity, Target, Terminal, Cpu, Layers, Database, Shield, Bot, GitBranch, TrendingUp, MonitorPlay, Heart, Radio, Camera, Award, Star, Info, Zap, Settings, HardDrive, Share2, Eye, Focus, Move, Film, UserCheck, Clapperboard, Monitor, Sparkles, Smile as SmileIcon, Box, Compass, MousePointer2, MessageSquare, Hammer, Laptop, Video, Smartphone, CheckCircle, Code, Server, Link, ShieldCheck, Search, Globe, Brain, ShieldAlert, FileCheck, ClipboardList, Briefcase, BookOpen, Crown } from 'lucide-react';
 import { ImageModal } from './ImageModal';
 
 interface SoftwareInfo {
@@ -284,40 +284,40 @@ const SoftwareDetailModal = ({ software, onClose }: { software: SoftwareInfo, on
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-[400] flex items-center justify-center p-4 lg:p-12 bg-black/95 backdrop-blur-3xl"
     >
-      <div className="max-w-4xl w-full glass-strong p-8 lg:p-16 relative overflow-y-auto max-h-[90vh] no-scrollbar border-t-4 border-[#CCFF00] rounded-2xl">
+      <div className="max-w-4xl w-full glass-strong p-6 sm:p-8 lg:p-16 relative overflow-y-auto overflow-x-hidden max-h-[90vh] no-scrollbar border-t-4 border-[#CCFF00] rounded-2xl">
         <button onClick={onClose} className="absolute top-6 right-6 text-white/40 hover:text-white transition-colors z-50">
           <X size={32} />
         </button>
-        <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-          <div className="flex-1 space-y-10">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-12">
+          <div className="flex-1 space-y-6 sm:space-y-10 min-w-0">
             <div className="space-y-4">
-              <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold">VIDEO EDITING SOFTWARE</span>
-              <div className="flex items-center gap-6">
-                <img src={software.src} className="h-12 lg:h-20 w-auto object-contain" alt="" />
-                <h3 className="text-3xl lg:text-6xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">{software.name}</h3>
+              <span className="text-[9px] sm:text-[10px] font-body tracking-[0.3em] sm:tracking-[0.5em] text-[#CCFF00] uppercase font-bold">VIDEO EDITING SOFTWARE</span>
+              <div className="flex items-center gap-4 sm:gap-6">
+                <img src={software.src} className="h-10 sm:h-12 lg:h-16 w-auto object-contain shrink-0" alt="" />
+                <h3 className="text-2xl sm:text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none break-words">{software.name}</h3>
               </div>
             </div>
-            <div className="space-y-6">
-              <p className="text-xl lg:text-3xl font-display font-bold text-white/90 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-6">
+            <div className="space-y-4 sm:space-y-6">
+              <p className="text-base sm:text-xl lg:text-2xl font-display font-bold text-white/90 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6">
                 {software.tagline}
               </p>
-              <p className="text-sm lg:text-base font-body font-medium text-white/50 uppercase leading-relaxed tracking-wide">
+              <p className="text-xs sm:text-sm lg:text-base font-body font-medium text-white/50 uppercase leading-relaxed tracking-wide">
                 {software.description}
               </p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-white/10">
+            <div className="grid grid-cols-3 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-white/10">
               {software.techStats.map((stat, i) => (
                 <div key={i} className="space-y-1">
-                  <span className="text-[9px] font-body text-white/30 uppercase block mb-1 font-bold tracking-widest">{stat.label}</span>
-                  <span className="text-sm lg:text-lg font-display font-bold text-white uppercase">{stat.value}</span>
+                  <span className="text-[8px] sm:text-[9px] font-body text-white/30 uppercase block mb-1 font-bold tracking-widest">{stat.label}</span>
+                  <span className="text-xs sm:text-sm lg:text-base font-display font-bold text-white uppercase">{stat.value}</span>
                 </div>
               ))}
             </div>
           </div>
-          <div className="lg:w-[300px] flex flex-col justify-end gap-6 shrink-0">
-            <div className="p-8 glass flex flex-col items-center text-center">
-              <Activity className="text-[#CCFF00] mb-4" size={40} />
-              <p className="text-[10px] font-body font-bold text-white/40 uppercase tracking-widest leading-relaxed">
+          <div className="lg:w-[280px] flex flex-col justify-end gap-4 sm:gap-6 shrink-0">
+            <div className="p-4 sm:p-6 lg:p-8 glass flex flex-col items-center text-center">
+              <Activity className="text-[#CCFF00] mb-3 sm:mb-4" size={32} />
+              <p className="text-[9px] sm:text-[10px] font-body font-bold text-white/40 uppercase tracking-wider sm:tracking-widest leading-relaxed">
                 SYSTEM INTEGRATED INTO MASTER PRODUCTION PIPELINE
               </p>
             </div>
@@ -325,7 +325,7 @@ const SoftwareDetailModal = ({ software, onClose }: { software: SoftwareInfo, on
               href={software.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-6 btn-primary text-[10px] tracking-[0.4em] text-center block"
+              className="w-full py-4 sm:py-6 btn-primary text-[9px] sm:text-[10px] tracking-[0.2em] sm:tracking-[0.4em] text-center block"
             >
               VIEW FULL SPECS
             </a>
@@ -337,26 +337,65 @@ const SoftwareDetailModal = ({ software, onClose }: { software: SoftwareInfo, on
 };
 
 const VideoModal = ({ id, title, onClose }: { id: string, title: string, onClose: () => void }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  useEffect(() => {
+    if (isMobileDevice && containerRef.current) {
+      // Try to go fullscreen and lock to landscape on mobile
+      const enterFullscreen = async () => {
+        try {
+          await containerRef.current?.requestFullscreen();
+          // Try to lock orientation to landscape
+          if (screen.orientation && 'lock' in screen.orientation) {
+            await (screen.orientation as any).lock('landscape').catch(() => {});
+          }
+        } catch (e) {
+          // Fullscreen not supported or denied
+        }
+      };
+      enterFullscreen();
+    }
+
+    return () => {
+      // Exit fullscreen and unlock orientation on close
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      }
+      if (screen.orientation && 'unlock' in screen.orientation) {
+        (screen.orientation as any).unlock();
+      }
+    };
+  }, [isMobileDevice]);
+
+  const handleClose = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+    onClose();
+  };
+
   return (
     <motion.div
+      ref={containerRef}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       className="fixed inset-0 z-[500] flex items-center justify-center p-4 lg:p-12 bg-black/95 backdrop-blur-3xl"
     >
       <div className="max-w-6xl w-full relative">
-        <button onClick={onClose} className="absolute -top-12 right-0 text-white/40 hover:text-white transition-colors">
+        <button onClick={handleClose} className="absolute -top-12 right-0 text-white/40 hover:text-white transition-colors z-10">
           <X size={32} />
         </button>
         <div className="aspect-video w-full bg-black rounded-xl overflow-hidden border border-white/10">
           <iframe
-            src={`https://www.youtube.com/embed/${id}?autoplay=1`}
+            src={`https://www.youtube.com/embed/${id}?autoplay=1&playsinline=0`}
             title={title}
             className="w-full h-full"
             frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
             allowFullScreen
           ></iframe>
         </div>
-        <div className="mt-6">
+        <div className="mt-6 hidden lg:block">
           <h3 className="text-xl lg:text-2xl font-display font-bold text-white uppercase tracking-tight">{title}</h3>
         </div>
       </div>
@@ -790,7 +829,7 @@ const TheArmory = ({ onShowSoftware, onShowImage, onConsultation }: { onShowSoft
   const selectedData = currentItems[activeItem];
 
   return (
-    <div className="py-12 md:py-20 lg:py-32">
+    <div className="pt-20 pb-12 md:py-20 lg:py-32">
       {/* MOBILE */}
       <div className="md:hidden px-4">
         <div className="mb-6 text-center">
@@ -912,43 +951,44 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
       <div className="mb-12 sm:mb-20">
         <div className="flex flex-col gap-10 lg:gap-16">
           <div className="w-full text-center">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <div className="w-12 h-[1px] bg-[#CCFF00]" />
-              <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold">HIGH-END DOCUMENTARY</span>
-              <div className="w-12 h-[1px] bg-[#CCFF00]" />
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00]" />
+              <span className="text-[9px] sm:text-[10px] font-body tracking-[0.4em] text-[#CCFF00] uppercase font-bold">HIGH-END DOCUMENTARY</span>
+              <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00]" />
             </div>
-            <h2 ref={cinematicsRef} style={glowStyle} className="proximity-glow block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.85] mb-12 text-center mx-auto">CINEMATICS.</h2>
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-12">
-              <div className="space-y-6">
-                <p className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white uppercase leading-none tracking-tight">
-                  AI POWERS THE SCALE. <br />
-                  <span className="gradient-text">CINEMA CAPTURES THE SOUL.</span>
+            <h2 ref={cinematicsRef} style={glowStyle} className="proximity-glow text-[1.85rem] sm:text-4xl md:text-5xl lg:text-[6rem] xl:text-[7rem] 2xl:text-[8rem] font-display font-black text-white uppercase tracking-tighter leading-none mb-4">CINEMATICS.</h2>
+            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-10 sm:space-y-12">
+              <div className="flex flex-col items-center gap-0 text-center">
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-display font-bold text-white uppercase tracking-wide">
+                  AI POWERS THE SCALE.
                 </p>
-                <div className="h-1 w-32 bg-gradient-to-r from-[#CCFF00] to-[#00F0FF] mx-auto rounded-full" />
+                <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-display font-bold uppercase tracking-wide gradient-text">
+                  CINEMA CAPTURES THE SOUL.
+                </p>
               </div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 text-left">
-                <div className="space-y-8">
-                  <p className="text-lg lg:text-2xl font-display font-medium text-white/90 uppercase leading-snug tracking-tight">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 text-center lg:text-left">
+                <div className="space-y-6">
+                  <p className="text-base sm:text-lg lg:text-xl font-display font-medium text-white/90 uppercase leading-snug tracking-tight">
                     As exciting as it is to be AI-powered, what really makes it all work is remembering that you are still serving a <span className="gradient-text">human audience</span>.
                   </p>
-                  <p className="text-sm font-body font-bold text-white/40 uppercase leading-relaxed">
+                  <p className="text-xs sm:text-sm font-body font-bold text-white/40 uppercase leading-relaxed">
                     The most powerful evergreen marketing tool is a high-end cinematic mini-documentary. We humanize your brand through artistic interview footage and Hollywood-grade B-roll.
                   </p>
                 </div>
-                <div className="space-y-8 border-l border-white/10 pl-10">
-                  <div className="space-y-6">
-                    <div className="flex items-start gap-4">
-                      <Film className="text-[#CCFF00] shrink-0" size={20} />
+                <div className="space-y-6 lg:border-l lg:border-white/10 lg:pl-10">
+                  <div className="space-y-5">
+                    <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3">
+                      <BookOpen className="text-[#CCFF00] shrink-0" size={18} />
                       <div>
                         <p className="text-xs font-display font-bold text-white uppercase mb-1">HERITAGE BRANDING</p>
-                        <p className="text-[11px] text-white/50 uppercase leading-relaxed font-bold">This isn't just an advertisement. It's a legacy piece that grows in value as your company matures.</p>
+                        <p className="text-[10px] sm:text-[11px] text-white/50 uppercase leading-relaxed font-bold">This isn't just an advertisement. It's a legacy piece that grows in value as your company matures.</p>
                       </div>
                     </div>
-                    <div className="flex items-start gap-4">
-                      <Target className="text-[#CCFF00] shrink-0" size={20} />
+                    <div className="flex flex-col items-center lg:flex-row lg:items-start gap-3">
+                      <Crown className="text-[#CCFF00] shrink-0" size={18} />
                       <div>
                         <p className="text-xs font-display font-bold text-white uppercase mb-1">UNMATCHED AUTHORITY</p>
-                        <p className="text-[11px] text-white/50 uppercase leading-relaxed font-bold">The visual texture of Hollywood cinema bypasses the natural skepticism of modern leads.</p>
+                        <p className="text-[10px] sm:text-[11px] text-white/50 uppercase leading-relaxed font-bold">The visual texture of Hollywood cinema bypasses the natural skepticism of modern leads.</p>
                       </div>
                     </div>
                   </div>
@@ -971,29 +1011,29 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
                       <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
                       <span className="text-[10px] font-body tracking-[0.3em] text-[#CCFF00] uppercase font-bold">CASE STUDY</span>
                     </div>
-                    <h4 className="text-3xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter mb-4 leading-none">{activeProject.title}</h4>
-                    <p className="text-base lg:text-lg font-body font-medium text-white/60 uppercase leading-relaxed tracking-wide">{activeProject.description}</p>
-                    <div className="mt-8 flex flex-wrap gap-4">
-                      <span className="px-3 py-1 glass text-[9px] font-body text-[#CCFF00] uppercase tracking-widest font-bold rounded-lg">PROJECT FOR: {activeProject.company}</span>
+                    <h4 className="text-xl sm:text-2xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter mb-4 leading-tight">{activeProject.title}</h4>
+                    <p className="text-sm sm:text-base lg:text-lg font-body font-medium text-white/60 uppercase leading-relaxed tracking-wide">{activeProject.description}</p>
+                    <div className="mt-6 sm:mt-8 flex flex-wrap gap-4">
+                      <span className="px-3 py-1 glass text-[8px] sm:text-[9px] font-body text-[#CCFF00] uppercase tracking-widest font-bold rounded-lg whitespace-nowrap">PROJECT FOR: {activeProject.company}</span>
                     </div>
                   </motion.div>
                 </div>
                 <div className="lg:col-span-4 flex flex-col gap-3">
-                  <div className="flex-1 space-y-3 overflow-y-auto no-scrollbar max-h-[400px] lg:max-h-none">
+                  <div className="space-y-2 sm:space-y-3">
                     {projects.map(p => (
                       <button key={p.id} onClick={() => {
                         setActiveProject(p);
                         if (window.innerWidth < 1024) setTimeout(() => { document.getElementById('hero-video-player')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-                      }} className={`w-full p-4 sm:p-6 text-left rounded-xl border transition-all flex items-center justify-between group ${activeProject.id === p.id ? 'bg-[#CCFF00] text-black border-[#CCFF00]' : 'glass text-white hover:border-white/20'}`}>
+                      }} className={`w-full p-3 sm:p-5 text-left rounded-xl border transition-all flex items-center justify-between group ${activeProject.id === p.id ? 'bg-[#CCFF00] text-black border-[#CCFF00]' : 'glass text-white hover:border-white/20'}`}>
                         <div className="min-w-0">
-                          <p className={`text-[9px] font-body font-bold uppercase mb-1 ${activeProject.id === p.id ? 'text-black/40' : 'text-white/40'}`}>{p.company}</p>
-                          <p className="font-display font-bold uppercase text-xs sm:text-sm truncate">{p.title}</p>
+                          <p className={`text-[8px] sm:text-[9px] font-body font-bold uppercase mb-0.5 sm:mb-1 ${activeProject.id === p.id ? 'text-black/40' : 'text-white/40'}`}>{p.company}</p>
+                          <p className="font-display font-bold uppercase text-[11px] sm:text-sm truncate">{p.title}</p>
                         </div>
-                        <ChevronRight size={16} className={`shrink-0 transition-transform ${activeProject.id === p.id ? 'translate-x-1' : ''}`} />
+                        <ChevronRight size={14} className={`shrink-0 transition-transform ${activeProject.id === p.id ? 'translate-x-1' : ''}`} />
                       </button>
                     ))}
                   </div>
-                  <button onClick={onConsultation} className="w-full py-6 sm:py-8 btn-primary text-xs tracking-[0.2em] mt-4">
+                  <button onClick={onConsultation} className="w-full py-5 sm:py-8 btn-primary text-[10px] sm:text-xs tracking-[0.2em] mt-3 sm:mt-4">
                     BOOK A CHAT
                   </button>
                 </div>
@@ -1006,58 +1046,88 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
               {/* Hollywood Advantage */}
               <div className="w-full pt-10">
                 <div className="glass-strong overflow-hidden rounded-2xl text-left">
-                  <div className="bg-white p-10 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-10 relative overflow-hidden">
+                  <div className="bg-white p-6 sm:p-10 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 sm:gap-10 relative overflow-hidden">
                     <div className="relative z-10 max-w-2xl">
-                      <span className="text-[10px] font-body tracking-[0.5em] text-black uppercase font-bold block mb-6 px-3 py-1 bg-black/10 inline-block rounded">NARRATIVE-DRIVEN BRAND STORIES</span>
-                      <h4 className="text-5xl lg:text-8xl font-display font-extrabold text-black uppercase tracking-tighter leading-[0.8] mb-6">THE HOLLYWOOD <br /> ADVANTAGE.</h4>
-                      <p className="text-base lg:text-xl font-display font-bold text-black/80 uppercase tracking-tight max-w-xl">
-                        WE USE THE SAME TOOLS AS NETFLIX MASTERPIECES. WHY? BECAUSE YOUR BUSINESS DESERVES TO LOOK LIKE A GLOBAL LEADER, NOT A STARTUP.
+                      <span className="text-[9px] sm:text-[10px] font-body tracking-[0.3em] sm:tracking-[0.5em] text-black uppercase font-bold block mb-4 sm:mb-6 px-2 sm:px-3 py-1 bg-black/10 inline-block rounded">NARRATIVE-DRIVEN BRAND STORIES</span>
+                      <h4 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-extrabold text-black uppercase tracking-tighter leading-[0.85] mb-4 sm:mb-6">THE HOLLYWOOD <br className="hidden sm:block" /> ADVANTAGE.</h4>
+                      <p className="text-sm sm:text-base lg:text-xl font-display font-bold text-black/80 uppercase tracking-tight max-w-xl leading-snug">
+                        WE USE THE SAME TOOLS AS <span className="text-red-600">NETFLIX MASTERPIECES</span>. WHY? BECAUSE YOUR BUSINESS DESERVES TO LOOK LIKE A GLOBAL LEADER, NOT A STARTUP.
                       </p>
                     </div>
-                    <div className="relative z-10 flex flex-col items-end">
-                      <div className="px-6 py-6 bg-black text-white font-body font-bold text-[10px] lg:text-xs uppercase tracking-[0.2em] rounded-xl flex flex-col items-center justify-center gap-4">
-                        <span className="opacity-60 text-[9px] tracking-[0.3em]">PRODUCTION SOFTWARE</span>
+                    <div className="relative z-10 flex flex-col items-start sm:items-end w-full sm:w-auto">
+                      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-black text-white font-body font-bold text-[9px] sm:text-[10px] lg:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] rounded-xl flex flex-col items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+                        <span className="opacity-60 text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.3em]">PRODUCTION SOFTWARE</span>
                         <div className="flex items-center gap-2">
                           <SoftwareItem software={softwareData.davinci} onClick={() => onShowSoftware(softwareData.davinci)} />
                           <SoftwareItem software={softwareData.dehancer} onClick={() => onShowSoftware(softwareData.dehancer)} />
                           <SoftwareItem software={softwareData.higgsfield} onClick={() => onShowSoftware(softwareData.higgsfield)} />
                           <SoftwareItem software={softwareData.topaz} onClick={() => onShowSoftware(softwareData.topaz)} />
                         </div>
-                        <span className="text-[9px] font-body text-white/30 uppercase tracking-widest">CLICK FOR INTEL</span>
+                        <span className="text-[8px] sm:text-[9px] font-body text-white/30 uppercase tracking-widest">CLICK FOR INTEL</span>
                       </div>
                     </div>
                   </div>
-                  <div className="p-8 lg:p-16 space-y-16">
+                  <div className="p-6 sm:p-8 lg:p-16 space-y-10 sm:space-y-16">
                     {/* RED Camera section */}
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 border-b border-white/5 pb-16">
-                      <div className="lg:col-span-7">
-                        <div className="aspect-video relative overflow-hidden rounded-xl border border-white/10 bg-black mb-8 cursor-pointer group" onClick={() => onShowImage("https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg")}>
-                          <img src="https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-1000" alt="RED Komodo-X" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                          <div className="absolute bottom-8 left-8">
-                            <span className="text-[10px] font-body font-bold text-[#CCFF00] uppercase block mb-2">MADE IN CALIFORNIA</span>
-                            <p className="text-2xl font-display font-extrabold text-white uppercase tracking-tighter">RED KOMODO-X 6K</p>
+                    <div className="space-y-8 sm:space-y-12 border-b border-white/5 pb-10 sm:pb-16">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
+                        <div className="lg:col-span-7">
+                          <div className="aspect-video relative overflow-hidden rounded-xl border border-white/10 bg-black cursor-pointer group" onClick={() => onShowImage("https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg")}>
+                            <img src="https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-1000" alt="RED Komodo-X" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                            <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8">
+                              <span className="text-[9px] sm:text-[10px] font-body font-bold text-[#CCFF00] uppercase block mb-1 sm:mb-2">MADE IN CALIFORNIA</span>
+                              <p className="text-base sm:text-xl lg:text-2xl font-display font-extrabold text-white uppercase tracking-tighter">RED KOMODO-X 6K CINEMA CAMERA</p>
+                            </div>
                           </div>
                         </div>
+                        <div className="lg:col-span-5 flex flex-col justify-center space-y-4 sm:space-y-6 text-center lg:text-left">
+                          <span className="text-[10px] sm:text-[11px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.3em] sm:tracking-[0.4em]">THE PSYCHOLOGY OF TRUST</span>
+                          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.9]">THE COVER TELLS THE STORY.</h4>
+                          <p className="text-xs sm:text-sm font-body font-bold text-white/60 uppercase leading-relaxed">
+                            In a digital-first world, your content is your reputation. An iPhone video signals a "startup"—this level of production signals a "market leader."
+                          </p>
+                          <p className="text-xs sm:text-sm font-body font-bold text-white/60 uppercase leading-relaxed">
+                            High-end visuals bypass the customer's logic and hit them straight in the gut, building instant faith in what you deliver.
+                          </p>
+                        </div>
                       </div>
-                      <div className="lg:col-span-5 flex flex-col justify-center space-y-8">
-                        <span className="text-[11px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.4em]">THE PSYCHOLOGY OF TRUST</span>
-                        <h4 className="text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.9]">THE COVER <br /> TELLS THE STORY.</h4>
-                        <p className="text-sm font-body font-bold text-white/60 uppercase leading-relaxed">
-                          In a digital-first world, your content is your reputation. An iPhone video signals a "startup"—this level of production signals a "market leader."
-                        </p>
+                      {/* Feature cards + Netflix badge */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                        <div className="glass p-6 sm:p-8 rounded-xl">
+                          <div className="w-8 h-8 mb-4 flex items-center justify-center text-[#CCFF00]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="3"></circle><line x1="12" y1="2" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="22"></line><line x1="2" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="22" y2="12"></line></svg>
+                          </div>
+                          <h5 className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-tight mb-3">6K NARRATIVE MASTERING</h5>
+                          <p className="text-[10px] sm:text-xs font-body font-bold text-white/50 uppercase leading-relaxed">
+                            This is about visual weight. We capture the "texture" of film that makes your business look expensive and authoritative.
+                          </p>
+                        </div>
+                        <div className="glass p-6 sm:p-8 rounded-xl">
+                          <div className="w-8 h-8 mb-4 flex items-center justify-center text-[#CCFF00]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 21l5-5"></path><path d="M7 21l-5-5"></path><path d="M12 21V11"></path><path d="M4 11h16"></path><path d="M4 11V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v4"></path><path d="M9 7V5"></path><path d="M15 7V5"></path></svg>
+                          </div>
+                          <h5 className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-tight mb-3">HOLLYWOOD COLOR GRADE</h5>
+                          <p className="text-[10px] sm:text-xs font-body font-bold text-white/50 uppercase leading-relaxed">
+                            We use the same color science as Netflix hits, allowing us to master your documentary so it looks like it belongs on the big screen.
+                          </p>
+                        </div>
+                        <div className="sm:col-span-2 lg:col-span-1 p-6 sm:p-8 rounded-xl bg-[#8B0000]/80 flex flex-col items-center justify-center text-center">
+                          <span className="text-[9px] sm:text-[10px] font-body font-bold text-white/60 uppercase tracking-[0.3em] mb-3">OFFICIALLY APPROVED FOR</span>
+                          <span className="text-3xl sm:text-4xl font-display font-black text-[#E50914] uppercase tracking-tight">NETFLIX</span>
+                        </div>
                       </div>
                     </div>
                     {/* Footer CTA */}
-                    <div className="flex flex-col items-center text-center gap-8">
+                    <div className="flex flex-col items-center text-center gap-6 sm:gap-8">
                       <div className="max-w-3xl">
-                        <h4 className="text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-6">
+                        <h4 className="text-2xl sm:text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-4 sm:mb-6">
                           NETFLIX QUALITY. <span className="text-white/30">MINUS THE EGO.</span>
                         </h4>
-                        <p className="text-xs lg:text-sm font-display font-bold text-white/60 uppercase leading-relaxed mb-10">
+                        <p className="text-[11px] sm:text-xs lg:text-sm font-display font-bold text-white/60 uppercase leading-relaxed mb-6 sm:mb-10">
                           Traditional Hollywood agencies charge $50k+ for this setup. By leveraging AI and keeping our team lean, I deliver Cinematic Masterworks for a fraction of the cost.
                         </p>
-                        <button onClick={onConsultation} className="btn-primary px-12 py-6 text-[10px] tracking-[0.4em]">
+                        <button onClick={onConsultation} className="btn-primary px-8 sm:px-12 py-4 sm:py-6 text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em]">
                           SECURE YOUR CINEMATIC AUDIT
                         </button>
                       </div>

@@ -10,17 +10,18 @@ const BrandingElement = ({ className = "" }: { className?: string }) => {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`footer-brand flex items-center gap-1 font-body text-[9px] font-bold tracking-[0.2em] text-white/20 uppercase cursor-default transition-all duration-300 whitespace-nowrap ${className}`}
+      className={`footer-brand flex items-center font-body text-[9px] font-bold tracking-normal text-white/20 uppercase cursor-default transition-all duration-300 whitespace-nowrap ${className}`}
     >
       <span>EST</span>
       <motion.span
         initial={false}
         animate={{ color: isHovered ? '#CCFF00' : 'rgba(255, 255, 255, 0.2)' }}
-        className="inline-block min-w-[50px] transition-colors"
+        className="inline-block transition-colors mx-2"
       >
         {isHovered ? '2026' : 'MMXXVI'}
       </motion.span>
-      <span>© CALL SAL.</span>
+      <span>©</span>
+      <span className="ml-2">CALL SAL .</span>
     </div>
   );
 };
@@ -48,10 +49,14 @@ export const GlassHeader: React.FC<{
       <header className="h-16 px-4 sm:px-6 lg:px-12 flex items-center justify-between z-40 glass-nav fixed top-4 left-4 right-4 lg:top-6 lg:left-6 lg:right-6" style={{ borderRadius: '1rem' }}>
         <div className="flex items-center">
           <button
-            onClick={() => onNavigate('overview')}
-            className="bg-[#CCFF00] px-4 py-1.5 text-black font-display font-extrabold text-lg sm:text-xl tracking-tight mr-6 uppercase cursor-pointer rounded-lg hover:shadow-[0_0_20px_rgba(204,255,0,0.3)] transition-all"
+            onClick={() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+              document.getElementById('main-content')?.scrollTo({ top: 0, behavior: 'smooth' });
+              onNavigate('overview');
+            }}
+            className="bg-[#CCFF00] px-4 py-1.5 text-black font-display font-extrabold text-lg sm:text-xl tracking-tight mr-6 uppercase cursor-pointer rounded-lg shadow-[0_0_30px_rgba(204,255,0,0.4)] hover:shadow-[0_0_50px_rgba(204,255,0,0.6)] transition-all animate-logo-glow"
           >
-            CALL SAL.
+            CALL SAL .
           </button>
           <div className="hidden lg:flex items-center gap-6 xl:gap-8 border-l border-white/10 pl-6">
             <span className="text-[10px] font-body tracking-[0.15em] text-white/50 uppercase font-medium whitespace-nowrap">
