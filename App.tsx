@@ -6,6 +6,9 @@ import { AmbientBackground } from './components/AmbientBackground';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
 import { Hero } from './components/Hero';
+import { MeetSalman } from './components/MeetSalman';
+import { TheOffer } from './components/TheOffer';
+import { BookingPage } from './components/BookingPage';
 
 const Placeholder = ({ name }: { name: string }) => (
   <div className="glass p-12 text-center">
@@ -90,10 +93,10 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Placeholder name="Hero" />;
-      case 'about': return <Placeholder name="Meet Salman" />;
-      case 'offer': return <Placeholder name="The Offer" />;
-      case 'consultation': return <Placeholder name="Book Meeting" />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} />;
+      case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
+      case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
+      case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Placeholder name="Dashboard" />;
