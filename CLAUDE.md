@@ -351,3 +351,70 @@ Complete overhaul of desktop ambient background system for premium glassmorphism
 - Apple-like glass morphing feel — clean, elegant, reactive
 - No bouncy springs — smooth ease curves
 - Focus on: hover states, transitions, modal animations, scroll behavior
+
+---
+
+## Session Log: Feb 3, 2026 (Session 4 — Scroll-Driven Parallax Entrance)
+
+### What was done
+Complete rebuild of landing experience with Calgary diorama hero and scroll-driven parallax.
+
+#### Calgary Diorama Hero
+- **Hero images added**: `public/calgary-diorama.jpg` (desktop), `public/calgary-diorama-mobile.jpg` (mobile)
+- **Full viewport**: Image fills 100vh, edge-to-edge
+- **Scroll hint**: "Scroll to explore" positioned in white table area of diorama, dark grey text
+- **Bounce animation**: New `animate-bounce-slow` keyframe for scroll indicator
+
+#### Scroll-Driven Parallax System
+- **Not triggered animations** — true scroll-position-driven transitions
+- **scrollProgress**: 0 (top) → 1 (after 80vh of scroll)
+- **Reversible**: Scroll up = everything reverses, scroll down = progresses
+- **Controls**:
+  - Diorama → black overlay opacity (0% → 100%)
+  - Header → slides down from -40px, opacity 0 → 1
+  - Nav → slides up from +40px, opacity 0 → 1
+  - Hero content → fades in + rises 30px → 0
+  - Scroll hint → fades out quickly (gone by 33% scroll)
+
+#### Ambient Background Update
+- **Removed lime green entirely** from ambient glow
+- **New palette**: Light neon blue (OKLCH hue 230) → Dark frosty cyan/teal (OKLCH hue 195-200)
+- Mobile orbs now all cyan variants
+
+#### Gradient Scroll Progress Bar
+- **Position**: Fixed top of viewport
+- **Style**: Lime → Cyan gradient (matches nav indicator)
+- **Glow**: Subtle box-shadow
+- **Visibility**: Only appears after entrance transition completes (scrollProgress >= 1)
+
+#### UI Changes
+- **Scrollbar hidden globally**: Both webkit and Firefox
+- **GlassHeader/GlassNav**: Now use inline styles driven by scrollProgress (not framer-motion animate)
+- **Hero content wrapper**: Inline styles for scroll-driven opacity/transform
+
+### Files Changed
+- `App.tsx` — scrollProgress state, scroll listener, progress bar, passed scrollProgress to components
+- `components/Hero.tsx` — Diorama hero, scroll-driven fade/content reveal, scroll hint
+- `components/GlassHeader.tsx` — scrollProgress prop, inline style transforms
+- `components/GlassNav.tsx` — scrollProgress prop, inline style transforms
+- `components/AmbientBackground.tsx` — Cyan/teal only (no lime), OKLCH blues
+- `src/index.css` — Hidden scrollbar, bounce-slow keyframe
+
+### Commits (Session 4)
+```
+8fd57d1 Scroll-driven parallax entrance with Calgary diorama hero
+```
+
+### User Direction for Next Session
+User is considering a **major aesthetic pivot**:
+- **Light mode**: White background, black text
+- **Keep brutalism elements** — still "hot af"
+- **2026 neumorphic feel**: Gloss, frost gradients, subtle gridlines
+- **Classy, elegant web app feel**
+- **Progress bar**: Move to bottom edge of navbar with underglow
+
+### Ready for next session
+- Move gradient progress bar to bottom edge of GlassNav with underglow
+- Explore light mode conversion (white bg, black text, glassmorphism on light)
+- Consider subtle background gridlines
+- Test current scroll parallax on production
