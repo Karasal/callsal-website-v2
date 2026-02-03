@@ -56,7 +56,7 @@ callsal-website-v2/
 - Copy/messaging (same words, new skin)
 
 ## Build Sequence Status
-- [x] Phase 1: Scaffold + Core Shell ✅ (commit 2ae7cad)
+- [x] Phase 1: Scaffold + Core Shell ✅ (commit 5394e88)
 - [ ] Phase 2: Hero Section (The Money Shot)
 - [ ] Phase 3: Services ("The Armory")
 - [ ] Phase 4: Video Portfolio
@@ -78,4 +78,7 @@ callsal-website-v2/
 ## Mistakes / Gotchas
 - Vite scaffold puts entry in `src/main.tsx` — we use `index.tsx` at root
 - tsconfig.app.json defaults to `include: ["src"]` — must add root dirs
-- Windows bash: use PowerShell for file copy operations (xcopy fails in bash)
+- Windows bash: use `cp -r` not `xcopy` (xcopy fails in git bash)
+- Phase 1 was previously marked complete but files were missing — always verify with `ls`
+- No tsconfig.app.json needed — single tsconfig.json works fine
+- strict mode OFF in tsconfig — v1 code wasn't written for it
