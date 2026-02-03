@@ -11,6 +11,7 @@ import { TheOffer } from './components/TheOffer';
 import { BookingPage } from './components/BookingPage';
 import { AuthModal } from './components/AuthModal';
 import { Dashboard } from './components/Dashboard';
+import ClientHubOnboarding from './components/ClientHubOnboarding';
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -98,6 +99,16 @@ const App: React.FC = () => {
       default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} />;
     }
   };
+
+  // Full-page onboarding takeover for clients who haven't completed it
+  if (currentUser && currentUser.role === 'client' && !currentUser.hasCompletedOnboarding) {
+    return (
+      <>
+        <AmbientBackground />
+        <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />
+      </>
+    );
+  }
 
   return (
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
