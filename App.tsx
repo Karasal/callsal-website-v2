@@ -5,8 +5,8 @@ import { User as IUser } from './types';
 import { AmbientBackground } from './components/AmbientBackground';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
+import { Hero } from './components/Hero';
 
-// Placeholder components — will be replaced in Phases 2-9
 const Placeholder = ({ name }: { name: string }) => (
   <div className="glass p-12 text-center">
     <h2 className="font-display text-3xl font-bold gradient-text mb-4">{name}</h2>
