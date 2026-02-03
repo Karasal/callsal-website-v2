@@ -1073,8 +1073,8 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
                         <div className="lg:col-span-7">
                           <div className="aspect-video relative overflow-hidden rounded-xl border border-white/10 bg-black cursor-pointer group" onClick={() => onShowImage("https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg")}>
-                            <img src="https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-all duration-1000" alt="RED Komodo-X" />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
+                            <img src="https://images.red.com/komodo-x/kx-rf-main-features-2x.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" alt="RED Komodo-X" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                             <div className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8">
                               <span className="text-[9px] sm:text-[10px] font-body font-bold text-[#CCFF00] uppercase block mb-1 sm:mb-2">MADE IN CALIFORNIA</span>
                               <p className="text-base sm:text-xl lg:text-2xl font-display font-extrabold text-white uppercase tracking-tighter">RED KOMODO-X 6K CINEMA CAMERA</p>
@@ -1118,6 +1118,76 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
                         </div>
                       </div>
                     </div>
+
+                    {/* Sirui Saturn Anamorphic Section */}
+                    <div className="space-y-8 sm:space-y-12 border-b border-white/5 pb-10 sm:pb-16">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
+                        <div className="lg:col-span-5 flex flex-col justify-center space-y-4 sm:space-y-6 text-center lg:text-left order-2 lg:order-1">
+                          <span className="text-[10px] sm:text-[11px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.3em] sm:tracking-[0.4em]">CINEMATIC FLARES & BOKEH</span>
+                          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.9]">SIRUI SATURN <br />ANAMORPHIC.</h4>
+                          <p className="text-xs sm:text-sm font-body font-bold text-white/60 uppercase leading-relaxed">
+                            We use specialized anamorphic glass to get that iconic widescreen look from the movies. Beautiful oval bokeh and cinematic blue flares create a visual atmosphere that regular lenses simply cannot replicate.
+                          </p>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="glass p-4 rounded-lg">
+                              <span className="text-[9px] font-body text-[#CCFF00] uppercase block mb-1">VISUALS</span>
+                              <span className="text-[10px] font-display font-bold text-white uppercase">WIDESCREEN EPIC</span>
+                            </div>
+                            <div className="glass p-4 rounded-lg">
+                              <span className="text-[9px] font-body text-[#CCFF00] uppercase block mb-1">FEEL</span>
+                              <span className="text-[10px] font-display font-bold text-white uppercase">CINEMA TEXTURE</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="lg:col-span-7 order-1 lg:order-2">
+                          <div className="aspect-video relative overflow-hidden rounded-xl border border-white/10 bg-black cursor-pointer group mb-6" onClick={() => onShowImage("https://cdn.shopifycdn.net/s/files/1/0449/9344/6037/files/v1-1.jpg?v=1677661259")}>
+                            <img src="https://cdn.shopifycdn.net/s/files/1/0449/9344/6037/files/v1-1.jpg?v=1677661259" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" alt="Sirui Saturn Lens Flare" />
+                            <div className="absolute inset-0 bg-gradient-to-l from-black/40 via-transparent to-transparent" />
+                          </div>
+                          <div className="glass p-6 sm:p-8 rounded-xl border-l-4 border-[#CCFF00]">
+                            <p className="text-xs font-display font-bold text-white uppercase tracking-wide mb-2 italic">"SIRUI SATURN SERIES IS THE TAILORED SUIT FOR YOUR BRAND."</p>
+                            <p className="text-[10px] font-body text-white/40 uppercase">It signals that your business isn't just operating—it's performing at a movie-star level.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* DJI RS3 Pro & LiDAR Section */}
+                    <div className="space-y-8 sm:space-y-12 border-b border-white/5 pb-10 sm:pb-16">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
+                        <div className="lg:col-span-7">
+                          <div className="aspect-video relative overflow-hidden rounded-xl border border-white/10 bg-black cursor-pointer group mb-6" onClick={() => onShowImage("https://www.diyphotography.net/wp-content/uploads/2024/04/dji-rs4-rs4pro-focuspro-928x522.jpg")}>
+                            <img src="https://www.diyphotography.net/wp-content/uploads/2024/04/dji-rs4-rs4pro-focuspro-928x522.jpg" className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000" alt="DJI RS3 Pro + LiDAR Focus" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
+                            <div className="absolute top-4 left-4 sm:top-6 sm:left-6 flex items-center gap-3">
+                              <div className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
+                              <span className="text-[8px] sm:text-[9px] font-body font-bold text-white uppercase tracking-widest">LIDAR_LASER_FOCUS_ACTIVE</span>
+                            </div>
+                          </div>
+                          <div className="flex flex-col sm:flex-row gap-4">
+                            <div className="flex-1 glass p-4 sm:p-6 rounded-xl flex items-center gap-4">
+                              <Move className="text-[#CCFF00] shrink-0" size={20} />
+                              <span className="text-[10px] font-display font-bold text-white uppercase">STEADY MOTION CONTROL</span>
+                            </div>
+                            <div className="flex-1 glass p-4 sm:p-6 rounded-xl flex items-center gap-4">
+                              <Focus className="text-[#CCFF00] shrink-0" size={20} />
+                              <span className="text-[10px] font-display font-bold text-white uppercase">LASER FOCUS TRACKING</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="lg:col-span-5 flex flex-col justify-center space-y-4 sm:space-y-6 text-center lg:text-left">
+                          <span className="text-[10px] sm:text-[11px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.3em] sm:tracking-[0.4em]">PRECISION CAMERA CONTROL</span>
+                          <h4 className="text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.9]">SMOOTH. SHARP. <br />SUPERIOR.</h4>
+                          <p className="text-xs sm:text-sm font-body font-bold text-white/60 uppercase leading-relaxed">
+                            Shaky footage looks like a home video. We use the DJI RS3 Pro with laser LiDAR focusing to ensure every frame is rock-steady and pin-sharp. Whether it's a slow cinematic glide or high-action tracking, the motion is perfectly controlled.
+                          </p>
+                          <p className="text-[11px] font-body font-bold text-white/40 uppercase leading-relaxed border-t border-white/10 pt-4 sm:pt-6">
+                            Our LiDAR system maps the environment in 3D using lasers, keeping you in perfect focus regardless of lighting conditions—we never miss "The Moment."
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Footer CTA */}
                     <div className="flex flex-col items-center text-center gap-6 sm:gap-8">
                       <div className="max-w-3xl">

@@ -97,7 +97,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <div className="space-y-12">
             <motion.div variants={mobileItemVariants} className="space-y-6">
-              <h2 ref={grandExperimentRef} style={grandExperimentGlow} className="text-4xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none">THE GRAND <br /> EXPERIMENT.</h2>
+              <h2 ref={grandExperimentRef} style={grandExperimentGlow} className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none"><span className="text-[1.2em]">THE</span> GRAND <br /><span className="text-[0.8em]">EXPERIMENT.</span></h2>
               <div className="w-24 h-1 bg-[#CCFF00]" />
             </motion.div>
 
@@ -106,7 +106,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
                 I HAVE CARRIED A <span className="text-white">LIFELONG PASSION</span> FOR FILMS AND THE RAW POWER OF STORYTELLING. MY CAREER AS A DIGITAL CONTENT PRODUCER AND MARKETER HAS LED ME TO A SINGULAR REALIZATION: THE WORLD HAS CHANGED, AND THE <span className="text-[#CCFF00]">OLD RULES</span> NO LONGER APPLY.
               </p>
               <p>
-                I DISCOVERED THAT THE FUTURE OF SCALABLE SUCCESS LIES AT THE INTERSECTION OF <span className="text-[#CCFF00]">AUTHENTIC FILMMAKING</span>, <span className="text-[#CCFF00]">AI BUSINESS OPERATIONS</span>, AND <span className="text-[#CCFF00]">AGENTIC WORKFLOWS</span>. THESE AREN'T JUST TRENDS; THEY ARE THE ENGINES OF THE NEW ECONOMY.
+                I DISCOVERED THAT THE FUTURE OF SCALABLE SUCCESS LIES AT THE INTERSECTION OF <span className="text-[#CCFF00]">AUTHENTIC FILMMAKING</span>, AND <span className="text-[#CCFF00]">AGENTIC WORKFLOWS</span>. THESE AREN'T JUST TRENDS; THEY ARE THE ENGINES OF THE NEW ECONOMY.
               </p>
               <p>
                 TODAY, I HELP ADVENTUROUS BUSINESS OWNERS <span className="text-white underline decoration-[#CCFF00] decoration-4 underline-offset-8">RAPIDLY TRANSFORM</span> THEIR COMPANIES INTO ELITE, AI-POWERED ORGANIZATIONS. WE ARE TURNING SLOW, TEDIOUS BUSYWORK INTO HIGH-SPEED, AUTOMATED WORKFLOWS THAT RUN WHILE YOU SLEEP.
@@ -116,15 +116,15 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {[
-              { icon: <Zap size={32} />, title: "ADAPT \n& ACCELERATE", desc: "IN 2026, AGILITY IS THE ONLY DEFENSE. I ARCHITECT SYSTEMS THAT ALLOW YOU TO ADAPT TO NEW REALITIES INSTANTLY AND ACCELERATE TOWARD TOTAL MARKET LEADERSHIP." },
-              { icon: <TrendingUp size={32} />, title: "THE UNFAIR \nADVANTAGE", desc: "LEVERAGE TOOLS THAT WORK WHILE YOU SLEEP. REDUCE OVERHEAD TO ZERO WHILE MULTIPLYING OUTPUT." },
-              { icon: <Clock size={32} />, title: "TIME \nSOVEREIGNTY", desc: "WE WIN BACK THE HOURS YOU LOSE TO THE GRIND. FOCUS ON YOUR VISION, NOT THE SPREADSHEETS." },
-              { icon: <Film size={32} />, title: "CINEMATIC \nTRUTH", desc: "DOCUMENTING THE LIFE AND LEGACY OF THOSE MAKING THE EXPERIMENT OF LIFE EXCITING." },
+              { icon: <Zap size={48} />, title: "ADAPT & ACCELERATE", desc: "IN 2026, AGILITY IS THE ONLY DEFENSE. I ARCHITECT SYSTEMS THAT ALLOW YOU TO ADAPT TO NEW REALITIES INSTANTLY AND ACCELERATE TOWARD TOTAL MARKET LEADERSHIP." },
+              { icon: <TrendingUp size={48} />, title: "THE UNFAIR ADVANTAGE", desc: "LEVERAGE TOOLS THAT WORK WHILE YOU SLEEP. REDUCE OVERHEAD TO ZERO WHILE MULTIPLYING OUTPUT." },
+              { icon: <Clock size={48} />, title: "TIME SOVEREIGNTY", desc: "WE WIN BACK THE HOURS YOU LOSE TO THE GRIND. FOCUS ON YOUR VISION, NOT THE SPREADSHEETS." },
+              { icon: <Film size={48} />, title: "CINEMATIC TRUTH", desc: "DOCUMENTING THE LIFE AND LEGACY OF THOSE MAKING THE EXPERIMENT OF LIFE EXCITING." },
             ].map((card, i) => (
-              <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-10 flex flex-col justify-between group hover:bg-white/10 transition-all duration-700">
-                <span className="text-[#CCFF00] mb-6">{card.icon}</span>
+              <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-8 flex flex-col justify-between group hover:bg-white/10 transition-all duration-700 min-h-[280px]">
+                <span className="text-[#CCFF00] mb-auto">{card.icon}</span>
                 <div>
-                  <h4 className="text-xl font-display font-black text-white uppercase leading-none mb-4 whitespace-pre-line">{card.title}</h4>
+                  <h4 className="text-base lg:text-lg font-display font-black text-white uppercase leading-tight mb-4">{card.title}</h4>
                   <p className="text-[10px] font-body text-white/40 uppercase font-black leading-tight">{card.desc}</p>
                 </div>
               </motion.div>
@@ -134,37 +134,39 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
       </section>
 
       {/* 3. PHILOSOPHY / THE "WHY" */}
-      <section className="glass-strong rounded-2xl bg-white/95 text-black overflow-hidden relative">
+      <section className="glass-strong rounded-2xl text-white overflow-hidden relative">
         <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
            <Quote size={400} />
         </div>
         <div className="p-12 lg:p-24 space-y-16 relative z-10">
           <motion.div variants={mobileItemVariants} className="max-w-4xl">
             <h2 className="text-5xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85] mb-12">
-              EVERYTHING <br /> WE DO IS <br /> FOR <span className="bg-black text-white px-4 rounded-lg">"US"</span>.
+              EVERYTHING <br /> WE DO IS <br /> FOR <span className="bg-[#CCFF00] text-black px-4 rounded-lg">"US"</span>.
             </h2>
-            <div className="space-y-8 text-lg lg:text-3xl font-display font-black uppercase leading-tight tracking-tight">
+            <div className="space-y-8 text-lg lg:text-2xl font-body font-medium uppercase leading-relaxed">
               <p>
-                WE ENTERTAIN, DELIGHT, AND SERVE ONE ANOTHER. WE CARE FOR EACHOTHER. WE CO-OPERATE, AND WE COMPETE. BUT THE CONSTANT IS <span className="border-b-4 border-black">HUMANITY</span> - WE DO IT ALL FOR <span className="bg-black text-white px-2 rounded-lg">"US"</span>.
+                WE ENTERTAIN, DELIGHT, AND SERVE ONE ANOTHER.<br />
+                WE CARE FOR EACH OTHER. WE CO-OPERATE, AND WE COMPETE.<br />
+                BUT THE CONSTANT IS <span className="border-b-4 border-[#CCFF00] font-bold">HUMANITY</span> — WE DO IT ALL FOR <span className="bg-[#CCFF00] text-black px-2 rounded-lg font-bold">"US"</span>.
               </p>
-              <p className="opacity-50">
-                FILMMAKING IS ONE OF THE LAST BEAUTIFUL ARTS TO PRESERVE AND DOCUMENT THE LIFE AND LEGACY OF THE PEOPLE WHO MADE THIS GRAND EXPERIMENT OF LIFE JUST A LITTLE BIT MORE EXCITING.
+              <p className="text-white/50 font-body font-medium normal-case text-base lg:text-xl leading-relaxed">
+                Filmmaking is one of the last beautiful arts to preserve and document the life and legacy of the people who made this grand experiment of life just a little bit more exciting.
               </p>
             </div>
           </motion.div>
 
-          <motion.div variants={mobileItemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-black/20 pt-16">
+          <motion.div variants={mobileItemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-white/20 pt-16">
             <div className="space-y-4">
-              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-black/50">THE GOAL</span>
-              <p className="text-base font-display font-black uppercase leading-tight">DO WELL IN THIS WORLD, BE OF GREAT VALUE AND SERVICE, AND BE TREMENDOUSLY REWARDED.</p>
+              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE GOAL</span>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">Do well in this world, be of great value and service, and be tremendously rewarded.</p>
             </div>
             <div className="space-y-4">
-              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-black/50">THE REWARD</span>
-              <p className="text-base font-display font-black uppercase leading-tight">AN EXCITING, FULFILLING LIFE OF EXPERIENCES, FRIENDSHIPS, & MEANING.</p>
+              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE REWARD</span>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">An exciting, fulfilling life of experiences, friendships, & meaning.</p>
             </div>
             <div className="space-y-4">
-              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-black/50">THE MISSION</span>
-              <p className="text-base font-display font-black uppercase leading-tight">BE THE PERSON PEOPLE CALL WHEN THEY "NEED SOMETHING DONE RIGHT - NOW!"</p>
+              <span className="text-[10px] font-body font-black uppercase tracking-[0.4em] text-[#CCFF00]">THE MISSION</span>
+              <p className="text-sm font-body font-medium normal-case leading-relaxed text-white/80">Be the person people call when they "need something done right - now!"</p>
             </div>
           </motion.div>
         </div>
@@ -174,7 +176,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
       <section className="text-center space-y-16">
         <motion.div variants={mobileItemVariants} className="max-w-4xl mx-auto space-y-8">
           <span className="text-[11px] font-body tracking-[1em] text-[#CCFF00] uppercase font-black block">THE INVITATION</span>
-          <h2 ref={inviteRef} style={inviteGlowStyle} className="text-5xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+          <h2 ref={inviteRef} style={inviteGlowStyle} className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none whitespace-nowrap">
             INVITE ME IN.
           </h2>
           <p className="text-lg lg:text-2xl font-display font-medium text-white/50 uppercase leading-relaxed tracking-wide">

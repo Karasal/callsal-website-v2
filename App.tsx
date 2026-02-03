@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileAnimations } from './hooks/useMobileAnimations';
 import { User as IUser } from './types';
 import { AmbientBackground } from './components/AmbientBackground';
+import { PerspectiveGrid } from './components/PerspectiveGrid';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
 import { Hero } from './components/Hero';
@@ -104,6 +105,7 @@ const App: React.FC = () => {
   if (currentUser && currentUser.role === 'client' && !currentUser.hasCompletedOnboarding) {
     return (
       <>
+        <PerspectiveGrid />
         <AmbientBackground />
         <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />
       </>
@@ -112,6 +114,7 @@ const App: React.FC = () => {
 
   return (
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
+      <PerspectiveGrid />
       <AmbientBackground />
       <GlassHeader
         onAuth={() => setIsAuthOpen(true)}

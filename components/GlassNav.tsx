@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { LayoutGrid, Home, User, Zap, MessageSquare, LogIn, UserPlus, LogOut } from 'lucide-react';
-import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { User as IUser } from '../types';
 import { BrandingElement } from './GlassHeader';
 
@@ -20,35 +20,89 @@ export const GlassNav: React.FC<{
     ...(currentUser ? [{ id: 'dashboard', icon: <LayoutGrid size={20} />, label: currentUser.role === 'admin' ? 'ADMIN' : 'CLIENT HUB' }] : []),
   ];
 
+  const navRef = useRef<HTMLElement>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+
+  // Calculate indicator position based on active tab
+  useEffect(() => {
+    const activeIndex = tabs.findIndex(t => t.id === activeTab);
+    const activeButton = tabRefs.current[activeIndex];
+    const nav = navRef.current;
+
+    if (activeButton && nav) {
+      const navRect = nav.getBoundingClientRect();
+      const buttonRect = activeButton.getBoundingClientRect();
+
+      setIndicatorStyle({
+        left: buttonRect.left - navRect.left,
+        width: buttonRect.width,
+      });
+    }
+  }, [activeTab, tabs.length, currentUser]);
+
+  const handleTabClick = (tabId: string) => {
+    if (tabId !== activeTab) {
+      setActiveTab(tabId);
+    }
+  };
+
   return (
     <aside className="fixed bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 glass-nav h-16 lg:h-20 flex items-center justify-between px-4 lg:px-12 z-[100]">
       <BrandingElement className="hidden lg:flex w-48" />
 
-      <nav className="flex-1 flex flex-row w-full justify-around lg:justify-center lg:gap-8" aria-label="Primary Navigation">
-        {tabs.map((tab) => (
+      <nav
+        ref={navRef}
+        className="flex-1 flex flex-row w-full justify-around lg:justify-center lg:gap-8 relative"
+        aria-label="Primary Navigation"
+      >
+        {/* Premium Gradient Indicator */}
+        <motion.div
+          className="absolute bottom-1 h-[2px] rounded-full pointer-events-none"
+          initial={false}
+          animate={{
+            left: indicatorStyle.left,
+            width: indicatorStyle.width,
+          }}
+          transition={{
+            type: 'spring',
+            stiffness: 300,
+            damping: 30,
+          }}
+        >
+          {/* Core gradient bar */}
+          <div
+            className="absolute inset-x-4 inset-y-0 rounded-full"
+            style={{
+              background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
+            }}
+          />
+          {/* Soft glow */}
+          <div
+            className="absolute inset-x-4 -inset-y-1 rounded-full"
+            style={{
+              background: 'linear-gradient(90deg, rgba(204, 255, 0, 0.5) 0%, rgba(0, 240, 255, 0.5) 100%)',
+              filter: 'blur(6px)',
+            }}
+          />
+        </motion.div>
+
+        {tabs.map((tab, index) => (
           <button
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            ref={(el) => { tabRefs.current[index] = el; }}
+            onClick={() => handleTabClick(tab.id)}
             aria-label={tab.label}
-            className={`flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-3 px-2 lg:px-5 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all ${
+            className={`flex flex-col lg:flex-row items-center justify-center gap-1 lg:gap-3 px-2 lg:px-5 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all duration-300 ${
               activeTab === tab.id ? 'text-white' : 'text-white/40 hover:text-white/70'
             }`}
           >
-            <span className="shrink-0">{tab.icon}</span>
-            <span className="hidden lg:block font-display text-[10px] tracking-[0.15em] font-bold uppercase leading-none">{tab.label}</span>
-            {/* Active indicator - gradient line */}
-            <span
-              className={`absolute bottom-0 left-2 right-2 h-[2px] rounded-full transition-all duration-500 ${
-                activeTab === tab.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-40'
-              }`}
-              style={{
-                background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
-                boxShadow: activeTab === tab.id
-                  ? '0 0 10px rgba(204, 255, 0, 0.4), 0 0 20px rgba(0, 240, 255, 0.2)'
-                  : 'none'
-              }}
-              aria-hidden="true"
-            />
+            <span className={`shrink-0 transition-transform duration-300 ${activeTab === tab.id ? 'scale-110 -translate-y-0.5' : ''}`}>
+              {tab.icon}
+            </span>
+            <span className="hidden lg:block font-display text-[10px] tracking-[0.15em] font-bold uppercase leading-none">
+              {tab.label}
+            </span>
           </button>
         ))}
       </nav>
@@ -67,7 +121,7 @@ export const GlassNav: React.FC<{
           </div>
         ) : (
           <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => setActiveTab('dashboard')} role="button" aria-label="View Dashboard">
+            <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleTabClick('dashboard')} role="button" aria-label="View Dashboard">
               <img src={currentUser.avatar} className="w-8 h-8 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" alt="" />
               <div className="text-[11px] font-display font-bold text-white uppercase truncate max-w-[100px]">{currentUser.name}</div>
             </div>
