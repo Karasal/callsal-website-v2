@@ -32,7 +32,8 @@ export const GlassHeader: React.FC<{
   onAuth: () => void;
   currentUser: IUser | null;
   onNavigate: (tab: string) => void;
-}> = ({ onAuth, currentUser, onNavigate }) => {
+  scrollProgress?: number;
+}> = ({ onAuth, currentUser, onNavigate, scrollProgress = 1 }) => {
   const [mstTime, setMstTime] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMobile, fadeProps } = useMobileAnimations();
@@ -46,7 +47,14 @@ export const GlassHeader: React.FC<{
 
   return (
     <>
-      <header className="h-16 px-4 sm:px-6 lg:px-12 flex items-center justify-between z-40 glass-nav fixed top-4 left-4 right-4 lg:top-6 lg:left-6 lg:right-6" style={{ borderRadius: '1rem' }}>
+      <header
+        className="h-16 px-4 sm:px-6 lg:px-12 flex items-center justify-between z-40 glass-nav fixed top-4 left-4 right-4 lg:top-6 lg:left-6 lg:right-6 transition-none"
+        style={{
+          borderRadius: '1rem',
+          opacity: isMobile ? 1 : scrollProgress,
+          transform: isMobile ? 'none' : `translateY(${(1 - scrollProgress) * -40}px)`,
+        }}
+      >
         <div className="flex items-center">
           <button
             onClick={() => {

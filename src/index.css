@@ -249,10 +249,9 @@ html {
   mix-blend-mode: overlay;
 }
 
-/* ===== Scrollbar ===== */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #000; }
-::-webkit-scrollbar-thumb { background: var(--lime); border-radius: 2px; }
+/* ===== Scrollbar - Hidden globally ===== */
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
@@ -411,4 +410,13 @@ input:focus, textarea:focus, select:focus {
     /* bottom-left */
     transform: translate(-30%, 50%);
   }
+}
+
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 1.5s ease-in-out infinite;
 }

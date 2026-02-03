@@ -1213,7 +1213,7 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }> = ({ onStart, onConsultation }) => {
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number }> = ({ onStart, onConsultation, scrollProgress = 1 }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
@@ -1230,10 +1230,50 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }>
 
   return (
     <div className="relative">
+      {/* Calgary Diorama Hero Image - Full Viewport with Scroll-Driven Parallax */}
+      <div className="relative w-screen h-screen -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 flex items-center justify-center overflow-hidden">
+        {/* Desktop image */}
+        <img
+          src="/calgary-diorama.jpg"
+          alt="Calgary Skyline Diorama"
+          className="hidden lg:block w-full h-full object-cover object-center"
+        />
+        {/* Mobile image */}
+        <img
+          src="/calgary-diorama-mobile.jpg"
+          alt="Calgary Skyline Diorama"
+          className="lg:hidden w-full h-full object-cover object-center"
+        />
+
+        {/* Fade to black overlay - controlled by scroll */}
+        <div
+          className="absolute inset-0 bg-black pointer-events-none"
+          style={{ opacity: isMobile ? (scrollProgress >= 0.5 ? 1 : 0) : scrollProgress }}
+        />
+
+        {/* Scroll hint - fades out as you scroll */}
+        <div
+          className="absolute bottom-[12%] lg:bottom-[15%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
+          style={{ opacity: Math.max(0, 1 - scrollProgress * 3) }}
+        >
+          <span className="text-[10px] font-body tracking-[0.3em] text-black/50 uppercase">Scroll to explore</span>
+          <div className="w-5 h-8 rounded-full border border-black/40 flex items-start justify-center p-1 animate-bounce-slow">
+            <div className="w-1 h-2 bg-black/60 rounded-full" />
+          </div>
+        </div>
+      </div>
+
+      {/* Hero Content - fades in as you scroll */}
+      <div
+        style={{
+          opacity: isMobile ? 1 : scrollProgress,
+          transform: isMobile ? 'none' : `translateY(${(1 - scrollProgress) * 30}px)`,
+        }}
+      >
       <div className="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-20 lg:space-y-32">
-        <div className="min-h-[70vh] lg:min-h-0 lg:h-[calc(100dvh-160px)] flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-6 lg:gap-8 xl:gap-12 relative pt-2 pb-8 lg:pt-0 lg:pb-0">
+        <div className="min-h-[50vh] lg:min-h-0 flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-6 lg:gap-8 xl:gap-12 relative pt-2 pb-8 lg:pt-0 lg:pb-0">
           <div className="z-10 flex-1 w-full lg:max-w-[calc(100%-420px)] xl:max-w-[calc(100%-460px)] text-left self-start lg:self-center">
-            <motion.div {...(isMobile ? {} : { initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.8 } })}>
+            <div>
               <div className="mb-3 lg:mb-2 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
                 <div className="w-8 h-[2px] bg-[#CCFF00]" />
                 <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline gradient-text">
@@ -1257,18 +1297,17 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }>
                 </button>
               </div>
               {!isSalBotExpanded && (
-                <motion.button {...(isMobile ? {} : { initial: { opacity: 0 }, animate: { opacity: 1 } })} onClick={() => setIsSalBotExpanded(true)} className="lg:hidden w-full py-3 btn-primary text-[11px] tracking-[0.15em] mb-8">
+                <button onClick={() => setIsSalBotExpanded(true)} className="lg:hidden w-full py-3 btn-primary text-[11px] tracking-[0.15em] mb-8">
                   LAUNCH SAL BOT
-                </motion.button>
+                </button>
               )}
-            </motion.div>
+            </div>
           </div>
           <div className={`z-10 w-full lg:w-[380px] xl:w-[420px] 2xl:w-[460px] shrink-0 ${!isSalBotExpanded ? 'hidden lg:block' : 'block'}`}>
-            <motion.div {...(isMobile ? {} : { initial: { opacity: 0, scale: 0.95 }, animate: { opacity: 1, scale: 1 }, transition: { duration: 0.8, delay: 0.2 } })}>
-              <IntegratedSalBot onConsultation={onConsultation} />
-            </motion.div>
+            <IntegratedSalBot onConsultation={onConsultation} />
           </div>
         </div>
+      </div>
       </div>
 
       <TheArmory onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} onConsultation={onConsultation} />
@@ -1279,14 +1318,14 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }>
 
       {/* Meet Sal CTA */}
       <div className="py-16 sm:py-24 border-t border-white/10">
-        <motion.div {...(isMobile ? {} : { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, viewport: { once: true } })} className="text-center max-w-3xl mx-auto px-4">
+        <div className="text-center max-w-3xl mx-auto px-4">
           <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold block mb-4">INDEPENDENT AI OPERATOR & FILMMAKER</span>
           <h3 className="text-2xl sm:text-4xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-6">SO WHO IS THIS SAL GUY ANYWAY?</h3>
           <p className="text-sm sm:text-base font-display font-medium text-white/50 uppercase tracking-tight mb-8 max-w-xl mx-auto">
             THE FACE BEHIND THE TECH. THE HUMAN BEHIND THE AUTOMATION. GET TO KNOW YOUR NEW BUSINESS PAL.
           </p>
           <button onClick={onStart} className="btn-glass px-8 py-4 sm:px-12 sm:py-5 text-xs sm:text-sm tracking-[0.2em]">MEET SALMAN</button>
-        </motion.div>
+        </div>
       </div>
 
       {/* Operator Deep Dive Modal */}

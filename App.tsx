@@ -21,6 +21,41 @@ const App: React.FC = () => {
   const [authLoading, setAuthLoading] = useState(true);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
+  // Scroll-driven parallax state (0 = top/hero visible, 1 = fully transitioned)
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [totalScrollProgress, setTotalScrollProgress] = useState(0);
+
+  // Track scroll position for parallax entrance
+  useEffect(() => {
+    const updateScrollProgress = () => {
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        const scrollTop = mainContent.scrollTop;
+        // Transition completes within first viewport height of scroll
+        const transitionZone = window.innerHeight * 0.8;
+        const progress = Math.min(scrollTop / transitionZone, 1);
+        setScrollProgress(progress);
+
+        // Total progress for the progress bar
+        const scrollHeight = mainContent.scrollHeight - mainContent.clientHeight;
+        const total = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        setTotalScrollProgress(total);
+      }
+    };
+
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+      mainContent.addEventListener('scroll', updateScrollProgress, { passive: true });
+      updateScrollProgress(); // Initial call
+    }
+
+    return () => {
+      if (mainContent) {
+        mainContent.removeEventListener('scroll', updateScrollProgress);
+      }
+    };
+  }, [activeTab]);
+
   // Hash-based deep linking
   useEffect(() => {
     const hashToTab: Record<string, string> = {
@@ -90,14 +125,14 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} />;
       case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
       case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} />;
     }
   };
 
@@ -116,10 +151,23 @@ const App: React.FC = () => {
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
       <PerspectiveGrid />
       <AmbientBackground />
+
+      {/* Gradient Scroll Progress Bar */}
+      <div
+        className="fixed top-0 left-0 h-[3px] z-[200] transition-opacity duration-300"
+        style={{
+          width: `${totalScrollProgress}%`,
+          background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
+          boxShadow: '0 0 10px rgba(204, 255, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)',
+          opacity: scrollProgress >= 1 ? 1 : 0,
+        }}
+      />
+
       <GlassHeader
         onAuth={() => setIsAuthOpen(true)}
         currentUser={currentUser}
         onNavigate={handleNavigation}
+        scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
       />
       <main id="main-content" className="flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 overflow-y-auto">
         {isMobile ? (
@@ -150,6 +198,7 @@ const App: React.FC = () => {
         currentUser={currentUser}
         setCurrentUser={setCurrentUser}
         onLogout={handleLogout}
+        scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
       />
     </div>
   );

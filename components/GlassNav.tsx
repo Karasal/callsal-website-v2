@@ -11,7 +11,10 @@ export const GlassNav: React.FC<{
   currentUser: IUser | null;
   setCurrentUser: (u: IUser | null) => void;
   onLogout: () => void;
-}> = ({ activeTab, setActiveTab, onAuth, currentUser, setCurrentUser, onLogout }) => {
+  scrollProgress?: number;
+}> = ({ activeTab, setActiveTab, onAuth, currentUser, setCurrentUser, onLogout, scrollProgress = 1 }) => {
+  // Check if mobile for animation control
+  const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
   const tabs = [
     { id: 'overview', icon: <Home size={20} />, label: 'WELCOME' },
     { id: 'about', icon: <User size={20} />, label: 'MEET SALMAN' },
@@ -63,7 +66,13 @@ export const GlassNav: React.FC<{
   };
 
   return (
-    <aside className="fixed bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 glass-nav h-16 lg:h-20 flex items-center justify-between px-4 lg:px-12 z-[100]">
+    <aside
+      className="fixed bottom-4 left-4 right-4 lg:bottom-6 lg:left-6 lg:right-6 glass-nav h-16 lg:h-20 flex items-center justify-between px-4 lg:px-12 z-[100] transition-none"
+      style={{
+        opacity: isMobile ? 1 : scrollProgress,
+        transform: isMobile ? 'none' : `translateY(${(1 - scrollProgress) * 40}px)`,
+      }}
+    >
       <BrandingElement className="hidden lg:flex w-48" />
 
       <nav
