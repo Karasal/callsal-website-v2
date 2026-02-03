@@ -99,33 +99,53 @@ const ProximityHeroText = () => {
 
 const PixelNerdSal = ({ state }: { state: 'idle' | 'typing' | 'happy' }) => {
   return (
-    <div className="relative w-20 h-20 sm:w-24 sm:h-24 bg-white/90 border border-[#CCFF00]/40 overflow-hidden p-2 flex items-center justify-center rounded-xl shrink-0 glow-lime">
-      <div className="absolute inset-0 z-0 opacity-10 bg-[linear-gradient(rgba(204,255,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(204,255,0,0.1)_1px,transparent_1px)] bg-[size:4px_4px]" />
+    <div
+      className="relative w-20 h-20 sm:w-24 sm:h-24 bg-white/95 overflow-hidden p-2 flex items-center justify-center rounded-xl shrink-0"
+      style={{
+        border: '2px solid transparent',
+        backgroundImage: 'linear-gradient(white, white), linear-gradient(135deg, #CCFF00 0%, #00F0FF 100%)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'padding-box, border-box',
+        boxShadow: '0 0 15px rgba(204, 255, 0, 0.2), 0 0 30px rgba(0, 240, 255, 0.15)',
+      }}
+    >
       <motion.svg
         viewBox="0 0 100 100"
-        className="w-full h-full text-[#CCFF00] relative z-0 drop-shadow-[0_0_8px_rgba(204,255,0,0.5)]"
+        className="w-full h-full relative z-0"
+        style={{ filter: 'drop-shadow(0 0 6px rgba(204, 255, 0, 0.4)) drop-shadow(0 0 12px rgba(0, 240, 255, 0.3))' }}
         animate={state === 'typing' ? { scale: [1, 1.05, 1], y: [0, -2, 0] } : {}}
         transition={{ repeat: Infinity, duration: 0.15 }}
       >
-        <g stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round">
+        {/* Gradient definition for line art */}
+        <defs>
+          <linearGradient id="salGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#CCFF00" />
+            <stop offset="100%" stopColor="#00F0FF" />
+          </linearGradient>
+        </defs>
+        {/* Hair/head */}
+        <g stroke="url(#salGradient)" strokeWidth="4" fill="none" strokeLinecap="round">
           <path d="M15 32 L15 22 Q15 10 45 10 L85 10 L85 32" />
           <path d="M25 22 L75 22" />
           <path d="M35 16 L80 16" />
         </g>
-        <g stroke="currentColor" strokeWidth="4" fill="none">
+        {/* Glasses */}
+        <g stroke="url(#salGradient)" strokeWidth="4" fill="none">
           <rect x="15" y="35" width="30" height="20" />
           <rect x="55" y="35" width="30" height="20" />
           <path d="M45 45 H55" />
           <path d="M15 45 H5" />
           <path d="M85 45 H95" />
         </g>
-        <motion.g fill="currentColor" animate={state === 'idle' ? { scaleY: [1, 1, 0, 1] } : {}} transition={{ repeat: Infinity, duration: 3, times: [0, 0.9, 0.95, 1] }}>
+        {/* Eyes (blink animation) */}
+        <motion.g fill="url(#salGradient)" animate={state === 'idle' ? { scaleY: [1, 1, 0, 1] } : {}} transition={{ repeat: Infinity, duration: 3, times: [0, 0.9, 0.95, 1] }}>
           <rect x="25" y="42" width="10" height="6" />
           <rect x="65" y="42" width="10" height="6" />
         </motion.g>
+        {/* Mouth */}
         <motion.path
           d={state === 'happy' ? "M30 65 Q50 85 70 65" : "M35 70 H65"}
-          stroke="currentColor" strokeWidth="4" fill="none" strokeLinecap="round"
+          stroke="url(#salGradient)" strokeWidth="4" fill="none" strokeLinecap="round"
           animate={state === 'happy' ? { scale: [1, 1.1, 1] } : {}}
         />
       </motion.svg>
@@ -169,8 +189,17 @@ const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) =
   };
 
   return (
-    <div className="glass-strong w-full flex flex-col overflow-hidden h-[480px] lg:h-[520px] relative">
-      <div className="p-3 sm:p-4 border-b border-gray-200 flex flex-col sm:flex-row items-center gap-4 z-20 shrink-0">
+    <div
+      className="glass-strong w-full flex flex-col overflow-hidden h-[480px] lg:h-[520px] relative rounded-2xl"
+      style={{
+        border: '2px solid transparent',
+        backgroundImage: 'linear-gradient(white, white), linear-gradient(135deg, #CCFF00 0%, #00F0FF 100%)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'padding-box, border-box',
+        boxShadow: '0 0 20px rgba(204, 255, 0, 0.15), 0 0 40px rgba(0, 240, 255, 0.1)',
+      }}
+    >
+      <div className="p-3 sm:p-4 border-b border-gray-200/50 flex flex-col sm:flex-row items-center gap-4 z-20 shrink-0">
         <PixelNerdSal state={isTyping ? 'typing' : (messages.length > 1 ? 'happy' : 'idle')} />
         <div className="flex-1 text-center sm:text-left">
           <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
