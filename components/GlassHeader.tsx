@@ -10,7 +10,7 @@ const BrandingElement = ({ className = "" }: { className?: string }) => {
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`footer-brand flex items-center gap-1 font-body text-[9px] font-bold tracking-[0.3em] text-white/20 uppercase cursor-default transition-all duration-300 ${className}`}
+      className={`footer-brand flex items-center gap-1 font-body text-[9px] font-bold tracking-[0.2em] text-white/20 uppercase cursor-default transition-all duration-300 whitespace-nowrap ${className}`}
     >
       <span>EST</span>
       <motion.span

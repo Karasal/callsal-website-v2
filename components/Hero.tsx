@@ -74,7 +74,7 @@ const ProximityHeroText = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { glowStyle } = useProximityGlow(containerRef);
 
-  const baseClasses = "text-[15vw] sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem] 2xl:text-[7.5rem] font-display font-extrabold leading-[0.85] tracking-tighter uppercase flex flex-col items-start";
+  const baseClasses = "text-[12vw] sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem] 2xl:text-[5rem] font-display font-extrabold leading-[0.9] tracking-tighter uppercase flex flex-col items-start";
   const limeStyle = { color: '#CCFF00', WebkitTextFillColor: '#CCFF00' } as React.CSSProperties;
   const whiteProximityStyle = { color: '#ffffff', WebkitTextFillColor: '#ffffff', ...glowStyle } as React.CSSProperties;
 
@@ -917,7 +917,7 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
               <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold">HIGH-END DOCUMENTARY</span>
               <div className="w-12 h-[1px] bg-[#CCFF00]" />
             </div>
-            <h2 ref={cinematicsRef} style={glowStyle} className="proximity-glow inline-block text-6xl sm:text-8xl lg:text-[10rem] font-display font-extrabold text-white uppercase tracking-tighter leading-[0.85] mb-12">CINEMATICS.</h2>
+            <h2 ref={cinematicsRef} style={glowStyle} className="proximity-glow block text-5xl sm:text-7xl lg:text-8xl xl:text-9xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.85] mb-12 text-center mx-auto">CINEMATICS.</h2>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-12">
               <div className="space-y-6">
                 <p className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white uppercase leading-none tracking-tight">
@@ -1092,7 +1092,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void }>
     <div className="relative">
       <div className="max-w-7xl mx-auto px-4 space-y-12 sm:space-y-20 lg:space-y-32">
         <div className="min-h-[70vh] lg:min-h-0 lg:h-[calc(100dvh-160px)] flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-6 lg:gap-8 xl:gap-12 relative pt-2 pb-8 lg:pt-0 lg:pb-0">
-          <div className="z-10 flex-1 w-full max-w-3xl text-left self-start lg:self-center">
+          <div className="z-10 flex-1 w-full lg:max-w-[calc(100%-420px)] xl:max-w-[calc(100%-460px)] text-left self-start lg:self-center">
             <motion.div {...(isMobile ? {} : { initial: { opacity: 0, x: -50 }, animate: { opacity: 1, x: 0 }, transition: { duration: 0.8 } })}>
               <div className="mb-3 lg:mb-2 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
                 <div className="w-8 h-[2px] bg-[#CCFF00]" />
