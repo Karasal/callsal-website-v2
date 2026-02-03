@@ -26,19 +26,34 @@ export const GlassNav: React.FC<{
 
   // Calculate indicator position based on active tab
   useEffect(() => {
-    const activeIndex = tabs.findIndex(t => t.id === activeTab);
-    const activeButton = tabRefs.current[activeIndex];
-    const nav = navRef.current;
+    const updateIndicator = () => {
+      const activeIndex = tabs.findIndex(t => t.id === activeTab);
+      const activeButton = tabRefs.current[activeIndex];
+      const nav = navRef.current;
 
-    if (activeButton && nav) {
-      const navRect = nav.getBoundingClientRect();
-      const buttonRect = activeButton.getBoundingClientRect();
+      if (activeButton && nav) {
+        const navRect = nav.getBoundingClientRect();
+        const buttonRect = activeButton.getBoundingClientRect();
 
-      setIndicatorStyle({
-        left: buttonRect.left - navRect.left,
-        width: buttonRect.width,
-      });
-    }
+        setIndicatorStyle({
+          left: buttonRect.left - navRect.left,
+          width: buttonRect.width,
+        });
+      }
+    };
+
+    // Delay initial measurement to ensure icons/fonts are rendered
+    const rafId = requestAnimationFrame(() => {
+      requestAnimationFrame(updateIndicator);
+    });
+
+    // Also update on resize
+    window.addEventListener('resize', updateIndicator);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', updateIndicator);
+    };
   }, [activeTab, tabs.length, currentUser]);
 
   const handleTabClick = (tabId: string) => {
