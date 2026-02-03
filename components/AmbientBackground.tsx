@@ -3,9 +3,9 @@ import React from 'react';
 export const AmbientBackground: React.FC = () => {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-      {/* Primary lime orb - anchored to top-left (logo area radiosity) */}
+      {/* ============== MOBILE ORBS (lg:hidden) - LOCKED, DO NOT EDIT ============== */}
       <div
-        className="orb orb-lime"
+        className="orb orb-lime lg:hidden"
         style={{
           width: '700px',
           height: '700px',
@@ -14,9 +14,8 @@ export const AmbientBackground: React.FC = () => {
           animation: 'drift 30s ease-in-out infinite',
         }}
       />
-      {/* Secondary lime orb - subtle accent */}
       <div
-        className="orb orb-lime"
+        className="orb orb-lime lg:hidden"
         style={{
           width: '300px',
           height: '300px',
@@ -26,9 +25,8 @@ export const AmbientBackground: React.FC = () => {
           animation: 'breathe 8s ease-in-out infinite',
         }}
       />
-      {/* Primary cyan orb - bottom right area */}
       <div
-        className="orb orb-cyan"
+        className="orb orb-cyan lg:hidden"
         style={{
           width: '600px',
           height: '600px',
@@ -38,9 +36,8 @@ export const AmbientBackground: React.FC = () => {
           animationDelay: '-10s',
         }}
       />
-      {/* Secondary cyan orb - mid-right accent */}
       <div
-        className="orb orb-cyan"
+        className="orb orb-cyan lg:hidden"
         style={{
           width: '250px',
           height: '250px',
@@ -51,9 +48,8 @@ export const AmbientBackground: React.FC = () => {
           animationDelay: '-3s',
         }}
       />
-      {/* Mixed orb - center area for depth */}
       <div
-        className="orb orb-mixed"
+        className="orb orb-mixed lg:hidden"
         style={{
           width: '500px',
           height: '500px',
@@ -64,9 +60,8 @@ export const AmbientBackground: React.FC = () => {
           animationDelay: '-15s',
         }}
       />
-      {/* Subtle bottom accent */}
       <div
-        className="orb orb-lime"
+        className="orb orb-lime lg:hidden"
         style={{
           width: '400px',
           height: '400px',
@@ -75,6 +70,37 @@ export const AmbientBackground: React.FC = () => {
           opacity: 0.08,
           animation: 'breathe 12s ease-in-out infinite',
           animationDelay: '-6s',
+        }}
+      />
+
+      {/* ============== DESKTOP GLOW (hidden lg:block) - EDIT FREELY ============== */}
+      {/* Edge-projected frosted aura with slow counter-clockwise rotation */}
+
+      {/* Electric green wash - rotates counter-clockwise around edges */}
+      <div
+        className="hidden lg:block absolute"
+        style={{
+          width: '80%',
+          height: '80%',
+          top: 0,
+          left: 0,
+          background: 'radial-gradient(in oklch, ellipse 100% 100% at 50% 50%, oklch(0.95 0.40 118 / 0.24) 0%, oklch(0.95 0.40 118 / 0.08) 40%, transparent 70%)',
+          filter: 'blur(100px)',
+          animation: 'aurora-green 120s linear infinite',
+        }}
+      />
+
+      {/* Cyan wash - rotates counter-clockwise, offset from green */}
+      <div
+        className="hidden lg:block absolute"
+        style={{
+          width: '80%',
+          height: '80%',
+          top: 0,
+          left: 0,
+          background: 'radial-gradient(in oklch, ellipse 100% 100% at 50% 50%, oklch(0.90 0.16 190 / 0.20) 0%, oklch(0.90 0.16 190 / 0.06) 40%, transparent 70%)',
+          filter: 'blur(100px)',
+          animation: 'aurora-cyan 120s linear infinite',
         }}
       />
     </div>

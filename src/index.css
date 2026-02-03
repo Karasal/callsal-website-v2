@@ -372,3 +372,43 @@ input:focus, textarea:focus, select:focus {
 .animate-logo-glow {
   animation: logo-glow 4s ease-in-out infinite;
 }
+
+/* Aurora rotation - slow counter-clockwise drift of ambient colors */
+/* Green starts top-left, cyan starts bottom-right, both rotate counter-clockwise */
+@keyframes aurora-green {
+  0%, 100% {
+    /* top-left */
+    transform: translate(-30%, -30%);
+  }
+  25% {
+    /* bottom-left */
+    transform: translate(-30%, 50%);
+  }
+  50% {
+    /* bottom-right */
+    transform: translate(50%, 50%);
+  }
+  75% {
+    /* top-right */
+    transform: translate(50%, -30%);
+  }
+}
+
+@keyframes aurora-cyan {
+  0%, 100% {
+    /* bottom-right (opposite of green) */
+    transform: translate(50%, 50%);
+  }
+  25% {
+    /* top-right */
+    transform: translate(50%, -30%);
+  }
+  50% {
+    /* top-left */
+    transform: translate(-30%, -30%);
+  }
+  75% {
+    /* bottom-left */
+    transform: translate(-30%, 50%);
+  }
+}

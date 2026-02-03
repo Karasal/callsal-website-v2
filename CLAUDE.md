@@ -277,3 +277,77 @@ html, body { overflow-x: hidden; max-width: 100vw; }
 - Continue fixing other pages (MeetSalman, TheOffer, BookingPage) if needed
 - Test interactive features (auth, booking, chat)
 - Deploy and verify production
+
+---
+
+## Session Log: Feb 3, 2026 (Session 3 — Ambient Background & OKLCH)
+
+### What was done
+Complete overhaul of desktop ambient background system for premium glassmorphism aesthetic.
+
+#### GlassNav Fix
+- **Nav indicator race condition**: Fixed gradient indicator skipping icon on first load
+- Solution: Double `requestAnimationFrame` ensures icons/fonts painted before measuring
+- Added resize listener for robustness
+
+#### Desktop Ambient Background (Complete Rewrite)
+- **Problem**: Mobile looked gorgeous (diffused glow), desktop had 4 separate "light spots"
+- **Solution**: Separate mobile/desktop implementations with `lg:hidden` / `hidden lg:block`
+
+##### Mobile (LOCKED — do not edit)
+- Original orb-based system preserved exactly
+- 6 orbs with drift/breathe animations
+- Works perfectly on narrow viewports
+
+##### Desktop (New System)
+- **Edge-projected gradients**: Linear gradients from each edge (not radial orbs)
+  - Electric green from left + top edges
+  - Frosty cyan from right + bottom edges
+- **OKLCH color interpolation**: Vibrant blends without muddy midtones
+  - Electric green: `oklch(0.95 0.40 118)` — high lightness, high chroma, hue 118°
+  - Frosty cyan: `oklch(0.90 0.16 190)` — bright, low chroma for icy feel
+- **Aurora rotation**: 120-second counter-clockwise drift of color positions
+- **Frosted halo layer**: 60px blur for diffused aura effect
+
+#### Key Learnings: OKLCH Color Space
+- RGB interpolation creates muddy browns when lime mixes with dark backgrounds
+- OKLCH (perceptually uniform) keeps gradients vibrant throughout
+- Hue 118° = electric green-lime (not yellow-brown, not forest green)
+- Hue 190° = true cyan (frosty, not green-tinted)
+- Higher lightness (0.90+) prevents dark muddy blends
+
+#### Files Changed
+- `components/PerspectiveGrid.tsx` — Desktop edge-projected gradients with OKLCH
+- `components/AmbientBackground.tsx` — Separate mobile/desktop systems, aurora animation
+- `components/GlassNav.tsx` — Double RAF fix for indicator positioning
+- `src/index.css` — Aurora keyframes (aurora-green, aurora-cyan)
+
+### Commits (Session 3)
+```
+2f53581 Fix nav indicator position on initial load
+965c7cb Visual polish: nav indicator, hardware sections, MeetSalman refinements
+```
+
+### CSS: Aurora Keyframes
+```css
+@keyframes aurora-green {
+  0%, 100% { transform: translate(-30%, -30%); }  /* top-left */
+  25% { transform: translate(-30%, 50%); }         /* bottom-left */
+  50% { transform: translate(50%, 50%); }          /* bottom-right */
+  75% { transform: translate(50%, -30%); }         /* top-right */
+}
+
+@keyframes aurora-cyan {
+  0%, 100% { transform: translate(50%, 50%); }    /* bottom-right */
+  25% { transform: translate(50%, -30%); }         /* top-right */
+  50% { transform: translate(-30%, -30%); }        /* top-left */
+  75% { transform: translate(-30%, 50%); }         /* bottom-left */
+}
+```
+
+### Ready for next session
+- **Interaction & Animation Overhaul**: Clean up ported v1 animations
+- Replace static/prekeyed animations with fluid microinteractions
+- Apple-like glass morphing feel — clean, elegant, reactive
+- No bouncy springs — smooth ease curves
+- Focus on: hover states, transitions, modal animations, scroll behavior
