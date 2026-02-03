@@ -142,9 +142,9 @@ const PixelNerdSal = ({ state }: { state: 'idle' | 'typing' | 'happy' }) => {
           <rect x="25" y="42" width="10" height="6" />
           <rect x="65" y="42" width="10" height="6" />
         </motion.g>
-        {/* Mouth */}
+        {/* Mouth - slight curve even in idle for better visibility */}
         <motion.path
-          d={state === 'happy' ? "M30 65 Q50 85 70 65" : "M35 70 H65"}
+          d={state === 'happy' ? "M30 65 Q50 85 70 65" : "M35 68 Q50 74 65 68"}
           stroke="url(#salGradient)" strokeWidth="4" fill="none" strokeLinecap="round"
           animate={state === 'happy' ? { scale: [1, 1.1, 1] } : {}}
         />
