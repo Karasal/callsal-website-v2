@@ -546,3 +546,81 @@ Major cleanup and new 3D background effect for hero section.
 - **Finish ParallaxRoom**: Tune grid density, room depth, rotation amount
 - **Plan Hero → Armory transition**: User has full vision, needs implementation
 - **Scroll choreography**: Map out the full tick-by-tick section transitions
+
+---
+
+## Session Log: Feb 3, 2026 (Session 7 — Dark Mode + Persistent Room3D)
+
+### What was done
+Complete dark mode conversion and persistent 3D room background that works across all pages.
+
+#### Room3D Persistent Background
+- **Moved from Hero.tsx to App.tsx**: Now renders at app level, persists across all tab changes
+- **Overview tab**: Room3D fades in after diorama (scrollProgress controls opacity/trace)
+- **Other tabs**: Room3D fully visible at opacity=1, scrollProgress=1 (black walls, dark grid, fully traced)
+- **Desktop only**: Preserved original mobile exclusion
+
+#### Dark Mode Conversion (Full Site)
+All components updated with dark theme colors:
+- Text: `text-gray-900` → `text-white`, `text-gray-500` → `text-gray-400`
+- Borders: `border-gray-200` → `border-white/20`
+- Updated: AuthModal, BookingPage, ClientHubOnboarding, Dashboard, GlassHeader, GlassNav, MeetSalman, TheOffer, Hero
+
+#### Flat Black Panels (Not Transparent Glassmorphism)
+- **Problem**: Transparent blur panels too jarring with 3D room motion
+- **Solution**: Flat black panels with subtle borders
+```css
+.glass {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.glass-strong {
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+```
+
+#### Frosty Radiosity Glows
+- Removed hover glows on text/titles (useProximityGlow removed from all components)
+- New glow style based on lime→cyan gradient:
+```css
+.btn-primary {
+  box-shadow:
+    0 0 15px rgba(204, 255, 0, 0.2),
+    0 0 30px rgba(204, 255, 0, 0.1),
+    0 0 45px rgba(0, 240, 255, 0.08);
+}
+```
+
+#### Brutalist Grid Lines
+- Grid color: darker grey (80→40 range based on scroll)
+- Style: dotted with square caps
+```typescript
+ctx.lineCap = 'square';
+ctx.lineJoin = 'miter';
+const dotSize = 2;
+const gapSize = 5;
+ctx.setLineDash([dotSize, gapSize]);
+```
+
+#### Deleted Components
+- `AmbientBackground.tsx` — replaced by Room3D
+- `ParallaxRoom.tsx` — replaced by Room3D
+- `PerspectiveGrid.tsx` — no longer needed
+
+### Files Changed
+- `App.tsx` — Added Room3D import and render at app level
+- `components/Hero.tsx` — Removed Room3D import and render
+- `components/Room3D.tsx` — NEW: Canvas-based 3D wireframe room
+- `src/index.css` — Flat black glass panels, frosty radiosity glows
+- All page components — Dark mode colors
+
+### Commits (Session 7)
+```
+e62e8f2 Session 7: Dark mode, persistent 3D room background, flat black panels
+```
+
+### Ready for next session
+- Visual QA on production (Vercel auto-deploy should be live)
+- Fine-tune Room3D grid density/animation timing
+- Test all pages with persistent background
