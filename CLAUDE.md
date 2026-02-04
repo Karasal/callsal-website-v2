@@ -483,3 +483,66 @@ b68cea7 Scroll UX overhaul: smooth bidirectional transitions + compact header
 - Fine-tune animation timing if needed
 - Consider adding email to header pill if space allows
 - Mobile menu could use polish
+
+---
+
+## Session Log: Feb 3, 2026 (Session 6 — SalBot Nuke + 3D Parallax Room)
+
+### What was done
+Major cleanup and new 3D background effect for hero section.
+
+#### SalBot Nuked
+- **Removed entirely**: `PixelNerdSal` component, `IntegratedSalBot` component
+- **Deleted**: `/api/chat/index.ts` (Gemini-powered chat endpoint)
+- **Removed**: "LAUNCH SAL BOT" button, `isSalBotExpanded` state
+- **Hero layout**: Now full-width (was split to accommodate chat panel)
+
+#### Hero Text Made HUGE
+- **Before**: `text-[12vw] sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem] 2xl:text-[5rem]`
+- **After**: `text-[15vw] sm:text-[12vw] md:text-[11vw] lg:text-[9vw] xl:text-[8vw] 2xl:text-[7.5vw]`
+- Viewport-width based sizing = scales massively on all screens
+
+#### Color Updates (Lime → Hyperblue)
+- "HOW I HELP YOU GROW [?]" → `text-[#00F0FF]` (was gradient)
+- "THE SAL METHOD" → `text-[#00F0FF]` (was lime)
+- Tagline accents (AI, EVERYTHING, COMPETITION, etc.) → `text-[#00F0FF]`
+- Left border accent → `border-[#00F0FF]`
+- MY GOAL, SILENT WORKERS, SMOOTH PIPELINES, CONSTANT GROWTH → `text-black`
+
+#### WHY WORK WITH ME Modal
+- Background: `bg-white` (was `glass-strong` grey)
+- Close button: hover to gray-900 (was white)
+- Added `shadow-2xl` for depth
+
+#### 3D Parallax Room Background (NEW)
+- **Component**: `ParallaxRoom.tsx`
+- **Effect**: Wireframe 3D room (floor, ceiling, 4 walls) with mouse-driven parallax
+- **Interaction**: Mouse position controls camera rotation (±8° max, smoothly interpolated)
+- **Grid**: Subtle black lines on white background
+- **Visibility**: Fades in after diorama fades out (scrollProgress 0.25 → 0.75)
+- **Desktop only**: Disabled on mobile (no mouse to track)
+
+#### Scroll-Up Animation Fix
+- **Problem**: Hero text was jerking DOWN on scroll-up before fading
+- **Root cause**: Direction detection was lagging by frames
+- **Solution**: Phase-based state machine using refs
+  - `hasReachedFullVisibility` ref tracks if hero was ever fully visible
+  - Once true, any fade-out moves content UP (exit animation)
+  - Resets when fully exited (allows re-entrance)
+- **Result**: Smooth "rise up and out" on scroll-up, no jerk
+
+### Files Changed
+- `App.tsx` — Added scrollDirection prop to Hero
+- `components/Hero.tsx` — SalBot removal, huge text, color updates, phase-based animation
+- `components/ParallaxRoom.tsx` — NEW: 3D wireframe room with mouse parallax
+- `api/chat/index.ts` — DELETED
+
+### Commits (Session 6)
+```
+7229ea3 Session 6: Nuke SalBot, HUGE hero text, 3D parallax room background
+```
+
+### TODO for next session
+- **Finish ParallaxRoom**: Tune grid density, room depth, rotation amount
+- **Plan Hero → Armory transition**: User has full vision, needs implementation
+- **Scroll choreography**: Map out the full tick-by-tick section transitions
