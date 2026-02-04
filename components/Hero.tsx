@@ -1109,7 +1109,10 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
         {/* Fixed Diorama Image - stays in place while scrolling */}
         {/* bg-neutral-100 prevents white flash before image loads */}
         {/* pointer-events-none allows scroll events to pass through */}
-        <div className="fixed inset-0 z-0 bg-neutral-100 pointer-events-none">
+        <div
+          className="fixed inset-0 z-[2] bg-neutral-100 pointer-events-none"
+          style={{ opacity: isMobile ? (scrollProgress >= 0.3 ? 0 : 1) : Math.max(0, 1 - scrollProgress * 4) }}
+        >
           {/* Desktop image */}
           <img
             src="/calgary-diorama.jpg"
@@ -1121,12 +1124,6 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
             src="/calgary-diorama-mobile.jpg"
             alt="Calgary Skyline Diorama"
             className="lg:hidden w-full h-full object-cover object-center"
-          />
-
-          {/* Fade to white overlay - completes by 0.25 scroll progress (before pills appear) */}
-          <div
-            className="absolute inset-0 bg-white pointer-events-none"
-            style={{ opacity: isMobile ? (scrollProgress >= 0.3 ? 1 : 0) : Math.min(1, scrollProgress * 4) }}
           />
         </div>
 

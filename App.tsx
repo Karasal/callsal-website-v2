@@ -302,12 +302,12 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="relative h-screen w-screen flex flex-col bg-white overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
+    <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
 
       {/* 3D Room Background - persists across all pages (desktop only) */}
       {!isMobile && (
         <Room3D
-          opacity={activeTab === 'overview' ? Math.min(1, Math.max(0, (scrollProgress - 0.15) * 3)) : 1}
+          opacity={1}
           scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         />
       )}
