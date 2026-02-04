@@ -17,6 +17,7 @@ export interface Position3D {
 export interface ModuleContentProps {
   onClose: () => void;
   onConsultation?: () => void;
+  isPreview?: boolean; // true = scaled-down preview in 3D card, false = full interactive
 }
 
 // Module metadata for registry

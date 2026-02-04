@@ -37,6 +37,8 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   const dioramaImageRef = useRef<HTMLImageElement | null>(null);
   const hoveredModuleIdRef = useRef<string | null>(null);
   const zoomProgressRef = useRef(zoomProgress);
+  const activeModuleIdRef = useRef<string | null>(null);
+  const targetModulePosRef = useRef<{ x: number; y: number; z: number } | null>(null);
 
   // Store projected card bounds for hit detection
   const cardBoundsRef = useRef<Map<string, { corners: { x: number; y: number }[] }>>(new Map());
@@ -59,6 +61,17 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   useEffect(() => {
     zoomProgressRef.current = zoomProgress;
   }, [zoomProgress]);
+
+  // Track active module and its position for camera targeting
+  useEffect(() => {
+    activeModuleIdRef.current = activeModuleId;
+    if (activeModuleId) {
+      const targetModule = modules.find(m => m.id === activeModuleId);
+      if (targetModule) {
+        targetModulePosRef.current = targetModule.basePosition;
+      }
+    }
+  }, [activeModuleId, modules]);
 
   // Point-in-polygon test for hit detection
   const isPointInPolygon = useCallback((px: number, py: number, corners: { x: number; y: number }[]) => {
@@ -184,20 +197,38 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       ctx.fillStyle = wallColor;
       ctx.fillRect(0, 0, w, h);
 
-      // Camera zoom
+      // Camera zoom from scroll
       const zoomProgress = Math.min(1, sp);
       const easeZoom = (1 - Math.cos(zoomProgress * Math.PI)) / 2;
 
-      // Additional zoom when module is active (fly toward it)
-      const moduleZoomOffset = zp * 5; // Zoom closer when module is active
+      // Base camera position at full scroll
+      const baseCamX = 0;
+      const baseCamY = 2.5 + (3.5 - 2.5) * easeZoom;
+      const baseCamZ = 7.5 + (2.0 - 7.5) * easeZoom;
 
-      const camX = 0;
-      const camY = 2.5 + (3.5 - 2.5) * easeZoom;
-      const camZ = 7.5 + (2.0 - 7.5) * easeZoom - moduleZoomOffset;
+      // When a module is active, fly camera TOWARD it smoothly
+      let camX = baseCamX;
+      let camY = baseCamY;
+      let camZ = baseCamZ;
 
-      // Camera rotation based on mouse
-      const maxPan = 0.3 * easeZoom * (1 - zp); // Disable pan when zoomed into module
-      const maxTilt = 0.2 * easeZoom * (1 - zp);
+      if (targetModulePosRef.current && zp > 0) {
+        const target = targetModulePosRef.current;
+        // Smoothstep easing for natural drone movement
+        const ease = zp * zp * (3 - 2 * zp);
+
+        // Camera flies toward module — keep centered
+        const targetCamX = target.x * 0.02; // Almost no X offset — stay centered
+        const targetCamY = baseCamY;        // DON'T move Y — stay at current height
+        const targetCamZ = target.z - 3.5;  // Stop 3.5 units in front
+
+        camX = baseCamX + (targetCamX - baseCamX) * ease;
+        camY = targetCamY; // Keep Y stable
+        camZ = baseCamZ + (targetCamZ - baseCamZ) * ease;
+      }
+
+      // Camera rotation based on mouse — CONSTRAINED for subtle, clean movement
+      const maxPan = 0.08 * easeZoom * (1 - zp); // Reduced from 0.3 for subtlety
+      const maxTilt = 0.05 * easeZoom * (1 - zp); // Reduced from 0.2 for subtlety
       const panAngle = (smoothMouseRef.current.x - 0.5) * maxPan * 2;
       const tiltAngle = (smoothMouseRef.current.y - 0.5) * maxTilt * 2;
 
@@ -398,9 +429,10 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
         }
       }
 
-      // Draw module cards (only in floating state, not zoomed)
+      // Draw module card FRAMES only (content is rendered by Module3DOverlay)
+      // This creates a subtle frame effect behind the HTML content
       if (sp >= 0.8 && zp < 0.5) {
-        const cardOpacity = Math.min(1, (sp - 0.8) * 5) * (1 - zp * 2);
+        const cardOpacity = Math.min(1, (sp - 0.8) * 5) * (1 - zp * 2) * 0.3; // Subtle frame
 
         // Clear card bounds for this frame
         cardBoundsRef.current.clear();
@@ -408,7 +440,6 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
         modules.forEach((module) => {
           const pos = module.basePosition;
           const isHovered = hoveredModuleIdRef.current === module.id;
-          const isActive = activeModuleId === module.id;
 
           // Card corners in 3D space
           const halfW = CARD_WIDTH / 2;
@@ -427,14 +458,19 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
           if (projectedCorners.every(p => p !== null)) {
             const pc = projectedCorners as { x: number; y: number }[];
 
-            // Store bounds for hit detection
+            // Store bounds for hit detection (still needed)
             cardBoundsRef.current.set(module.id, { corners: pc });
 
+            // Only draw a subtle shadow/frame behind the HTML content
             ctx.save();
             ctx.globalAlpha = cardOpacity;
 
-            // Card background
-            ctx.fillStyle = isHovered ? 'rgba(0, 0, 0, 0.95)' : 'rgba(0, 0, 0, 0.85)';
+            // Subtle shadow
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+            ctx.shadowBlur = 30;
+            ctx.shadowOffsetX = 0;
+            ctx.shadowOffsetY = 10;
             ctx.beginPath();
             ctx.moveTo(pc[0].x, pc[0].y);
             ctx.lineTo(pc[1].x, pc[1].y);
@@ -442,42 +478,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
             ctx.lineTo(pc[3].x, pc[3].y);
             ctx.closePath();
             ctx.fill();
-
-            // Card border (glow on hover)
-            if (isHovered) {
-              // Lime glow
-              ctx.shadowColor = '#CCFF00';
-              ctx.shadowBlur = 20;
-              ctx.strokeStyle = '#CCFF00';
-              ctx.lineWidth = 3;
-            } else {
-              ctx.shadowBlur = 0;
-              ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-              ctx.lineWidth = 2;
-            }
-            ctx.stroke();
             ctx.shadowBlur = 0;
-
-            // Calculate center and size for text
-            const centerX = (pc[0].x + pc[1].x + pc[2].x + pc[3].x) / 4;
-            const centerY = (pc[0].y + pc[1].y + pc[2].y + pc[3].y) / 4;
-            const cardWidth = Math.sqrt(Math.pow(pc[1].x - pc[0].x, 2) + Math.pow(pc[1].y - pc[0].y, 2));
-
-            // Dynamic font size based on card projection size
-            const fontSize = Math.max(12, Math.min(24, cardWidth / 8));
-
-            // Draw title
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = `bold ${fontSize}px "Syne", sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(module.title, centerX, centerY + fontSize * 0.5);
-
-            // Draw icon area indicator (cyan accent)
-            ctx.fillStyle = '#00F0FF';
-            ctx.beginPath();
-            ctx.arc(centerX, centerY - fontSize * 0.8, fontSize * 0.5, 0, Math.PI * 2);
-            ctx.fill();
 
             ctx.restore();
           }
