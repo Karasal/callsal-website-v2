@@ -1064,7 +1064,7 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
 };
 
 // 3D Title that appears "painted" on the back wall above the diorama
-const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgress: number; onStart: () => void; onViewCinematics: () => void }> = ({ smoothMouse, scrollProgress, onStart, onViewCinematics }) => {
+const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgress: number; onViewCinematics: () => void; onBookNow: () => void; cinematicsMode: boolean }> = ({ smoothMouse, scrollProgress, onViewCinematics, onBookNow, cinematicsMode }) => {
   // Match Room3D camera math exactly
   const zoomProgress = Math.min(1, scrollProgress);
   const easeZoom = (1 - Math.cos(zoomProgress * Math.PI)) / 2;
@@ -1085,9 +1085,11 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   // Snap point is at scrollProgress = 0.7, so title should be fully visible there
   // fadeIn: 0→1 from 0.4 to 0.65
   // fadeOut: 1→0 from 0.75 to 0.80 (instant fade before modules appear)
+  // Also fade out when cinematics mode is active
   const fadeIn = Math.min(1, Math.max(0, (scrollProgress - 0.4) / 0.25));
   const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.75) / 0.05));
-  const titleOpacity = fadeIn * fadeOut;
+  const cinematicsFade = cinematicsMode ? 0 : 1;
+  const titleOpacity = fadeIn * fadeOut * cinematicsFade;
 
   // Text color transition: black → white as room goes white → black
   // Matches room colorProgress: 0.7 → 1.0
@@ -1100,11 +1102,11 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   const scale = 0.9 + 0.2 * easeZoom;
 
   // Enable pointer events only when visible enough
-  const canInteract = scrollProgress > 0.7;
+  const canInteract = scrollProgress >= 0.6;
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center z-[5]"
+      className="fixed inset-0 flex items-center justify-center z-[60]"
       style={{
         perspective: '1000px',
         perspectiveOrigin: '50% 50%',
@@ -1157,17 +1159,17 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
         {/* Buttons */}
         <div className="flex gap-4">
           <button
-            onClick={onStart}
+            onClick={onViewCinematics}
             className="btn-primary px-8 py-4 text-[11px] tracking-[0.15em]"
           >
-            SEE MY PROCESS
+            VIEW CINEMATICS
           </button>
           <button
-            onClick={onViewCinematics}
+            onClick={onBookNow}
             className="px-8 py-4 text-[11px] tracking-[0.15em] rounded-lg font-display font-bold uppercase hover:bg-white/10 transition-colors"
             style={{ color: dynamicTextColor, borderWidth: '2px', borderStyle: 'solid', borderColor: dynamicTextColor }}
           >
-            VIEW CINEMATICS
+            BOOK NOW
           </button>
         </div>
       </div>
@@ -1175,7 +1177,7 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, cinematicsMode?: boolean, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, cinematicsMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
@@ -1217,7 +1219,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
   return (
     <div className="relative">
       {/* 3D Title painted on back wall - synced to Room3D camera (desktop only) */}
-      {!isMobile && <Wall3DTitle smoothMouse={smoothMouse} scrollProgress={scrollProgress} onStart={onStart} onViewCinematics={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} />}
+      {!isMobile && <Wall3DTitle smoothMouse={smoothMouse} scrollProgress={scrollProgress} onViewCinematics={onViewCinematics || (() => {})} onBookNow={onConsultation} cinematicsMode={cinematicsMode} />}
 
       {/* Calgary Diorama Hero Section - Fixed background with overlay */}
       {/* Height is 250vh - animations complete as section ends, no dead zone */}

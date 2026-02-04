@@ -12,6 +12,7 @@ interface Room3DEnhancedProps {
   zoomProgress: number;
   onModuleClick: (id: string) => void;
   onModuleHover: (id: string | null) => void;
+  cinematicsMode?: boolean;
 }
 
 // Card dimensions in 3D space
@@ -29,6 +30,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   zoomProgress,
   onModuleClick,
   onModuleHover,
+  cinematicsMode = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef<number | null>(null);
@@ -39,6 +41,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   const zoomProgressRef = useRef(zoomProgress);
   const activeModuleIdRef = useRef<string | null>(null);
   const targetModulePosRef = useRef<{ x: number; y: number; z: number } | null>(null);
+  const cinematicsModeRef = useRef(cinematicsMode);
 
   // Store projected card bounds for hit detection
   const cardBoundsRef = useRef<Map<string, { corners: { x: number; y: number }[] }>>(new Map());
@@ -72,6 +75,11 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       }
     }
   }, [activeModuleId, modules]);
+
+  // Track cinematics mode
+  useEffect(() => {
+    cinematicsModeRef.current = cinematicsMode;
+  }, [cinematicsMode]);
 
   // Point-in-polygon test for hit detection
   const isPointInPolygon = useCallback((px: number, py: number, corners: { x: number; y: number }[]) => {
@@ -380,9 +388,10 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
 
       // Picture frame on back wall — fade out as we approach modules
       // Fade from 0.7 (hero) to 0.9 (just before modules)
+      // Hide when cinematics mode is active (TV overlay takes over)
       const frameOpacity = sp <= 0.7 ? 1 : Math.max(0, 1 - (sp - 0.7) / 0.2);
 
-      if (dioramaImageRef.current && frameOpacity > 0) {
+      if (dioramaImageRef.current && frameOpacity > 0 && !cinematicsModeRef.current) {
         const frameWidth = 4;
         const frameHeight = 2.5;
         const frameY = 2.5;

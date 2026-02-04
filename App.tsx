@@ -18,6 +18,7 @@ const App: React.FC = () => {
   const [currentUser, setCurrentUser] = useState<IUser | null>(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
+  const [cinematicsMode, setCinematicsMode] = useState(false);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
   // Shared mouse state for 3D parallax (syncs Room3D canvas with CSS transforms)
@@ -188,6 +189,9 @@ const App: React.FC = () => {
     };
 
     const handleWheel = (e: WheelEvent) => {
+      // Don't intercept scroll when cinematics is open
+      if (cinematicsMode) return;
+
       const scrollTop = mainContent.scrollTop;
       const isInEntranceZone = scrollTop < transitionZone + 50;
 
@@ -231,6 +235,7 @@ const App: React.FC = () => {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
+      if (cinematicsMode) return;
       if (isSnappingRef.current) return;
 
       const scrollTop = mainContent.scrollTop;
@@ -264,7 +269,7 @@ const App: React.FC = () => {
       mainContent.removeEventListener('touchstart', handleTouchStart);
       mainContent.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [activeTab, isMobile]);
+  }, [activeTab, isMobile, cinematicsMode]);
 
   // Hash-based deep linking
   useEffect(() => {
@@ -335,14 +340,14 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} cinematicsMode={cinematicsMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
       case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
       case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} cinematicsMode={cinematicsMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
     }
   };
 
@@ -361,6 +366,8 @@ const App: React.FC = () => {
           smoothMouse={smoothMouse}
           activeTab={activeTab}
           onConsultation={() => handleNavigation('consultation')}
+          cinematicsMode={cinematicsMode}
+          onCloseCinematics={() => setCinematicsMode(false)}
         />
       )}
 
@@ -381,6 +388,7 @@ const App: React.FC = () => {
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
       />
+
       <main id="main-content" className="flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 overflow-y-auto">
         {isMobile ? (
           <div className="min-h-full">

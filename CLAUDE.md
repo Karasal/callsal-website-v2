@@ -53,6 +53,7 @@ npm run preview  # Preview production build
 - `Room3DEnhanced.tsx` — Room3D + module card rendering + hit detection
 - `ModuleManager.tsx` — State machine (diorama → floating → zoomed)
 - `Module3DOverlay.tsx` — HTML cards positioned in 3D space, fly-to-fullscreen
+- `TVOverlay.tsx` — Cinematics mode: flip animation, video player, selector, info bar
 
 ### Modules
 - `modules/ArmoryModule.tsx` — SOFTWARE/HARDWARE tabs with detail modals
@@ -176,12 +177,21 @@ ADMIN_EMAIL=...
 - Minor scroll imprecision on modules→hero (lands ~0.75 instead of 0.70)
 - Smoothness prioritized over precision
 
+### Session 16 (Feb 4, 2026)
+- **Cinematics Mode**: New TVOverlay.tsx with flip animation
+- Hero buttons changed: "VIEW CINEMATICS" (primary) + "BOOK NOW" (secondary)
+- Click VIEW CINEMATICS → hero title fades, TV flips from diorama to video player
+- Floating panels: TV (38% width) + Selector + Info bar with subtle parallax
+- Fixed sizes (no 3D projection resize), just translation parallax on mouse
+- Snap scroll disabled during cinematicsMode to prevent scroll lock
+- canInteract threshold lowered to 0.6 for floating point safety
+
 ### Session 15 (Feb 4, 2026)
 - Diorama picture frame fades out 0.7→0.9 scrollProgress (invisible before modules)
 - Hero title fades out instantly 0.75→0.80 (was 0.85→1.0, eliminated overlap)
 
 ### TODO
-- [ ] Extract VideoPortfolio as `CinematicsModule.tsx`
+- [ ] Extract "THE SAL METHOD" content as module
 - [ ] Extract "THE SAL METHOD" content as module
 - [ ] Visual QA on remaining pages
 - [ ] Test auth/booking flows end-to-end

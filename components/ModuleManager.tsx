@@ -11,6 +11,8 @@ import {
 import { Room3DEnhanced } from './Room3DEnhanced';
 // Import Module3DOverlay for HTML content positioned in 3D space
 import { Module3DOverlay } from './Module3DOverlay';
+// Import TVOverlay for cinematics mode
+import { TVOverlay } from './TVOverlay';
 // Import actual module components
 import { ArmoryModule } from './modules/ArmoryModule';
 
@@ -95,6 +97,8 @@ interface ModuleManagerProps {
   smoothMouse: { x: number; y: number };
   activeTab: PageId | string;
   onConsultation: () => void;
+  cinematicsMode?: boolean;
+  onCloseCinematics?: () => void;
 }
 
 export const ModuleManager: React.FC<ModuleManagerProps> = ({
@@ -102,6 +106,8 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   smoothMouse,
   activeTab,
   onConsultation,
+  cinematicsMode = false,
+  onCloseCinematics,
 }) => {
   // State machine
   const [viewState, setViewState] = useState<ViewState>('diorama');
@@ -202,6 +208,7 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
         zoomProgress={zoomProgress}
         onModuleClick={handleModuleClick}
         onModuleHover={handleModuleHover}
+        cinematicsMode={cinematicsMode}
       />
 
       {/* Module3DOverlay renders actual HTML content positioned in 3D space */}
@@ -217,6 +224,14 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
         onModuleHover={handleModuleHover}
         onClose={handleCloseModule}
         onConsultation={onConsultation}
+      />
+
+      {/* TVOverlay - flip animation from diorama to video player */}
+      <TVOverlay
+        isActive={cinematicsMode}
+        onClose={onCloseCinematics || (() => {})}
+        scrollProgress={scrollProgress}
+        smoothMouse={smoothMouse}
       />
     </>
   );
