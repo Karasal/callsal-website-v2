@@ -753,3 +753,43 @@ User wants to implement 3D hero text on back wall with step-by-step guidance:
 3. Handle lime/cyan highlights properly
 4. Coordinate with scroll progress
 5. Make sure it looks organic, not tacked on
+
+---
+
+## Session Log: Feb 3, 2026 (Session 9 — 3D Nav Attempt #2 + Revert)
+
+### What happened
+Attempted to render GlassHeader and GlassNav as 3D objects painted on the back wall of Room3D canvas. The goal was for nav elements to rotate WITH the room when mouse parallax moves the camera.
+
+### Approaches tried
+1. **Bilinear interpolation for text positioning** — calculated text positions relative to projected panel corners
+2. **Canvas rotation** — applied `ctx.rotate()` to match panel angle
+3. **Multiple iterations** — tried various fixes but text kept appearing flat/rotated incorrectly
+
+### Why it failed
+- Canvas 2D doesn't support true perspective transformation of text
+- Rotating text by panel angle isn't enough — need full perspective skew
+- The complexity kept growing without solving the core problem
+
+### Resolution
+**Reverted to backup**: `git reset --hard backup-before-3d-nav`
+- Commit: `b558a95`
+- Tag: `v2-stable-before-3d-nav`
+- Site is back to working state with HTML-based header/nav
+
+### Key Learnings
+- **Canvas 2D limitations**: Can't do true perspective text without complex matrix transforms or drawing text to offscreen canvas then projecting as texture
+- **Step-by-step with feedback**: When attempting complex visual changes, get user approval at EACH small step before proceeding
+- **Backups are essential**: The branch/tag we created in Session 8 saved us
+
+### Current stable state
+- Room3D renders 3D wireframe room + diorama picture frame
+- GlassHeader/GlassNav are HTML overlays (work correctly)
+- Hero content visible with scroll-driven animations
+- All other pages functional
+
+### Options for next session (if user wants 3D nav)
+1. **WebGL/Three.js** — true 3D text rendering with proper perspective
+2. **CSS 3D transforms** — position HTML elements in 3D space with `transform-style: preserve-3d`
+3. **Keep HTML overlays** — accept that nav doesn't rotate with room (current state works fine)
+4. **Hybrid approach** — render nav panels as 3D quads in canvas, but keep text as positioned HTML
