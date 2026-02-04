@@ -1084,9 +1084,9 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   // Fade in as we zoom out, fade out before module cards appear
   // Snap point is at scrollProgress = 0.7, so title should be fully visible there
   // fadeIn: 0→1 from 0.4 to 0.65
-  // fadeOut: 1→0 from 0.85 to 1.0 (only fade out when approaching modules)
+  // fadeOut: 1→0 from 0.75 to 0.80 (instant fade before modules appear)
   const fadeIn = Math.min(1, Math.max(0, (scrollProgress - 0.4) / 0.25));
-  const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.85) / 0.15));
+  const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.75) / 0.05));
   const titleOpacity = fadeIn * fadeOut;
 
   // Text color transition: black → white as room goes white → black

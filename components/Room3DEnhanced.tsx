@@ -378,8 +378,11 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       drawLine3D(-halfSize, halfSize, zNear, -halfSize, halfSize, zFar);
       drawLine3D(halfSize, halfSize, zNear, halfSize, halfSize, zFar);
 
-      // Picture frame on back wall
-      if (dioramaImageRef.current) {
+      // Picture frame on back wall — fade out as we approach modules
+      // Fade from 0.7 (hero) to 0.9 (just before modules)
+      const frameOpacity = sp <= 0.7 ? 1 : Math.max(0, 1 - (sp - 0.7) / 0.2);
+
+      if (dioramaImageRef.current && frameOpacity > 0) {
         const frameWidth = 4;
         const frameHeight = 2.5;
         const frameY = 2.5;
@@ -399,6 +402,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
           const pc = projectedCorners as { x: number; y: number }[];
 
           ctx.save();
+          ctx.globalAlpha = frameOpacity;
           ctx.beginPath();
           ctx.moveTo(pc[0].x, pc[0].y);
           ctx.lineTo(pc[1].x, pc[1].y);
@@ -415,6 +419,9 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
           ctx.drawImage(dioramaImageRef.current, minX, minY, maxX - minX, maxY - minY);
           ctx.restore();
 
+          // Frame border with same opacity
+          ctx.save();
+          ctx.globalAlpha = frameOpacity;
           ctx.strokeStyle = '#000';
           ctx.lineWidth = 8;
           ctx.lineCap = 'square';
@@ -426,6 +433,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
           ctx.lineTo(pc[3].x, pc[3].y);
           ctx.closePath();
           ctx.stroke();
+          ctx.restore();
         }
       }
 
