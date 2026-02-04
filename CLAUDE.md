@@ -917,3 +917,85 @@ e39a462 Session 11: 3D floating module system (WIP)
 - [ ] Extract VideoPortfolio to `modules/VideoPortfolio.tsx`
 - [ ] Create ModuleZoomView for full HTML content overlay
 - [ ] Test carousel navigation between modules
+
+---
+
+## Session Log: Feb 4, 2026 (Session 12 — 3D Module Fly-to-Fullscreen)
+
+### What was built
+Complete 3D module system where cards float in the room, and clicking flies the card to fullscreen.
+
+#### New Components
+- `components/modules/ArmoryModule.tsx` — Extracted Armory as standalone module with full content
+- `components/Module3DOverlay.tsx` — HTML cards positioned in 3D space with fly-to-fullscreen transitions
+
+#### Key Features
+1. **3D Card Positioning**: HTML content rendered in cards that match canvas 3D projection
+2. **Fly-to-Fullscreen**: Click a card → it smoothly flies from 3D position to centered fullscreen
+3. **Camera Zoom**: Room3D camera flies toward clicked module (subtle eye candy)
+4. **Responsive Target**: Fullscreen is `min(80% screen width, 1000px)` × `75% height`
+5. **Scroll Passthrough**: Cards are visual-only (`pointer-events: none`), canvas handles clicks
+6. **Snap Scroll Works**: Can scroll back up to hero from module screen
+
+#### Architecture
+- **Canvas (Room3DEnhanced)**: Renders 3D room, grid, handles click/hover detection
+- **HTML Overlay (Module3DOverlay)**: Renders actual module content positioned in 3D space
+- **Hybrid Approach**: Canvas for interaction, HTML for content (responsive)
+
+#### Camera Math (synced between canvas and overlay)
+```javascript
+// Camera flies toward module on click
+const targetCamX = target.x * 0.02;  // Almost centered
+const targetCamY = baseCamY;          // Don't move Y
+const targetCamZ = target.z - 3.5;    // Stop 3.5 units in front
+
+// Constrained rotation for subtle parallax
+const maxPan = 0.08 * easeZoom * (1 - zp);
+const maxTilt = 0.05 * easeZoom * (1 - zp);
+```
+
+#### Fly-to-Fullscreen Interpolation
+```javascript
+// Linear easing for clean scaling (no pop)
+const ease = zoomProgress;
+
+// Target responsive size
+const targetWidth = Math.min(screenW * 0.8, 1000);
+const targetHeight = screenH * 0.75;
+
+// Interpolate position/size
+const currentX = isActive ? transform.x + (targetX - transform.x) * ease : transform.x;
+// ... etc
+```
+
+#### Key Decisions
+- **Linear easing** instead of smoothstep — no "pop" effect
+- **Center-origin scaling** — content scales outward from center, not corner
+- **Cards visual-only when not active** — scroll events pass through to snap scroll
+- **Canvas handles clicks** — existing hit detection in Room3DEnhanced
+
+### Files Changed
+- `components/modules/ArmoryModule.tsx` — NEW: Full Armory content as module
+- `components/Module3DOverlay.tsx` — NEW: 3D positioned HTML cards
+- `components/ModuleManager.tsx` — Wires Room3D + Module3DOverlay together
+- `components/Room3DEnhanced.tsx` — Camera targeting, constrained rotation
+- `types/modules.ts` — Added `isPreview` prop to ModuleContentProps
+
+### Commits
+```
+a137148 Session 12: 3D module system with fly-to-fullscreen transition
+```
+
+### What Works
+- ✅ Cards float in 3D room with real content preview
+- ✅ Click card → flies smoothly to fullscreen center
+- ✅ Scroll back up from module screen (snap scroll)
+- ✅ Close button appears when zoomed
+- ✅ Responsive fullscreen target size
+- ✅ Subtle camera zoom as eye candy
+
+### TODO for next session
+- [ ] Extract VideoPortfolio as `CinematicsModule.tsx`
+- [ ] Extract "THE SAL METHOD" content as module
+- [ ] Fine-tune fullscreen size/position if needed
+- [ ] Test on production (Vercel auto-deploy)
