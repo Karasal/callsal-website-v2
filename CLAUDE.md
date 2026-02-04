@@ -999,3 +999,42 @@ a137148 Session 12: 3D module system with fly-to-fullscreen transition
 - [ ] Extract "THE SAL METHOD" content as module
 - [ ] Fine-tune fullscreen size/position if needed
 - [ ] Test on production (Vercel auto-deploy)
+
+---
+
+## Session Log: Feb 4, 2026 (Session 13 — Scroll Debug Deferred)
+
+### What happened
+Investigated scroll-up issue where modules→hero transition doesn't land at exact scrollProgress=0.7, causing slight visual mismatch (room slightly darker than intended).
+
+### Attempts made (all reverted)
+1. **Progress clamping** — Snap scrollProgress to exact values when near snap points
+2. **Lerp-based interpolation** — Track target progress and lerp UI state toward it
+3. **Force-correct on scrollend** — Instant scroll correction after smooth scroll completes
+
+### Why they failed
+- Clamping caused jarring "pops" when crossing thresholds mid-scroll
+- Lerping desynchronized element animations (opacity and transform at different rates)
+- Instant correction was visually jarring
+- User insight: "When elements move, they should be fading in perfect sync"
+
+### Decision
+**Deferred to later** — Keeping current smooth behavior. Will revisit when:
+1. Site is more complete
+2. Progress bar is re-enabled for visual debugging
+3. Can properly map snap points to scroll positions
+
+### Current State
+- Three-point snap scroll works (diorama → hero → modules)
+- Smooth both directions
+- Minor imprecision on modules→hero (lands ~0.75-0.78 instead of 0.70)
+- Visually acceptable, smoothness prioritized over precision
+
+### Key Learning
+**Smoothness > Precision** — Users notice jarring pops more than slight color differences. Don't sacrifice buttery animations for pixel-perfect positioning.
+
+### TODO (deferred)
+- [ ] Re-enable gradient progress bar for debugging
+- [ ] Map exact scroll positions to visual states
+- [ ] Consider CSS scroll-snap instead of JS-based snapping
+- [ ] Test on various browsers/devices for scroll behavior differences
