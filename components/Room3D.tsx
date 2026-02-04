@@ -3,26 +3,36 @@ import React, { useEffect, useRef } from 'react';
 interface Room3DProps {
   opacity?: number;
   scrollProgress?: number;
+  smoothMouse?: { x: number; y: number };
 }
 
-export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 }) => {
+export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1, smoothMouse: smoothMouseProp }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0.5, y: 0.5 });
-  const smoothMouse = useRef({ x: 0.5, y: 0.5 });
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | null>(null);
   const scrollProgressRef = useRef(scrollProgress);
+  const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
   const dioramaImageRef = useRef<HTMLImageElement | null>(null);
 
-  // Update ref when prop changes
+  // Update refs when props change
   useEffect(() => {
     scrollProgressRef.current = scrollProgress;
   }, [scrollProgress]);
 
   useEffect(() => {
+    if (smoothMouseProp) {
+      smoothMouseRef.current = smoothMouseProp;
+    }
+  }, [smoothMouseProp]);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
+
+    // Enable anti-aliasing hints
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -41,16 +51,6 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
     dioramaImg.onload = () => {
       dioramaImageRef.current = dioramaImg;
     };
-
-    const onMouse = (e: MouseEvent) => {
-      mouseRef.current = {
-        x: e.clientX / window.innerWidth,
-        y: e.clientY / window.innerHeight,
-      };
-    };
-    window.addEventListener('mousemove', onMouse);
-
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     // 3D to 2D projection with 90 FOV
     const project = (x: number, y: number, z: number, w: number, h: number, camX: number, camY: number, camZ: number) => {
@@ -73,8 +73,7 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       const w = window.innerWidth;
       const h = window.innerHeight;
 
-      smoothMouse.current.x = lerp(smoothMouse.current.x, mouseRef.current.x, 0.06);
-      smoothMouse.current.y = lerp(smoothMouse.current.y, mouseRef.current.y, 0.06);
+      // Mouse smoothing handled by App.tsx - read from ref
 
       // Scroll-driven animation progress
       const sp = scrollProgressRef.current;
@@ -114,8 +113,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       // Camera rotation (pan/tilt) based on mouse - starts subtle, increases as we zoom out
       const maxPan = 0.3 * easeZoom;  // No pan when zoomed in, full pan when zoomed out
       const maxTilt = 0.2 * easeZoom;
-      const panAngle = (smoothMouse.current.x - 0.5) * maxPan * 2;
-      const tiltAngle = (smoothMouse.current.y - 0.5) * maxTilt * 2;
+      const panAngle = (smoothMouseRef.current.x - 0.5) * maxPan * 2;
+      const tiltAngle = (smoothMouseRef.current.y - 0.5) * maxTilt * 2;
 
       // Rotation helper - rotate point around camera
       const rotatePoint = (x: number, y: number, z: number) => {
@@ -187,14 +186,19 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         const p2 = project(bx, by, bz, w, h, camX, camY, camZ);
         if (!p1 || !p2) return;
 
-        // Solid lines with square caps for brutalist feel
-        ctx.lineCap = 'square';
-        ctx.lineJoin = 'miter';
+        // Round caps for better anti-aliasing on diagonal lines
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
 
-        // Draw full line (no trace animation - we need lines visible when zoomed in)
+        // Offset by 0.5 for sharper rendering on straight segments
+        const px1 = Math.round(p1.x) + 0.5;
+        const py1 = Math.round(p1.y) + 0.5;
+        const px2 = Math.round(p2.x) + 0.5;
+        const py2 = Math.round(p2.y) + 0.5;
+
         ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
+        ctx.moveTo(px1, py1);
+        ctx.lineTo(px2, py2);
         ctx.stroke();
       };
 
@@ -262,12 +266,12 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       const step = roomSize / gridDivisions;
 
       // Total number of grid lines for stagger calculation
-      // Back wall: 22, Floor: 22, Ceiling: 22, Left: 22, Right: 22, Corners: 8 = ~118 lines
-      const totalGridLines = (gridDivisions + 1) * 2 * 5; // 5 surfaces, 2 directions each
+      // Interior lines only: (gridDivisions - 1) * 2 per surface * 5 surfaces
+      const totalGridLines = (gridDivisions - 1) * 2 * 5; // 5 surfaces, 2 directions each
       let lineIndex = 0;
 
-      // Back wall grid
-      for (let i = 0; i <= gridDivisions; i++) {
+      // Back wall grid (interior lines only - skip edges to avoid z-fighting)
+      for (let i = 1; i < gridDivisions; i++) {
         const pos = -halfSize + i * step;
         // Vertical lines
         drawLine3D(pos, -halfSize, zFar, pos, halfSize, zFar, lineIndex++, totalGridLines);
@@ -275,8 +279,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         drawLine3D(-halfSize, pos, zFar, halfSize, pos, zFar, lineIndex++, totalGridLines);
       }
 
-      // Floor grid
-      for (let i = 0; i <= gridDivisions; i++) {
+      // Floor grid (interior lines only)
+      for (let i = 1; i < gridDivisions; i++) {
         const pos = -halfSize + i * step;
         const zPos = zNear + i * step;
         // Lines along X (left to right)
@@ -285,8 +289,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         drawLine3D(pos, halfSize, zNear, pos, halfSize, zFar, lineIndex++, totalGridLines);
       }
 
-      // Ceiling grid
-      for (let i = 0; i <= gridDivisions; i++) {
+      // Ceiling grid (interior lines only)
+      for (let i = 1; i < gridDivisions; i++) {
         const pos = -halfSize + i * step;
         const zPos = zNear + i * step;
         // Lines along X
@@ -295,8 +299,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         drawLine3D(pos, -halfSize, zNear, pos, -halfSize, zFar, lineIndex++, totalGridLines);
       }
 
-      // Left wall grid
-      for (let i = 0; i <= gridDivisions; i++) {
+      // Left wall grid (interior lines only)
+      for (let i = 1; i < gridDivisions; i++) {
         const pos = -halfSize + i * step;
         const zPos = zNear + i * step;
         // Vertical lines (along Y)
@@ -305,8 +309,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         drawLine3D(-halfSize, pos, zNear, -halfSize, pos, zFar, lineIndex++, totalGridLines);
       }
 
-      // Right wall grid
-      for (let i = 0; i <= gridDivisions; i++) {
+      // Right wall grid (interior lines only)
+      for (let i = 1; i < gridDivisions; i++) {
         const pos = -halfSize + i * step;
         const zPos = zNear + i * step;
         // Vertical lines
@@ -403,7 +407,6 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
 
     return () => {
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', onMouse);
       if (frameRef.current) cancelAnimationFrame(frameRef.current);
     };
   }, []);

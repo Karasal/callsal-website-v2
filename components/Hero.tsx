@@ -1063,7 +1063,104 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number, scrollDirection?: 'forward' | 'backward' }> = ({ onStart, onConsultation, scrollProgress = 1 }) => {
+// 3D Title that appears "painted" on the back wall above the diorama
+const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgress: number; onStart: () => void; onViewCinematics: () => void }> = ({ smoothMouse, scrollProgress, onStart, onViewCinematics }) => {
+  // Match Room3D camera math exactly
+  const zoomProgress = Math.min(1, scrollProgress);
+  const easeZoom = (1 - Math.cos(zoomProgress * Math.PI)) / 2;
+
+  // Pan/tilt increases as we zoom out (same as Room3D)
+  const maxPan = 0.3 * easeZoom;
+  const maxTilt = 0.2 * easeZoom;
+
+  // Calculate rotation angles in radians (same formula as Room3D)
+  const panAngle = (smoothMouse.x - 0.5) * maxPan * 2;
+  const tiltAngle = (smoothMouse.y - 0.5) * maxTilt * 2;
+
+  // Convert to degrees for CSS (negative panAngle because CSS rotateY is opposite direction)
+  const rotateY = -panAngle * (180 / Math.PI);
+  const rotateX = tiltAngle * (180 / Math.PI);
+
+  // Fade in as we zoom out (title revealed as camera pulls back)
+  // Visible from scrollProgress 0.3 to 0.7
+  const titleOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.3) / 0.4));
+
+  // Scale down slightly when zoomed in for depth illusion
+  const scale = 0.9 + 0.2 * easeZoom;
+
+  // Enable pointer events only when visible enough
+  const canInteract = scrollProgress > 0.7;
+
+  return (
+    <div
+      className="fixed inset-0 flex items-center justify-center z-[5]"
+      style={{
+        perspective: '1000px',
+        perspectiveOrigin: '50% 50%',
+        pointerEvents: canInteract ? 'auto' : 'none',
+      }}
+    >
+      <div
+        className="flex flex-col items-start text-left max-w-4xl px-8"
+        style={{
+          transform: `rotateY(${rotateY}deg) rotateX(${rotateX}deg) scale(${scale})`,
+          transformStyle: 'preserve-3d',
+          transformOrigin: 'center center -300px', // Pivot point on the wall
+          opacity: titleOpacity,
+          willChange: 'transform, opacity',
+        }}
+      >
+        {/* Subtitle */}
+        <div className="mb-3 flex items-center gap-3">
+          <div className="w-10 h-[2px] bg-[#CCFF00]" />
+          <span className="text-[12px] font-body tracking-[0.3em] uppercase font-bold text-[#00F0FF]">
+            HOW I HELP YOU GROW
+          </span>
+        </div>
+
+        {/* Main Title */}
+        <h1 className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[5vw] font-display font-extrabold leading-[0.9] tracking-tighter uppercase mb-6">
+          <span className="block whitespace-nowrap">
+            <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>"</span>
+            <span style={{ color: '#CCFF00' }}>HI</span>
+            <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}> - IT'S</span>
+          </span>
+          <span className="block whitespace-nowrap" style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>YOUR NEW</span>
+          <span className="block whitespace-nowrap">
+            <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>PAL, </span>
+            <span style={{ color: '#CCFF00' }}>SAL</span>
+            <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>!"</span>
+          </span>
+        </h1>
+
+        {/* Blurb with blue accent line */}
+        <div className="text-[2vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.2vw] text-white font-display font-medium leading-relaxed mb-8 border-l-2 border-[#00F0FF] pl-5">
+          <span className="block"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
+          <span className="block">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
+          <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
+        </div>
+
+        {/* Buttons */}
+        <div className="flex gap-4">
+          <button
+            onClick={onStart}
+            className="btn-primary px-8 py-4 text-[11px] tracking-[0.15em]"
+          >
+            SEE MY PROCESS
+          </button>
+          <button
+            onClick={onViewCinematics}
+            className="btn-glass px-8 py-4 text-[11px] tracking-[0.15em]"
+          >
+            VIEW CINEMATICS
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
@@ -1104,6 +1201,9 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
 
   return (
     <div className="relative">
+      {/* 3D Title painted on back wall - synced to Room3D camera (desktop only) */}
+      {!isMobile && <Wall3DTitle smoothMouse={smoothMouse} scrollProgress={scrollProgress} onStart={onStart} onViewCinematics={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} />}
+
       {/* Calgary Diorama Hero Section - Fixed background with overlay */}
       {/* Height is 250vh - animations complete as section ends, no dead zone */}
       <div className="relative w-screen h-[250vh] -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28">
@@ -1136,48 +1236,46 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
           </div>
         </div>
 
-        {/* Hero Content - fades in LAST (0.70-1.0) with subtle rise */}
+        {/* Hero Content - MOBILE ONLY (desktop uses Wall3DTitle) */}
         {/* Uses heroContentEased computed above for symmetric forward/reverse animation */}
-        <div
-          className="sticky top-0 h-screen flex items-center justify-center z-20 px-4 sm:px-6 lg:px-12"
-          style={{
-            opacity: isMobile ? 1 : heroContentEased,
-            transform: isMobile ? 'none' : `translateY(${heroTranslateY}px)`,
-            pointerEvents: scrollProgress > 0.85 ? 'auto' : 'none',
-            willChange: 'transform, opacity',
-          }}
-        >
-          <div className="max-w-7xl w-full mx-auto">
-            <div className="flex flex-col items-start justify-center relative">
-          <div className="z-10 w-full text-left">
-            <div>
-              <div className="mb-3 lg:mb-2 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
-                <div className="w-8 h-[2px] bg-[#CCFF00]" />
-                <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline text-[#00F0FF]">
-                  HOW I HELP YOU GROW [?]
-                </span>
-              </div>
-              <ProximityHeroText />
-              <div className="text-[3vw] sm:text-base md:text-lg lg:text-lg xl:text-xl text-white mb-5 lg:mb-4 leading-snug font-display font-medium border-l-2 border-[#00F0FF] pl-4 sm:pl-6 flex flex-col items-start gap-0.5 text-stroke">
-                <span className="block sm:whitespace-nowrap"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
-                <span className="block sm:whitespace-nowrap">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
-                <span className="block sm:whitespace-nowrap">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
-              </div>
-              <div className="flex flex-row sm:flex-wrap gap-3 sm:gap-4 mb-3 lg:mb-4">
-                <button onClick={onStart} className="flex-1 sm:flex-none btn-primary px-4 py-2.5 sm:px-8 sm:py-4 text-[10px] sm:text-[11px] tracking-[0.15em]">
-                  <span className="sm:hidden">DISCOVER</span>
-                  <span className="hidden sm:inline">SEE MY PROCESS</span>
-                </button>
-                <button onClick={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} className="flex-1 sm:flex-none btn-glass px-4 py-2.5 sm:px-8 sm:py-4 text-[10px] sm:text-[11px] tracking-[0.15em]">
-                  <span className="sm:hidden">CINEMATICS</span>
-                  <span className="hidden sm:inline">VIEW CINEMATICS</span>
-                </button>
+        {isMobile && (
+          <div
+            className="sticky top-0 h-screen flex items-center justify-center z-20 px-4 sm:px-6"
+            style={{
+              opacity: 1,
+              pointerEvents: scrollProgress > 0.85 ? 'auto' : 'none',
+            }}
+          >
+            <div className="max-w-7xl w-full mx-auto">
+              <div className="flex flex-col items-start justify-center relative">
+                <div className="z-10 w-full text-left">
+                  <div>
+                    <div className="mb-3 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
+                      <div className="w-8 h-[2px] bg-[#CCFF00]" />
+                      <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline text-[#00F0FF]">
+                        HOW I HELP YOU GROW [?]
+                      </span>
+                    </div>
+                    <ProximityHeroText />
+                    <div className="text-[3vw] sm:text-base text-white mb-5 leading-snug font-display font-medium border-l-2 border-[#00F0FF] pl-4 sm:pl-6 flex flex-col items-start gap-0.5 text-stroke">
+                      <span className="block"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
+                      <span className="block">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
+                      <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
+                    </div>
+                    <div className="flex flex-row gap-3 mb-3">
+                      <button onClick={onStart} className="flex-1 btn-primary px-4 py-2.5 text-[10px] tracking-[0.15em]">
+                        DISCOVER
+                      </button>
+                      <button onClick={() => portfolioRef.current?.scrollIntoView({ behavior: 'smooth' })} className="flex-1 btn-glass px-4 py-2.5 text-[10px] tracking-[0.15em]">
+                        CINEMATICS
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
 
       <TheArmory onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} onConsultation={onConsultation} />

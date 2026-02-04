@@ -20,6 +20,50 @@ const App: React.FC = () => {
   const [authLoading, setAuthLoading] = useState(true);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
+  // Shared mouse state for 3D parallax (syncs Room3D canvas with CSS transforms)
+  const [smoothMouse, setSmoothMouse] = useState({ x: 0.5, y: 0.5 });
+  const mouseRef = useRef({ x: 0.5, y: 0.5 });
+  const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
+  const mouseAnimationRef = useRef<number | null>(null);
+
+  // Mouse tracking with smooth interpolation (shared between Room3D and Hero)
+  useEffect(() => {
+    if (isMobile) return;
+
+    const onMouseMove = (e: MouseEvent) => {
+      mouseRef.current = {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      };
+    };
+    window.addEventListener('mousemove', onMouseMove);
+
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    const animate = () => {
+      smoothMouseRef.current.x = lerp(smoothMouseRef.current.x, mouseRef.current.x, 0.06);
+      smoothMouseRef.current.y = lerp(smoothMouseRef.current.y, mouseRef.current.y, 0.06);
+
+      // Only update React state if changed significantly (reduces re-renders)
+      setSmoothMouse(prev => {
+        const dx = Math.abs(prev.x - smoothMouseRef.current.x);
+        const dy = Math.abs(prev.y - smoothMouseRef.current.y);
+        if (dx > 0.001 || dy > 0.001) {
+          return { x: smoothMouseRef.current.x, y: smoothMouseRef.current.y };
+        }
+        return prev;
+      });
+
+      mouseAnimationRef.current = requestAnimationFrame(animate);
+    };
+    mouseAnimationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      if (mouseAnimationRef.current) cancelAnimationFrame(mouseAnimationRef.current);
+    };
+  }, [isMobile]);
+
   // Scroll-driven parallax state (0 = top/hero visible, 1 = fully transitioned)
   const [scrollProgress, setScrollProgress] = useState(0);
   const [totalScrollProgress, setTotalScrollProgress] = useState(0);
@@ -285,14 +329,14 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
       case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
       case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
     }
   };
 
@@ -309,6 +353,7 @@ const App: React.FC = () => {
         <Room3D
           opacity={1}
           scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
+          smoothMouse={smoothMouse}
         />
       )}
 
