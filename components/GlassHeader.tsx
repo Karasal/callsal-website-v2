@@ -4,18 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { User as IUser } from '../types';
 
-const BrandingElement = ({ className = "" }: { className?: string }) => {
+const BrandingElement = ({ className = "", textColor = "#000000" }: { className?: string; textColor?: string }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className={`footer-brand flex items-center font-body text-[9px] font-bold tracking-normal text-white uppercase cursor-default transition-all duration-300 whitespace-nowrap ${className}`}
+      className={`footer-brand flex items-center font-body text-[9px] font-bold tracking-normal uppercase cursor-default transition-all duration-300 whitespace-nowrap ${className}`}
+      style={{ color: textColor }}
     >
       <span>EST</span>
       <motion.span
         initial={false}
-        animate={{ color: isHovered ? '#CCFF00' : '#ffffff' }}
+        animate={{ color: isHovered ? '#CCFF00' : textColor }}
         className="inline-block transition-colors mx-2"
       >
         {isHovered ? '2026' : 'MMXXVI'}
@@ -55,6 +56,11 @@ export const GlassHeader: React.FC<{
   const appear = easeOutCubic(appearRaw);
   const contentFade = easeOutCubic(contentFadeRaw);
 
+  // Text color transition: black → white as room goes white → black (0.7 → 1.0)
+  const colorProgress = Math.min(1, Math.max(0, (scrollProgress - 0.7) * 3.33));
+  const textGrey = Math.round(255 * colorProgress);
+  const dynamicTextColor = `rgb(${textGrey}, ${textGrey}, ${textGrey})`;
+
   const isBackward = scrollDirection === 'backward';
 
   // Vertical position:
@@ -90,14 +96,17 @@ export const GlassHeader: React.FC<{
             <span>CALL SAL</span>
           </a>
 
-          {/* Condensed info */}
-          <div className="flex items-center gap-2 text-[9px] font-body tracking-[0.1em] text-white uppercase font-medium">
+          {/* Condensed info - color transitions black → white with room */}
+          <div
+            className="flex items-center gap-2 text-[9px] font-body tracking-[0.1em] uppercase font-medium"
+            style={{ color: dynamicTextColor }}
+          >
             <span>905-749-0266</span>
-            <span className="text-white/50">|</span>
+            <span style={{ opacity: 0.5 }}>|</span>
             <span>CALGARY, AB</span>
-            <span className="text-white/50">|</span>
-            <span className="text-white font-semibold">{mstTime}</span>
-            <span className="text-white/70">MST</span>
+            <span style={{ opacity: 0.5 }}>|</span>
+            <span className="font-semibold">{mstTime}</span>
+            <span style={{ opacity: 0.7 }}>MST</span>
           </div>
         </div>
       </header>

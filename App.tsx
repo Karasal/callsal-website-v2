@@ -4,8 +4,8 @@ import { useMobileAnimations } from './hooks/useMobileAnimations';
 import { User as IUser } from './types';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
-import { Room3D } from './components/Room3D';
 import { Hero } from './components/Hero';
+import { ModuleManager } from './components/ModuleManager';
 import { MeetSalman } from './components/MeetSalman';
 import { TheOffer } from './components/TheOffer';
 import { BookingPage } from './components/BookingPage';
@@ -145,7 +145,7 @@ const App: React.FC = () => {
   }, [activeTab]);
 
   // Snap-scroll behavior for overview page entrance
-  // One deliberate scroll = auto-transition through entire entrance animation
+  // Three snap points: diorama (0) → hero text (0.7) → modules (1.0)
   useEffect(() => {
     if (activeTab !== 'overview' || isMobile) return;
 
@@ -154,6 +154,11 @@ const App: React.FC = () => {
 
     const transitionZone = window.innerHeight * 1.5;
     const DELTA_THRESHOLD = 15; // Ignore micro-scrolls from trackpads
+
+    // Three snap points
+    const SNAP_DIORAMA = 0;
+    const SNAP_HERO = transitionZone * 0.7;  // scrollProgress = 0.7 (hero text visible)
+    const SNAP_MODULES = transitionZone;      // scrollProgress = 1.0 (module cards)
 
     // Snap to target position - smooth scroll both directions
     const snapTo = (target: number) => {
@@ -170,6 +175,16 @@ const App: React.FC = () => {
           snapTargetRef.current = null;
         }
       }, 800);
+    };
+
+    // Find which snap point we're closest to
+    const getSnapZone = (scrollTop: number): 'diorama' | 'hero' | 'modules' => {
+      const heroThreshold = SNAP_HERO * 0.5;
+      const modulesThreshold = SNAP_HERO + (SNAP_MODULES - SNAP_HERO) * 0.5;
+
+      if (scrollTop < heroThreshold) return 'diorama';
+      if (scrollTop < modulesThreshold) return 'hero';
+      return 'modules';
     };
 
     const handleWheel = (e: WheelEvent) => {
@@ -191,28 +206,19 @@ const App: React.FC = () => {
         return;
       }
 
+      e.preventDefault();
       const scrollingDown = e.deltaY > 0;
-      const isAtTop = scrollTop < 20;
-      const isAtSnapEnd = scrollTop >= transitionZone - 20;
+      const currentZone = getSnapZone(scrollTop);
 
-      // At diorama → snap to content
-      if (isAtTop && scrollingDown) {
-        e.preventDefault();
-        snapTo(transitionZone);
-        return;
-      }
-
-      // At content → snap back to diorama
-      if (isAtSnapEnd && !scrollingDown) {
-        e.preventDefault();
-        snapTo(0);
-        return;
-      }
-
-      // Caught in between → snap to nearest based on direction
-      if (!isAtTop && !isAtSnapEnd) {
-        e.preventDefault();
-        snapTo(scrollingDown ? transitionZone : 0);
+      // Navigate between snap points
+      if (scrollingDown) {
+        if (currentZone === 'diorama') snapTo(SNAP_HERO);
+        else if (currentZone === 'hero') snapTo(SNAP_MODULES);
+        // At modules - could allow normal scroll or stay
+      } else {
+        if (currentZone === 'modules') snapTo(SNAP_HERO);
+        else if (currentZone === 'hero') snapTo(SNAP_DIORAMA);
+        // At diorama - already at top
       }
     };
 
@@ -237,15 +243,15 @@ const App: React.FC = () => {
       if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
 
       const swipedDown = deltaY > 0;
-      const isAtTop = scrollTop < 20;
-      const isAtSnapEnd = scrollTop >= transitionZone - 20;
+      const currentZone = getSnapZone(scrollTop);
 
-      if (isAtTop && swipedDown) {
-        snapTo(transitionZone);
-      } else if (isAtSnapEnd && !swipedDown) {
-        snapTo(0);
-      } else if (!isAtTop && !isAtSnapEnd) {
-        snapTo(swipedDown ? transitionZone : 0);
+      // Navigate between snap points (same logic as wheel)
+      if (swipedDown) {
+        if (currentZone === 'diorama') snapTo(SNAP_HERO);
+        else if (currentZone === 'hero') snapTo(SNAP_MODULES);
+      } else {
+        if (currentZone === 'modules') snapTo(SNAP_HERO);
+        else if (currentZone === 'hero') snapTo(SNAP_DIORAMA);
       }
     };
 
@@ -348,24 +354,25 @@ const App: React.FC = () => {
   return (
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
 
-      {/* 3D Room Background - persists across all pages (desktop only) */}
+      {/* Module Manager - renders 3D room + floating module cards (desktop only) */}
       {!isMobile && (
-        <Room3D
-          opacity={1}
+        <ModuleManager
           scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
           smoothMouse={smoothMouse}
+          activeTab={activeTab}
+          onConsultation={() => handleNavigation('consultation')}
         />
       )}
 
-      {/* Gradient Scroll Progress Bar - always visible, always on top */}
-      <div
+      {/* Gradient Scroll Progress Bar - disabled for new 3D module system */}
+      {/* <div
         className="fixed top-0 left-0 h-[3px] z-[999]"
         style={{
           width: `${totalScrollProgress}%`,
           background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
           boxShadow: '0 0 10px rgba(204, 255, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)',
         }}
-      />
+      /> */}
 
       <GlassHeader
         onAuth={() => setIsAuthOpen(true)}

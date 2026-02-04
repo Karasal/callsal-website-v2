@@ -27,6 +27,11 @@ export const GlassNav: React.FC<{
   const contentFade = easeOutCubic(contentFadeRaw);
   const indicatorExpand = easeOutCubic(indicatorExpandRaw);
 
+  // Text color transition: black → white as room goes white → black (0.7 → 1.0)
+  const colorProgress = Math.min(1, Math.max(0, (scrollProgress - 0.7) * 3.33));
+  const textGrey = Math.round(255 * colorProgress);
+  const dynamicTextColor = `rgb(${textGrey}, ${textGrey}, ${textGrey})`;
+
   const isBackward = scrollDirection === 'backward';
 
   // Vertical position:
@@ -102,10 +107,10 @@ export const GlassNav: React.FC<{
       >
         {/* Branding - left side */}
         <div style={{ opacity: contentFade }}>
-          <BrandingElement className="w-48" />
+          <BrandingElement className="w-48" textColor={dynamicTextColor} />
         </div>
 
-        {/* Nav tabs - center */}
+        {/* Nav tabs - center - flat black text for white room visibility */}
         <nav
           ref={navRef}
           className="flex items-center justify-center gap-6 relative"
@@ -154,9 +159,8 @@ export const GlassNav: React.FC<{
               ref={(el) => { tabRefs.current[index] = el; }}
               onClick={() => handleTabClick(tab.id)}
               aria-label={tab.label}
-              className={`flex items-center justify-center gap-3 px-4 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all duration-300 ${
-                activeTab === tab.id ? 'text-white' : 'text-white/70 hover:text-white'
-              }`}
+              className="flex items-center justify-center gap-3 px-4 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all duration-300"
+              style={{ color: activeTab === tab.id ? dynamicTextColor : `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.7)` }}
             >
               <span className={`shrink-0 transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : ''}`}>
                 {tab.icon}
@@ -168,11 +172,11 @@ export const GlassNav: React.FC<{
           ))}
         </nav>
 
-        {/* Auth section - right side */}
-        <div className="flex items-center gap-4" style={{ opacity: contentFade }}>
+        {/* Auth section - right side - color transitions with room */}
+        <div className="flex items-center gap-4" style={{ opacity: contentFade, color: dynamicTextColor }}>
           {!currentUser ? (
             <div className="flex items-center gap-3">
-              <button onClick={onAuth} aria-label="Login" className="flex items-center gap-2 py-2 text-white hover:text-white/80 transition-all px-4 group">
+              <button onClick={onAuth} aria-label="Login" className="flex items-center gap-2 py-2 hover:opacity-80 transition-all px-4 group" style={{ color: dynamicTextColor }}>
                 <LogIn size={16} className="group-hover:scale-110 transition-transform" />
                 <span className="text-[10px] font-display font-bold tracking-widest uppercase">LOGIN</span>
               </button>
@@ -184,8 +188,8 @@ export const GlassNav: React.FC<{
           ) : (
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleTabClick('dashboard')} role="button" aria-label="View Dashboard">
-                <img src={currentUser.avatar} className="w-8 h-8 rounded-full border border-white/30 group-hover:border-white/60 transition-colors" alt="" />
-                <div className="text-[11px] font-display font-bold text-white uppercase truncate max-w-[100px]">{currentUser.name}</div>
+                <img src={currentUser.avatar} className="w-8 h-8 rounded-full border transition-colors" style={{ borderColor: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.3)` }} alt="" />
+                <div className="text-[11px] font-display font-bold uppercase truncate max-w-[100px]" style={{ color: dynamicTextColor }}>{currentUser.name}</div>
               </div>
               <button onClick={onLogout} aria-label="Logout" className="flex items-center gap-2 py-2 text-red-400/80 hover:text-red-400 transition-all border border-red-400/20 hover:border-red-400/40 px-3 rounded-lg group">
                 <LogOut size={16} />

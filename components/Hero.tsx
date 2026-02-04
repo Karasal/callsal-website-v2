@@ -1081,9 +1081,20 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   const rotateY = -panAngle * (180 / Math.PI);
   const rotateX = tiltAngle * (180 / Math.PI);
 
-  // Fade in as we zoom out (title revealed as camera pulls back)
-  // Visible from scrollProgress 0.3 to 0.7
-  const titleOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.3) / 0.4));
+  // Fade in as we zoom out, fade out before module cards appear
+  // Snap point is at scrollProgress = 0.7, so title should be fully visible there
+  // fadeIn: 0→1 from 0.4 to 0.65
+  // fadeOut: 1→0 from 0.85 to 1.0 (only fade out when approaching modules)
+  const fadeIn = Math.min(1, Math.max(0, (scrollProgress - 0.4) / 0.25));
+  const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.85) / 0.15));
+  const titleOpacity = fadeIn * fadeOut;
+
+  // Text color transition: black → white as room goes white → black
+  // Matches room colorProgress: 0.7 → 1.0
+  const colorProgress = Math.min(1, Math.max(0, (scrollProgress - 0.7) * 3.33));
+  const textGrey = Math.round(255 * colorProgress); // 0 (black) → 255 (white)
+  const dynamicTextColor = `rgb(${textGrey}, ${textGrey}, ${textGrey})`;
+  const dynamicBorderColor = `rgba(${textGrey}, ${textGrey}, ${textGrey}, ${colorProgress < 0.5 ? 1 : 0.5})`;
 
   // Scale down slightly when zoomed in for depth illusion
   const scale = 0.9 + 0.2 * easeZoom;
@@ -1133,8 +1144,11 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
           </span>
         </h1>
 
-        {/* Blurb with blue accent line */}
-        <div className="text-[2vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.2vw] text-white font-display font-medium leading-relaxed mb-8 border-l-2 border-[#00F0FF] pl-5">
+        {/* Blurb with blue accent line - color transitions black → white with room */}
+        <div
+          className="text-[2vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.2vw] font-display font-medium leading-relaxed mb-8 border-l-2 border-[#00F0FF] pl-5"
+          style={{ color: dynamicTextColor }}
+        >
           <span className="block"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
           <span className="block">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
           <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
@@ -1150,7 +1164,8 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
           </button>
           <button
             onClick={onViewCinematics}
-            className="btn-glass px-8 py-4 text-[11px] tracking-[0.15em]"
+            className="px-8 py-4 text-[11px] tracking-[0.15em] rounded-lg font-display font-bold uppercase hover:bg-white/10 transition-colors"
+            style={{ color: dynamicTextColor, borderWidth: '2px', borderStyle: 'solid', borderColor: dynamicTextColor }}
           >
             VIEW CINEMATICS
           </button>
@@ -1278,23 +1293,30 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
         )}
       </div>
 
-      <TheArmory onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} onConsultation={onConsultation} />
+      {/* TheArmory and VideoPortfolio are now module content (desktop uses ModuleManager) */}
+      {isMobile && (
+        <>
+          <TheArmory onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} onConsultation={onConsultation} />
 
-      <div ref={portfolioRef} className="py-20 border-t border-white/20">
-        <VideoPortfolio onConsultation={onConsultation} onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} />
-      </div>
+          <div ref={portfolioRef} className="py-20 border-t border-white/20">
+            <VideoPortfolio onConsultation={onConsultation} onShowSoftware={(s) => setSelectedSoftware(s)} onShowImage={(src) => setSelectedFullImage(src)} />
+          </div>
+        </>
+      )}
 
-      {/* Meet Sal CTA */}
-      <div className="py-16 sm:py-24 border-t border-white/20">
-        <div className="text-center max-w-3xl mx-auto px-4">
-          <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold block mb-4">INDEPENDENT AI OPERATOR & FILMMAKER</span>
-          <h3 className="text-2xl sm:text-4xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-6">SO WHO IS THIS SAL GUY ANYWAY?</h3>
-          <p className="text-sm sm:text-base font-display font-medium text-gray-400 uppercase tracking-tight mb-8 max-w-xl mx-auto">
-            THE FACE BEHIND THE TECH. THE HUMAN BEHIND THE AUTOMATION. GET TO KNOW YOUR NEW BUSINESS PAL.
-          </p>
-          <button onClick={onStart} className="btn-glass px-8 py-4 sm:px-12 sm:py-5 text-xs sm:text-sm tracking-[0.2em]">MEET SALMAN</button>
+      {/* Meet Sal CTA - mobile only (desktop uses module system) */}
+      {isMobile && (
+        <div className="py-16 sm:py-24 border-t border-white/20">
+          <div className="text-center max-w-3xl mx-auto px-4">
+            <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold block mb-4">INDEPENDENT AI OPERATOR & FILMMAKER</span>
+            <h3 className="text-2xl sm:text-4xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-6">SO WHO IS THIS SAL GUY ANYWAY?</h3>
+            <p className="text-sm sm:text-base font-display font-medium text-gray-400 uppercase tracking-tight mb-8 max-w-xl mx-auto">
+              THE FACE BEHIND THE TECH. THE HUMAN BEHIND THE AUTOMATION. GET TO KNOW YOUR NEW BUSINESS PAL.
+            </p>
+            <button onClick={onStart} className="btn-glass px-8 py-4 sm:px-12 sm:py-5 text-xs sm:text-sm tracking-[0.2em]">MEET SALMAN</button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Operator Deep Dive Modal */}
       <AnimatePresence>
