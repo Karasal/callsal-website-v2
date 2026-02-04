@@ -853,3 +853,67 @@ b1f814a Session 10: CSS 3D hero title with mouse parallax
 - Consider true canvas text if user wants it fixed to wall
 - Or accept current CSS approach as "good enough"
 - Test on production after deploy
+
+---
+
+## Session Log: Feb 4, 2026 (Session 11 — 3D Floating Module System)
+
+### What was built
+Complete 3D module system for displaying page sections as floating cards in Room3D canvas.
+
+#### New Components
+- `types/modules.ts` — ModuleMetadata, ViewState, module types
+- `components/ModuleManager.tsx` — State machine (diorama/floating/zoomed)
+- `components/Room3DEnhanced.tsx` — Canvas with module card rendering + hit detection
+
+#### Three-Point Snap Scroll
+- **Tick 0**: Diorama (scrollProgress = 0)
+- **Tick 1**: Hero text (scrollProgress = 0.7) — white room, black text
+- **Tick 2**: Module cards (scrollProgress = 1.0) — black room, white text
+
+#### Dynamic Text Color
+Text transitions black→white synchronized with room white→black:
+```js
+const colorProgress = (scrollProgress - 0.7) * 3.33; // 0.7→1.0
+const textGrey = Math.round(255 * colorProgress);
+```
+Applied to: Hero blurb, VIEW CINEMATICS button, GlassHeader, GlassNav
+
+#### Camera Follows Mouse
+Fixed rotation direction in Room3DEnhanced — removed negative signs so camera looks toward mouse pointer instead of away from it.
+
+#### Module Cards
+- Positioned inside room at z=6-7 (between camera at z=2 and back wall at z=10.5)
+- Canvas-rendered with hit detection for clicks
+- Hover glow effect (lime border)
+- Placeholder content (real extraction pending)
+
+### Files Changed
+- `App.tsx` — Three-point snap scroll, ModuleManager integration, disabled progress bar
+- `components/Hero.tsx` — Wall3DTitle with dynamic colors, adjusted fade timing
+- `components/GlassHeader.tsx` — Dynamic text color based on scrollProgress
+- `components/GlassNav.tsx` — Dynamic text color based on scrollProgress
+- `components/ModuleManager.tsx` — NEW: State machine coordinator
+- `components/Room3DEnhanced.tsx` — NEW: Canvas module rendering
+- `types/modules.ts` — NEW: Module type definitions
+
+### Commits
+```
+e39a462 Session 11: 3D floating module system (WIP)
+```
+
+### Known Issues
+1. **Scroll distance inconsistency**: When going back from modules→hero, text appears ghosted/faded (snap not landing at exact scrollProgress)
+2. **Module content placeholders**: TheArmory and VideoPortfolio not yet extracted to module components
+
+### Architecture Decisions
+- **Hybrid approach**: Canvas for floating cards (parallax), HTML overlay for zoomed content
+- **Three snap points** instead of two for smoother UX (diorama → hero → modules)
+- **Desktop-first**: TheArmory/VideoPortfolio hidden on desktop (replaced by module system), still inline on mobile
+
+### TODO for next session
+- [ ] Fix scroll distance inconsistency (hero ghosted when going back)
+- [ ] Extract TheArmory to `modules/TheArmory.tsx`
+- [ ] Extract VideoPortfolio to `modules/VideoPortfolio.tsx`
+- [ ] Create ModuleZoomView for full HTML content overlay
+- [ ] Test carousel navigation between modules
