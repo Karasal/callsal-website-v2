@@ -141,10 +141,10 @@ ADMIN_EMAIL=...
 
 ### Module Click Flow
 1. HTML cards in Module3DOverlay handle click/hover directly (canvas is visual-only)
-2. ModuleManager sets activeModule
-3. Room3D camera flies toward module
-4. Module3DOverlay animates card to fullscreen center
-5. Close button returns to floating state
+2. ModuleManager sets activeModule, triggers zoomProgress animation
+3. Floating cards fade out (opacity transition)
+4. Fullscreen modal fades in instantly (pre-loaded, no scaling)
+5. Close button fades modal out, cards fade back in
 
 ## Key Decisions
 - **Flat black panels** instead of transparent blur — 3D room motion made blur jarring
@@ -174,8 +174,17 @@ ADMIN_EMAIL=...
 - ✅ Smooth scroll transitions (diorama + hero title fade before modules)
 
 ### Known Issues
-- Minor scroll imprecision on modules→hero (lands ~0.75 instead of 0.70)
-- Smoothness prioritized over precision
+- None currently identified
+
+### Session 17 (Feb 4, 2026)
+- **Module Modal Rewrite**: Fade-to-modal replaces jerky zoom animation
+- Floating cards fade out, fullscreen modal fades in instantly
+- Modal at natural size (max-w-5xl), no transform scaling that caused jank
+- Prev/next navigation arrows for module switching
+- **Snap Scroll Fix**: Wheel listener on window (catches events over fixed overlays)
+- **Ghosted Hero Fix**: Both directions snap to 0.7 (white room, black text)
+- **UI Ghost Fix**: Header/Nav opacity + position use 0.7 threshold for backward scroll
+- Removed scroll-up-to-open on modules (caused instability)
 
 ### Session 16 (Feb 4, 2026)
 - **Cinematics Mode**: New TVOverlay.tsx with flip animation
