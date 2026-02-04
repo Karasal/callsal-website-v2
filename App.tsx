@@ -286,14 +286,14 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} />;
       case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
       case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} scrollProgress={scrollProgress} scrollDirection={scrollDirection} />;
     }
   };
 

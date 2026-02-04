@@ -4,6 +4,7 @@ import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, ChevronRight, X, Activity, Target, Terminal, Cpu, Layers, Database, Shield, Bot, GitBranch, TrendingUp, MonitorPlay, Heart, Radio, Camera, Award, Star, Info, Zap, Settings, HardDrive, Share2, Eye, Focus, Move, Film, UserCheck, Clapperboard, Monitor, Sparkles, Smile as SmileIcon, Box, Compass, MousePointer2, MessageSquare, Hammer, Laptop, Video, Smartphone, CheckCircle, Code, Server, Link, ShieldCheck, Search, Globe, Brain, ShieldAlert, FileCheck, ClipboardList, Briefcase, BookOpen, Crown } from 'lucide-react';
 import { ImageModal } from './ImageModal';
+import { ParallaxRoom } from './ParallaxRoom';
 
 interface SoftwareInfo {
   id: string;
@@ -74,20 +75,20 @@ const ProximityHeroText = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { glowStyle } = useProximityGlow(containerRef);
 
-  const baseClasses = "text-[12vw] sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4.5rem] 2xl:text-[5rem] font-display font-extrabold leading-[0.9] tracking-tighter uppercase flex flex-col items-start";
+  const baseClasses = "text-[15vw] sm:text-[12vw] md:text-[11vw] lg:text-[9vw] xl:text-[8vw] 2xl:text-[7.5vw] font-display font-extrabold leading-[0.85] tracking-tighter uppercase flex flex-col items-start";
   const limeStyle = { color: '#CCFF00', WebkitTextFillColor: '#CCFF00' } as React.CSSProperties;
   const whiteProximityStyle = { color: '#111111', WebkitTextFillColor: '#111111', ...glowStyle } as React.CSSProperties;
 
   return (
-    <div ref={containerRef} className="mb-4 lg:mb-3">
+    <div ref={containerRef} className="mb-6 lg:mb-8">
       <h1 className={baseClasses}>
-        <span className="block sm:whitespace-nowrap">
+        <span className="block whitespace-nowrap">
           <span style={whiteProximityStyle}>"</span>
           <span style={limeStyle}>HI</span>
           <span style={whiteProximityStyle}> - IT'S</span>
         </span>
-        <span className="block sm:whitespace-nowrap" style={whiteProximityStyle}>YOUR NEW</span>
-        <span className="block sm:whitespace-nowrap pb-2 sm:pb-4 lg:pb-2">
+        <span className="block whitespace-nowrap" style={whiteProximityStyle}>YOUR NEW</span>
+        <span className="block whitespace-nowrap pb-2 sm:pb-4 lg:pb-4">
           <span style={whiteProximityStyle}>PAL, </span>
           <span style={limeStyle}>SAL</span>
           <span style={whiteProximityStyle}>!"</span>
@@ -97,184 +98,6 @@ const ProximityHeroText = () => {
   );
 };
 
-const PixelNerdSal = ({ state }: { state: 'idle' | 'typing' | 'happy' }) => {
-  return (
-    <div
-      className="relative w-20 h-20 sm:w-24 sm:h-24 bg-white/95 overflow-hidden p-2 flex items-center justify-center rounded-xl shrink-0"
-      style={{
-        border: '2px solid transparent',
-        backgroundImage: 'linear-gradient(white, white), linear-gradient(135deg, #CCFF00 0%, #00F0FF 100%)',
-        backgroundOrigin: 'border-box',
-        backgroundClip: 'padding-box, border-box',
-        boxShadow: '0 0 15px rgba(204, 255, 0, 0.2), 0 0 30px rgba(0, 240, 255, 0.15)',
-      }}
-    >
-      <motion.svg
-        viewBox="0 0 100 100"
-        className="w-full h-full relative z-0"
-        style={{ filter: 'drop-shadow(0 0 6px rgba(204, 255, 0, 0.4)) drop-shadow(0 0 12px rgba(0, 240, 255, 0.3))' }}
-        animate={state === 'typing' ? { scale: [1, 1.05, 1], y: [0, -2, 0] } : {}}
-        transition={{ repeat: Infinity, duration: 0.15 }}
-      >
-        {/* Gradient definition for line art */}
-        <defs>
-          <linearGradient id="salGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#CCFF00" />
-            <stop offset="100%" stopColor="#00F0FF" />
-          </linearGradient>
-        </defs>
-        {/* Hair/head */}
-        <g stroke="url(#salGradient)" strokeWidth="4" fill="none" strokeLinecap="round">
-          <path d="M15 32 L15 22 Q15 10 45 10 L85 10 L85 32" />
-          <path d="M25 22 L75 22" />
-          <path d="M35 16 L80 16" />
-        </g>
-        {/* Glasses */}
-        <g stroke="url(#salGradient)" strokeWidth="4" fill="none">
-          <rect x="15" y="35" width="30" height="20" />
-          <rect x="55" y="35" width="30" height="20" />
-          <path d="M45 45 H55" />
-          <path d="M15 45 H5" />
-          <path d="M85 45 H95" />
-        </g>
-        {/* Eyes (blink animation) */}
-        <motion.g fill="url(#salGradient)" animate={state === 'idle' ? { scaleY: [1, 1, 0, 1] } : {}} transition={{ repeat: Infinity, duration: 3, times: [0, 0.9, 0.95, 1] }}>
-          <rect x="25" y="42" width="10" height="6" />
-          <rect x="65" y="42" width="10" height="6" />
-        </motion.g>
-        {/* Mouth - slight curve even in idle for better visibility */}
-        <motion.path
-          d={state === 'happy' ? "M30 65 Q50 85 70 65" : "M35 68 Q50 74 65 68"}
-          stroke="url(#salGradient)" strokeWidth="4" fill="none" strokeLinecap="round"
-          animate={state === 'happy' ? { scale: [1, 1.1, 1] } : {}}
-        />
-      </motion.svg>
-    </div>
-  );
-};
-
-const IntegratedSalBot = ({ onConsultation }: { onConsultation?: () => void }) => {
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<{ role: 'user' | 'model' | 'cta', text: string }[]>([
-    { role: 'model', text: "Hey! I'm Sal 👋\n\nI build the tools that run your business while you sleep. Tell me: what's your biggest business headache right now?" }
-  ]);
-  const [isTyping, setIsTyping] = useState(false);
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [messages, isTyping]);
-
-  const handleAudit = async () => {
-    if (!input.trim()) return;
-    const userMsg = input;
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
-    setIsTyping(true);
-    try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }),
-      });
-      const data = await res.json();
-      setMessages(prev => [...prev, { role: 'model', text: data.response || "Something went wrong! Can you try again, neighbor?" }]);
-      setTimeout(() => {
-        setMessages(prev => [...prev, { role: 'cta', text: "Ready to make it happen?" }]);
-      }, 800);
-    } catch {
-      setMessages(prev => [...prev, { role: 'model', text: "Something went wrong! Can you try again, neighbor?" }]);
-    }
-    setIsTyping(false);
-  };
-
-  return (
-    <div
-      className="glass-strong w-full flex flex-col overflow-hidden h-[480px] lg:h-[520px] relative rounded-2xl"
-      style={{
-        border: '2px solid transparent',
-        backgroundImage: 'linear-gradient(white, white), linear-gradient(135deg, #CCFF00 0%, #00F0FF 100%)',
-        backgroundOrigin: 'border-box',
-        backgroundClip: 'padding-box, border-box',
-        boxShadow: '0 0 20px rgba(204, 255, 0, 0.15), 0 0 40px rgba(0, 240, 255, 0.1)',
-      }}
-    >
-      <div className="p-3 sm:p-4 border-b border-gray-200/50 flex flex-col sm:flex-row items-center gap-4 z-20 shrink-0">
-        <PixelNerdSal state={isTyping ? 'typing' : (messages.length > 1 ? 'happy' : 'idle')} />
-        <div className="flex-1 text-center sm:text-left">
-          <div className="flex items-center justify-center sm:justify-start gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-[#CCFF00] animate-pulse" />
-            <span className="text-[10px] font-display font-bold tracking-widest text-[#CCFF00] uppercase">SAL_BOT ONLINE</span>
-          </div>
-          <p className="text-[9px] font-body text-gray-400 uppercase leading-tight max-w-[180px]">
-            NEURAL ENGINE: READY<br />
-            ADVISORY MODE: ACTIVE<br />
-            STATUS: AWAITING INPUT
-          </p>
-        </div>
-      </div>
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <div ref={scrollRef} className="flex-1 overflow-y-auto p-3 sm:p-5 space-y-4 font-body text-[10px] sm:text-[11px] no-scrollbar">
-          <AnimatePresence initial={false}>
-            {messages.map((m, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: m.role === 'user' ? 20 : -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
-              >
-                {m.role === 'cta' ? (
-                  <div className="flex flex-col gap-2 items-start">
-                    <p className="text-[9px] font-body text-gray-500 uppercase tracking-widest">{m.text}</p>
-                    <button
-                      onClick={onConsultation}
-                      className="btn-primary text-[10px] px-4 py-2"
-                    >
-                      Book Free Consultation →
-                    </button>
-                  </div>
-                ) : (
-                  <div className={`max-w-[85%] p-3 rounded-lg ${
-                    m.role === 'user'
-                    ? 'bg-[#CCFF00] text-black font-bold'
-                    : 'glass text-gray-800'
-                  }`}>
-                    {m.text.split('\n').map((line, idx) => (
-                      <p key={idx} className="mb-1.5 last:mb-0 leading-snug">{line}</p>
-                    ))}
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </AnimatePresence>
-          {isTyping && (
-            <div className="text-[#CCFF00] animate-pulse text-[10px] font-bold uppercase tracking-widest">
-              Sal is thinking...
-            </div>
-          )}
-        </div>
-        <div className="p-3 sm:p-4 border-t border-gray-200 shrink-0">
-          <div className="relative">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleAudit()}
-              placeholder="Ask me how I can help..."
-              className="w-full bg-black/[0.03] border border-gray-200 rounded-lg py-2.5 sm:py-3 px-3 pr-10 focus:outline-none focus:border-[#CCFF00]/50 text-[12px] font-body text-gray-900 placeholder:text-gray-400"
-            />
-            <button onClick={handleAudit} className="absolute right-1 top-1/2 -translate-y-1/2 text-[#CCFF00] hover:scale-110 transition-transform p-1.5">
-              <ChevronRight size={22} />
-            </button>
-          </div>
-          <div className="mt-2 flex justify-between items-center opacity-20">
-            <span className="text-[7px] font-body uppercase">encrypted session</span>
-            <span className="text-[7px] font-body uppercase">256-bit ssl</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 const SoftwareItem = ({ software, onClick }: { software: SoftwareInfo, onClick: () => void }) => {
   const [isHovered, setIsHovered] = useState(false);
@@ -1242,14 +1065,17 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number }> = ({ onStart, onConsultation, scrollProgress = 1 }) => {
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, scrollProgress?: number, scrollDirection?: 'forward' | 'backward' }> = ({ onStart, onConsultation, scrollProgress = 1 }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
   const [selectedSoftware, setSelectedSoftware] = useState<SoftwareInfo | null>(null);
   const [selectedFullImage, setSelectedFullImage] = useState<string | null>(null);
-  const [isSalBotExpanded, setIsSalBotExpanded] = useState(false);
   const { isMobile, fadeProps } = useMobileAnimations();
+
+  // Track if hero has been fully visible (high water mark)
+  // Once fully visible, any fade-out should move UP (exit animation)
+  const hasReachedFullVisibility = useRef(false);
 
   const helpAccordionItems = [
     { title: "SILENT WORKERS", desc: "AI agents that handle your emails and tasks.", icon: <Bot size={16} className="text-[#CCFF00] mt-1 shrink-0" />, explanation: "Digital employees that never sleep. They triage your inbox, handle initial customer inquiries, and perform data entry with 100% accuracy, freeing you to focus on high-level strategy and growth." },
@@ -1262,6 +1088,21 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
   const heroContentEased = heroContentRaw < 0.5
     ? 4 * heroContentRaw * heroContentRaw * heroContentRaw
     : 1 - Math.pow(-2 * heroContentRaw + 2, 3) / 2;
+
+  // Track high water mark - once hero is fully visible, exits should move UP
+  if (heroContentEased > 0.95) {
+    hasReachedFullVisibility.current = true;
+  }
+  // Reset when fully exited (allows re-entrance animation)
+  if (heroContentEased < 0.05) {
+    hasReachedFullVisibility.current = false;
+  }
+
+  // Calculate translateY: entrance rises from below (+20→0), exit rises up (0→-20)
+  const isExiting = hasReachedFullVisibility.current && heroContentEased < 0.95;
+  const heroTranslateY = isExiting
+    ? (1 - heroContentEased) * -20  // Exit: content rises UP and out
+    : (1 - heroContentEased) * 20;   // Entrance: content rises UP from below
 
   return (
     <div className="relative">
@@ -1292,6 +1133,11 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
           />
         </div>
 
+        {/* 3D Parallax Room - fades in after diorama fades out */}
+        {!isMobile && (
+          <ParallaxRoom opacity={Math.min(1, Math.max(0, (scrollProgress - 0.25) * 2))} />
+        )}
+
         {/* Scroll hint - fades out as you scroll */}
         <div
           className="absolute bottom-[12%] lg:bottom-[15%] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
@@ -1309,26 +1155,26 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
           className="sticky top-0 h-screen flex items-center justify-center z-20 px-4 sm:px-6 lg:px-12"
           style={{
             opacity: isMobile ? 1 : heroContentEased,
-            transform: isMobile ? 'none' : `translateY(${(1 - heroContentEased) * 20}px)`,
+            transform: isMobile ? 'none' : `translateY(${heroTranslateY}px)`,
             pointerEvents: scrollProgress > 0.85 ? 'auto' : 'none',
             willChange: 'transform, opacity',
           }}
         >
           <div className="max-w-7xl w-full mx-auto">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start lg:justify-between gap-6 lg:gap-8 xl:gap-12 relative">
-          <div className="z-10 flex-1 w-full lg:max-w-[calc(100%-420px)] xl:max-w-[calc(100%-460px)] text-left self-start lg:self-center">
+            <div className="flex flex-col items-start justify-center relative">
+          <div className="z-10 w-full text-left">
             <div>
               <div className="mb-3 lg:mb-2 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
                 <div className="w-8 h-[2px] bg-[#CCFF00]" />
-                <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline gradient-text">
+                <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline text-[#00F0FF]">
                   HOW I HELP YOU GROW [?]
                 </span>
               </div>
               <ProximityHeroText />
-              <div className="text-[3vw] sm:text-base md:text-lg lg:text-lg xl:text-xl text-gray-500 mb-5 lg:mb-4 leading-snug font-display font-medium border-l-2 border-[#CCFF00] pl-4 sm:pl-6 flex flex-col items-start gap-0.5">
-                <span className="block sm:whitespace-nowrap"><span className="text-[#CCFF00]">AI</span> IS CHANGING <span className="text-[#CCFF00]">EVERYTHING</span>.</span>
-                <span className="block sm:whitespace-nowrap">YOUR <span className="text-[#CCFF00]">COMPETITION</span> IS ALREADY <span className="text-[#CCFF00]">PREPARING</span>.</span>
-                <span className="block sm:whitespace-nowrap">I'M HERE TO MAKE SURE YOU <span className="text-[#CCFF00]">GET THERE FIRST</span>.</span>
+              <div className="text-[3vw] sm:text-base md:text-lg lg:text-lg xl:text-xl text-gray-500 mb-5 lg:mb-4 leading-snug font-display font-medium border-l-2 border-[#00F0FF] pl-4 sm:pl-6 flex flex-col items-start gap-0.5">
+                <span className="block sm:whitespace-nowrap"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
+                <span className="block sm:whitespace-nowrap">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
+                <span className="block sm:whitespace-nowrap">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
               </div>
               <div className="flex flex-row sm:flex-wrap gap-3 sm:gap-4 mb-3 lg:mb-4">
                 <button onClick={onStart} className="flex-1 sm:flex-none btn-primary px-4 py-2.5 sm:px-8 sm:py-4 text-[10px] sm:text-[11px] tracking-[0.15em]">
@@ -1340,15 +1186,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
                   <span className="hidden sm:inline">VIEW CINEMATICS</span>
                 </button>
               </div>
-              {!isSalBotExpanded && (
-                <button onClick={() => setIsSalBotExpanded(true)} className="lg:hidden w-full py-3 btn-primary text-[11px] tracking-[0.15em] mb-8">
-                  LAUNCH SAL BOT
-                </button>
-              )}
             </div>
-          </div>
-          <div className={`z-10 w-full lg:w-[380px] xl:w-[420px] 2xl:w-[460px] shrink-0 ${!isSalBotExpanded ? 'hidden lg:block' : 'block'}`}>
-            <IntegratedSalBot onConsultation={onConsultation} />
           </div>
             </div>
           </div>
@@ -1377,17 +1215,17 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
       <AnimatePresence>
         {showOperatorDeepDive && (
           <motion.div {...fadeProps} className="fixed inset-0 z-[300] flex items-center justify-center p-4 lg:p-8 bg-black/95 backdrop-blur-3xl">
-            <div className="max-w-4xl w-full glass-strong p-8 lg:p-16 border-t-4 border-[#CCFF00] max-h-[90vh] overflow-y-auto no-scrollbar relative rounded-2xl">
-              <button onClick={() => setShowOperatorDeepDive(false)} className="absolute top-6 right-6 lg:top-8 lg:right-8 text-gray-400 hover:text-white transition-colors"><X size={32} /></button>
+            <div className="max-w-4xl w-full bg-white p-8 lg:p-16 border-t-4 border-[#CCFF00] max-h-[90vh] overflow-y-auto no-scrollbar relative rounded-2xl shadow-2xl">
+              <button onClick={() => setShowOperatorDeepDive(false)} className="absolute top-6 right-6 lg:top-8 lg:right-8 text-gray-400 hover:text-gray-900 transition-colors"><X size={32} /></button>
               <div className="mb-10 lg:mb-12">
-                <span className="text-[10px] font-body tracking-[1em] text-[#CCFF00] uppercase font-bold block mb-4">THE SAL METHOD</span>
+                <span className="text-[10px] font-body tracking-[1em] text-[#00F0FF] uppercase font-bold block mb-4">THE SAL METHOD</span>
                 <h3 className="text-3xl lg:text-6xl font-display font-extrabold text-gray-900 uppercase tracking-tighter leading-none mb-6">WHY WORK <br />WITH ME?</h3>
                 <div className="h-1 w-24 bg-gradient-to-r from-[#CCFF00] to-[#00F0FF] rounded-full" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
                 <div className="space-y-6">
                   <div className="p-6 glass rounded-xl">
-                    <h4 className="text-xl font-display font-bold text-white uppercase mb-4 tracking-tight">MY GOAL</h4>
+                    <h4 className="text-xl font-display font-bold text-black uppercase mb-4 tracking-tight">MY GOAL</h4>
                     <p className="text-sm font-body font-medium text-gray-500 uppercase leading-relaxed tracking-tight">
                       I DON'T JUST SELL TOOLS. I BUILD CUSTOM SYSTEMS THAT WORK IN THE BACKGROUND SO YOU CAN FOCUS ON WHAT YOU ACTUALLY LOVE DOING.
                     </p>
@@ -1407,7 +1245,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
                         <div className="flex gap-4 p-4 items-start">
                           {m.icon}
                           <div className="flex-1">
-                            <p className="text-[11px] font-display font-bold text-white uppercase mb-1">{m.title}</p>
+                            <p className="text-[11px] font-display font-bold text-black uppercase mb-1">{m.title}</p>
                             <p className="text-[9px] font-body font-bold text-gray-400 uppercase tracking-widest">{m.desc}</p>
                           </div>
                           <ChevronRight size={14} className={`text-[#CCFF00] mt-1 transition-transform ${expandedHelpIndex === i ? 'rotate-90' : ''}`} />
