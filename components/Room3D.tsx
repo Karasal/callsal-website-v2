@@ -187,22 +187,13 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
 
         if (lineProgress <= 0) return; // Line hasn't started drawing yet
 
-        // Brutalist dotted pixel style - square caps, dotted pattern
+        // Solid lines with square caps for brutalist feel
         ctx.lineCap = 'square';
         ctx.lineJoin = 'miter';
 
-        // Dotted pattern: 3px dot, 6px gap (pixel shaft brutalist feel)
-        const dotSize = 2;
-        const gapSize = 5;
-
-        // Combine trace animation with dotted pattern
+        // Trace animation - draw partial line based on progress
         const drawnLength = lineLength * lineProgress;
 
-        // Set dotted pattern
-        ctx.setLineDash([dotSize, gapSize]);
-
-        // Clip the line to only draw the traced portion
-        ctx.save();
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
 
@@ -215,10 +206,6 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
 
         ctx.lineTo(endX, endY);
         ctx.stroke();
-        ctx.restore();
-
-        // Reset for next line
-        ctx.setLineDash([]);
       };
 
       // Helper to fill a quad in 3D
