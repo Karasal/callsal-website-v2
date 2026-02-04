@@ -672,3 +672,84 @@ Fixed Room3D persistence and diorama transition issues.
 - Test the full scroll flow: diorama → black → Room3D
 - All other pages should show Room3D directly
 - Consider adding scroll hint styling for dark background
+
+---
+
+## Session Log: Feb 3, 2026 (Session 7 Part 3 — Camera Zoom + Picture Frame)
+
+### What was done
+Cinematic 3D camera zoom-out effect where landing page IS the diorama in a picture frame.
+
+#### Camera Zoom-Out on Scroll
+- **Concept**: Start zoomed in on diorama (fills screen), scroll to zoom out and reveal 3D room
+- **Camera interpolation** based on scroll progress:
+  - `camY`: 2.5 → 3.5 (subtle Y shift)
+  - `camZ`: 7.5 → 2.0 (zoom out)
+- **Sine easing**: `(1 - Math.cos(zoomProgress * Math.PI)) / 2` for drone-like smooth glide
+- **Mouse parallax disabled when zoomed in**: `maxPan = 0.3 * easeZoom`
+
+#### Picture Frame with Diorama
+- Diorama image loaded and rendered inside a 3D picture frame on back wall
+- Frame dimensions: 4 units wide × 2.5 units tall
+- Position: centered horizontally, close to floor (`frameY = 2.5`)
+- **Flat black bezel**: 8px stroke, square caps, no glow
+
+#### Color Transition Timing
+- **Problem**: Walls changing color while zoomed in looked wrong
+- **Solution**: Delay color transition to back half of scroll
+- `colorProgress = (sp - 0.7) * 3.33` — only 70-100% scroll range
+- Zoom completes first, THEN colors dissolve white→black
+
+#### Other Fixes
+- **GlassHeader/GlassNav**: Added `overflow-visible` to prevent button glow clipping
+- **Hero text**: Thicker black stroke (`WebkitTextStroke: '3px #000'`)
+
+#### 3D Hero Text (Attempted & Reverted)
+- Tried rendering "HI - IT'S YOUR NEW PAL, SAL!" as 3D text on back wall
+- Would reveal organically during zoom-out
+- **Reverted**: User wants step-by-step approach to get this right
+
+### Technical Details
+
+#### 3D Projection
+```typescript
+const project = (x, y, z, w, h, camX, camY, camZ) => {
+  const fov = Math.PI / 2; // 90 degrees
+  const scale = w / (2 * Math.tan(fov / 2));
+  const dx = x - camX, dy = y - camY, dz = z - camZ;
+  if (dz <= 0) return null;
+  return { x: w/2 + (dx/dz)*scale, y: h/2 + (dy/dz)*scale };
+};
+```
+
+#### Camera Zoom Easing
+```typescript
+const zoomProgress = Math.min(1, sp);
+const easeZoom = (1 - Math.cos(zoomProgress * Math.PI)) / 2; // Sine easing
+const camY = 2.5 + (3.5 - 2.5) * easeZoom;
+const camZ = 7.5 + (2.0 - 7.5) * easeZoom;
+```
+
+### Files Changed
+- `components/Room3D.tsx` — Camera zoom, picture frame, color timing
+- `components/GlassHeader.tsx` — overflow-visible
+- `components/GlassNav.tsx` — overflow-visible
+- `components/Hero.tsx` — Thicker text stroke
+
+### Commits
+```
+1a7d1a7 Session 7: 3D room with camera zoom + picture frame
+```
+
+### Key Learnings
+- **Sine easing** is smoother than quadratic for camera movement
+- **Delay visual changes** until zoom completes for cleaner UX
+- **3D text on wall** is ambitious — needs careful step-by-step implementation
+
+### TODO for next session
+User wants to implement 3D hero text on back wall with step-by-step guidance:
+1. Define exact text content and positioning
+2. Test font rendering at various distances
+3. Handle lime/cyan highlights properly
+4. Coordinate with scroll progress
+5. Make sure it looks organic, not tacked on
