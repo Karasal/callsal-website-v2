@@ -793,3 +793,63 @@ Attempted to render GlassHeader and GlassNav as 3D objects painted on the back w
 2. **CSS 3D transforms** — position HTML elements in 3D space with `transform-style: preserve-3d`
 3. **Keep HTML overlays** — accept that nav doesn't rotate with room (current state works fine)
 4. **Hybrid approach** — render nav panels as 3D quads in canvas, but keep text as positioned HTML
+
+---
+
+## Session Log: Feb 4, 2026 (Session 10 — CSS 3D Hero Title)
+
+### What was done
+Implemented CSS 3D transforms for hero title that syncs with Room3D mouse parallax.
+
+#### Shared Mouse State (App.tsx)
+- Lifted mouse tracking from Room3D to App.tsx
+- Smooth interpolation with lerp (0.06 factor)
+- Passed as `smoothMouse` prop to both Room3D and Hero
+
+#### Wall3DTitle Component (Hero.tsx)
+- CSS 3D transforms matching Room3D camera math exactly
+- `rotateY` and `rotateX` calculated from same pan/tilt angles
+- `transformOrigin: 'center center -300px'` — pushes pivot point back toward wall
+- `scale: 0.9 + 0.2 * easeZoom` — subtle depth scaling
+- Fades in during scroll (30-70% progress)
+- Desktop only (mobile keeps original hero)
+
+#### Layout (final "perfect" state)
+- Left-justified (`items-start text-left`)
+- Subtitle: "HOW I HELP YOU GROW" with lime accent line
+- Multi-line title: "HI - IT'S / YOUR NEW / PAL, SAL!"
+- 3px black stroke on white text, lime highlights on HI and SAL
+- Blurb with cyan `border-l-2` accent
+- Two buttons: SEE MY PROCESS (primary), VIEW CINEMATICS (glass)
+
+#### Canvas Text Attempt (reverted)
+- Tried rendering title directly in Room3D canvas
+- Would truly fix text to the 3D wall
+- Reverted because CSS approach is simpler and user liked the result
+
+### Files Changed
+- `App.tsx` — Shared mouse state, passed to Room3D and Hero
+- `components/Hero.tsx` — Wall3DTitle component, mobile hero preserved
+- `components/Room3D.tsx` — Receives smoothMouse prop, fixed variable redeclaration bug
+
+### Commits
+```
+b1f814a Session 10: CSS 3D hero title with mouse parallax
+```
+
+### Key Learnings
+- **CSS 3D transforms** can simulate "on wall" effect with proper transformOrigin
+- **Shared state** between canvas and CSS is key for synced animations
+- **Canvas text is hard** — perspective projection of text needs complex matrix math
+- **Iterate with user feedback** — get approval at each step before over-engineering
+
+### Current State
+- Hero title rotates with mouse parallax (synced to Room3D)
+- Title feels like it's "in the scene" but not perfectly fixed to wall
+- User happy with current "perfect" sizing and layout
+- Buttons are interactive after scroll completes (70%+ progress)
+
+### TODO for next session
+- Consider true canvas text if user wants it fixed to wall
+- Or accept current CSS approach as "good enough"
+- Test on production after deploy
