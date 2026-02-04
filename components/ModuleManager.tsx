@@ -99,6 +99,7 @@ interface ModuleManagerProps {
   onConsultation: () => void;
   cinematicsMode?: boolean;
   onCloseCinematics?: () => void;
+  onZoomChange?: (zoomProgress: number) => void;
 }
 
 export const ModuleManager: React.FC<ModuleManagerProps> = ({
@@ -108,6 +109,7 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   onConsultation,
   cinematicsMode = false,
   onCloseCinematics,
+  onZoomChange,
 }) => {
   // State machine
   const [viewState, setViewState] = useState<ViewState>('diorama');
@@ -145,7 +147,8 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
 
   useEffect(() => {
     zoomProgressRef.current = zoomProgress;
-  }, [zoomProgress]);
+    onZoomChange?.(zoomProgress);
+  }, [zoomProgress, onZoomChange]);
 
   useEffect(() => {
     if (zoomAnimationRef.current) {
@@ -154,14 +157,17 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
 
     const targetZoom = activeModuleId !== null ? 1 : 0;
     const startZoom = zoomProgressRef.current;
-    const duration = 600; // ms
+    const duration = 300; // ms - fast, snappy animation
     let startTime: number | null = null;
+
+    // Faster ease-out for instant feel
+    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
       const elapsed = timestamp - startTime;
       const rawProgress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeOutCubic(rawProgress);
+      const easedProgress = easeOutQuart(rawProgress);
 
       const newZoom = startZoom + (targetZoom - startZoom) * easedProgress;
       setZoomProgress(newZoom);

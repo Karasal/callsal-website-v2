@@ -19,6 +19,7 @@ const App: React.FC = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [cinematicsMode, setCinematicsMode] = useState(false);
+  const [moduleZoom, setModuleZoom] = useState(0);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
   // Shared mouse state for 3D parallax (syncs Room3D canvas with CSS transforms)
@@ -77,6 +78,27 @@ const App: React.FC = () => {
   const snapTargetRef = useRef<number | null>(null);
   const lastScrollTopRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
+
+  // Reset snap state when cinematicsMode changes or module closes
+  const prevModuleZoomRef = useRef(0);
+  useEffect(() => {
+    // Reset when cinematics changes
+    isSnappingRef.current = false;
+    snapTargetRef.current = null;
+  }, [cinematicsMode]);
+
+  useEffect(() => {
+    // Reset snap state when module fully closes
+    const wasOpen = prevModuleZoomRef.current > 0.5;
+    const isClosed = moduleZoom < 0.1;
+
+    if (wasOpen && isClosed) {
+      isSnappingRef.current = false;
+      snapTargetRef.current = null;
+    }
+
+    prevModuleZoomRef.current = moduleZoom;
+  }, [moduleZoom]);
 
   // Track scroll position for parallax entrance (throttled with RAF)
   useEffect(() => {
@@ -156,9 +178,9 @@ const App: React.FC = () => {
     const transitionZone = window.innerHeight * 1.5;
     const DELTA_THRESHOLD = 15; // Ignore micro-scrolls from trackpads
 
-    // Three snap points
+    // Three snap points - all snap to same hero position for consistency
     const SNAP_DIORAMA = 0;
-    const SNAP_HERO = transitionZone * 0.7;  // scrollProgress = 0.7 (hero text visible)
+    const SNAP_HERO = transitionZone * 0.7;  // scrollProgress = 0.7 (white room, black text)
     const SNAP_MODULES = transitionZone;      // scrollProgress = 1.0 (module cards)
 
     // Snap to target position - smooth scroll both directions
@@ -188,9 +210,10 @@ const App: React.FC = () => {
       return 'modules';
     };
 
+    // Wheel handler on WINDOW (not mainContent) so it catches events over fixed overlays
     const handleWheel = (e: WheelEvent) => {
-      // Don't intercept scroll when cinematics is open
-      if (cinematicsMode) return;
+      // Don't intercept scroll when cinematics or module is open
+      if (cinematicsMode || moduleZoom > 0) return;
 
       const scrollTop = mainContent.scrollTop;
       const isInEntranceZone = scrollTop < transitionZone + 50;
@@ -218,7 +241,7 @@ const App: React.FC = () => {
       if (scrollingDown) {
         if (currentZone === 'diorama') snapTo(SNAP_HERO);
         else if (currentZone === 'hero') snapTo(SNAP_MODULES);
-        // At modules - could allow normal scroll or stay
+        // At modules - stay (no further snap points)
       } else {
         if (currentZone === 'modules') snapTo(SNAP_HERO);
         else if (currentZone === 'hero') snapTo(SNAP_DIORAMA);
@@ -235,7 +258,7 @@ const App: React.FC = () => {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (cinematicsMode) return;
+      if (cinematicsMode || moduleZoom > 0) return;
       if (isSnappingRef.current) return;
 
       const scrollTop = mainContent.scrollTop;
@@ -260,16 +283,17 @@ const App: React.FC = () => {
       }
     };
 
-    mainContent.addEventListener('wheel', handleWheel, { passive: false });
+    // Listen on window to catch wheel events over fixed overlays (module cards, etc.)
+    window.addEventListener('wheel', handleWheel, { passive: false });
     mainContent.addEventListener('touchstart', handleTouchStart, { passive: true });
     mainContent.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
-      mainContent.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('wheel', handleWheel);
       mainContent.removeEventListener('touchstart', handleTouchStart);
       mainContent.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [activeTab, isMobile, cinematicsMode]);
+  }, [activeTab, isMobile, cinematicsMode, moduleZoom]);
 
   // Hash-based deep linking
   useEffect(() => {
@@ -368,6 +392,7 @@ const App: React.FC = () => {
           onConsultation={() => handleNavigation('consultation')}
           cinematicsMode={cinematicsMode}
           onCloseCinematics={() => setCinematicsMode(false)}
+          onZoomChange={setModuleZoom}
         />
       )}
 
@@ -387,9 +412,10 @@ const App: React.FC = () => {
         onNavigate={handleNavigation}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
+        moduleZoom={moduleZoom}
       />
 
-      <main id="main-content" className="flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 overflow-y-auto">
+      <main id="main-content" className={`flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 ${cinematicsMode || moduleZoom > 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
         {isMobile ? (
           <div className="min-h-full">
             {renderContent()}
@@ -420,6 +446,7 @@ const App: React.FC = () => {
         onLogout={handleLogout}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
+        moduleZoom={moduleZoom}
       />
     </div>
   );

@@ -35,7 +35,8 @@ export const GlassHeader: React.FC<{
   onNavigate: (tab: string) => void;
   scrollProgress?: number;
   scrollDirection?: 'forward' | 'backward';
-}> = ({ onAuth, currentUser, onNavigate, scrollProgress = 1, scrollDirection = 'forward' }) => {
+  moduleZoom?: number;
+}> = ({ onAuth, currentUser, onNavigate, scrollProgress = 1, scrollDirection = 'forward', moduleZoom = 0 }) => {
   const [mstTime, setMstTime] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isMobile, fadeProps } = useMobileAnimations();
@@ -65,12 +66,19 @@ export const GlassHeader: React.FC<{
 
   // Vertical position:
   // Forward: drops in from above
-  // Backward: slides up off screen
-  const translateY = isBackward
-    ? (1 - scrollProgress) * -100
+  // Backward: slides up off screen (but stays in place at 0.7+)
+  // Module zoom: slides up off screen
+  // For backward: fully in position at scrollProgress >= 0.7, slides out below
+  const backwardSlide = scrollProgress >= 0.7 ? 0 : ((0.7 - scrollProgress) / 0.7) * -100;
+  const baseTranslateY = isBackward
+    ? backwardSlide
     : (1 - appear) * -60;
+  const translateY = baseTranslateY - (moduleZoom * 100);
 
-  const opacity = isBackward ? scrollProgress : appear;
+  // Opacity: fully visible at hero snap point (0.7) and above
+  // For backward: remap so 0.7+ = 1.0, below 0.7 fades to 0
+  const backwardOpacity = Math.min(1, scrollProgress / 0.7);
+  const opacity = (isBackward ? backwardOpacity : appear) * (1 - moduleZoom);
 
   return (
     <>

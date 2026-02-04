@@ -1082,12 +1082,12 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   const rotateX = tiltAngle * (180 / Math.PI);
 
   // Fade in as we zoom out, fade out before module cards appear
-  // Snap point is at scrollProgress = 0.7, so title should be fully visible there
+  // Snap from diorama lands at 0.7, snap from modules lands at 0.75
   // fadeIn: 0→1 from 0.4 to 0.65
-  // fadeOut: 1→0 from 0.75 to 0.80 (instant fade before modules appear)
+  // fadeOut: 1→0 from 0.78 to 0.83 (buffer zone for snap precision)
   // Also fade out when cinematics mode is active
   const fadeIn = Math.min(1, Math.max(0, (scrollProgress - 0.4) / 0.25));
-  const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.75) / 0.05));
+  const fadeOut = Math.min(1, Math.max(0, 1 - (scrollProgress - 0.78) / 0.05));
   const cinematicsFade = cinematicsMode ? 0 : 1;
   const titleOpacity = fadeIn * fadeOut * cinematicsFade;
 
@@ -1101,8 +1101,9 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   // Scale down slightly when zoomed in for depth illusion
   const scale = 0.9 + 0.2 * easeZoom;
 
-  // Enable pointer events only when visible enough
-  const canInteract = scrollProgress >= 0.6;
+  // Enable pointer events only when visible enough AND actually visible
+  // At scrollProgress >= 0.8, titleOpacity is 0, so don't block clicks to modules behind
+  const canInteract = scrollProgress >= 0.6 && titleOpacity > 0.1;
 
   return (
     <div

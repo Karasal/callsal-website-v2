@@ -32,12 +32,10 @@ const project3D = (
   panAngle: number,
   tiltAngle: number
 ) => {
-  // Apply camera rotation
   let dx = x - camX;
   let dy = y - camY;
   let dz = z - camZ;
 
-  // Pan (Y-axis rotation)
   const cosP = Math.cos(panAngle);
   const sinP = Math.sin(panAngle);
   const rx = dx * cosP - dz * sinP;
@@ -45,7 +43,6 @@ const project3D = (
   dx = rx;
   dz = rz;
 
-  // Tilt (X-axis rotation)
   const cosT = Math.cos(tiltAngle);
   const sinT = Math.sin(tiltAngle);
   const ry = dy * cosT - dz * sinT;
@@ -55,8 +52,7 @@ const project3D = (
 
   if (dz <= 0) return null;
 
-  // Project to screen
-  const fov = Math.PI / 2; // 90 degrees
+  const fov = Math.PI / 2;
   const scale = screenW / (2 * Math.tan(fov / 2));
   const screenX = screenW / 2 + (dx / dz) * scale;
   const screenY = screenH / 2 + (dy / dz) * scale;
@@ -81,60 +77,31 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   const screenW = typeof window !== 'undefined' ? window.innerWidth : 1920;
   const screenH = typeof window !== 'undefined' ? window.innerHeight : 1080;
 
-  // Get target module position for camera targeting
-  const targetModulePos = useMemo(() => {
-    if (!activeModuleId) return null;
-    const target = modules.find(m => m.id === activeModuleId);
-    return target?.basePosition || null;
-  }, [activeModuleId, modules]);
+  // Get active module
+  const activeModule = activeModuleId ? modules.find(m => m.id === activeModuleId) : null;
 
-  // Calculate camera position (must match Room3DEnhanced exactly)
+  // Camera state for floating cards (no zoom animation needed now)
   const cameraState = useMemo(() => {
     const sp = scrollProgress;
-    const zp = zoomProgress;
-
-    // Camera zoom from scroll
     const zoomProgress2 = Math.min(1, sp);
     const easeZoom = (1 - Math.cos(zoomProgress2 * Math.PI)) / 2;
 
-    // Base camera position at full scroll
     const baseCamX = 0;
     const baseCamY = 2.5 + (3.5 - 2.5) * easeZoom;
     const baseCamZ = 7.5 + (2.0 - 7.5) * easeZoom;
 
-    // When a module is active, fly camera TOWARD it
-    let camX = baseCamX;
-    let camY = baseCamY;
-    let camZ = baseCamZ;
-
-    if (targetModulePos && zp > 0) {
-      const ease = zp * zp * (3 - 2 * zp); // Smoothstep
-
-      // Must match Room3DEnhanced exactly
-      const targetCamX = targetModulePos.x * 0.02; // Almost no X offset — stay centered
-      const targetCamY = baseCamY; // DON'T move Y — stay centered
-      const targetCamZ = targetModulePos.z - 3.5;
-
-      camX = baseCamX + (targetCamX - baseCamX) * ease;
-      camY = targetCamY; // Keep Y stable
-      camZ = baseCamZ + (targetCamZ - baseCamZ) * ease;
-    }
-
-    // Camera rotation from mouse — CONSTRAINED for subtle movement
-    const maxPan = 0.08 * easeZoom * (1 - zp);
-    const maxTilt = 0.05 * easeZoom * (1 - zp);
+    const maxPan = 0.08 * easeZoom;
+    const maxTilt = 0.05 * easeZoom;
     const panAngle = (smoothMouse.x - 0.5) * maxPan * 2;
     const tiltAngle = (smoothMouse.y - 0.5) * maxTilt * 2;
 
-    return { camX, camY, camZ, panAngle, tiltAngle, easeZoom };
-  }, [scrollProgress, zoomProgress, smoothMouse, targetModulePos]);
+    return { camX: baseCamX, camY: baseCamY, camZ: baseCamZ, panAngle, tiltAngle };
+  }, [scrollProgress, smoothMouse]);
 
-  // Calculate card positions and sizes
+  // Calculate floating card positions
   const cardTransforms = useMemo(() => {
     return modules.map(module => {
       const pos = module.basePosition;
-
-      // Project card center
       const center = project3D(
         pos.x, pos.y, pos.z,
         screenW, screenH,
@@ -144,7 +111,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
 
       if (!center) return null;
 
-      // Project corners to get apparent size
       const halfW = CARD_WIDTH / 2;
       const halfH = CARD_HEIGHT / 2;
 
@@ -171,7 +137,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
 
       if (!topLeft || !topRight || !bottomLeft) return null;
 
-      // Calculate projected dimensions
       const projectedWidth = Math.sqrt(
         Math.pow(topRight.x - topLeft.x, 2) + Math.pow(topRight.y - topLeft.y, 2)
       );
@@ -179,7 +144,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
         Math.pow(bottomLeft.x - topLeft.x, 2) + Math.pow(bottomLeft.y - topLeft.y, 2)
       );
 
-      // Calculate rotation from perspective
       const rotateY = cameraState.panAngle * (180 / Math.PI) * -1;
       const rotateX = cameraState.tiltAngle * (180 / Math.PI);
 
@@ -192,27 +156,26 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
         depth: center.depth,
         rotateX,
         rotateY,
-        scale: 1 / center.depth * 3 // Depth-based scale factor
       };
     }).filter(Boolean);
   }, [modules, cameraState, screenW, screenH]);
 
-  // Don't render overlays until cards should be visible
-  const cardOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.8) * 5)) * (1 - zoomProgress * 2);
+  // Card visibility - fade out when modal opens
+  const effectiveZoom = zoomProgress < 0.01 ? 0 : zoomProgress;
+  const cardsVisible = scrollProgress >= 0.8 && effectiveZoom < 0.5;
+  const cardOpacity = cardsVisible ? Math.min(1, (scrollProgress - 0.8) * 5) * (1 - effectiveZoom * 2) : 0;
 
-  if (cardOpacity <= 0 && zoomProgress <= 0) return null;
-
-  // Get active module for fullscreen view
-  const activeModule = activeModuleId ? modules.find(m => m.id === activeModuleId) : null;
+  // Modal visibility - fade in when active
+  const modalVisible = effectiveZoom > 0.3;
+  const modalOpacity = Math.min(1, (effectiveZoom - 0.3) / 0.4);
 
   return (
     <>
-      {/* 3D positioned cards — active card flies to fullscreen */}
-      {/* Container has pointer-events-none so scrolling works through it */}
-      {(cardOpacity > 0 || zoomProgress > 0) && (
+      {/* Floating 3D cards - fade out when modal opens */}
+      {cardOpacity > 0 && (
         <div
           className="fixed inset-0 z-[50]"
-          style={{ perspective: '2000px', pointerEvents: 'none' }}
+          style={{ perspective: '2000px', pointerEvents: 'none', opacity: cardOpacity }}
         >
           {cardTransforms.map(transform => {
             if (!transform) return null;
@@ -220,92 +183,41 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
             if (!module) return null;
 
             const isHovered = hoveredModuleId === module.id;
-            const isActive = activeModuleId === module.id;
-
-            // Non-active cards fade out
-            const cardVisible = isActive ? 1 : cardOpacity * (1 - zoomProgress);
-            if (cardVisible <= 0) return null;
-
-            // Linear easing for clean, consistent scaling (no pop)
-            const ease = zoomProgress;
-
-            // Target: centered, smaller and cleaner
-            const targetWidth = Math.min(screenW * 0.8, 1000);
-            const targetHeight = screenH * 0.75;
-            const targetX = screenW / 2;
-            const targetY = screenH / 2;
-
-            // Interpolate from 3D position to fullscreen (only for active card)
-            const currentX = isActive
-              ? transform.x + (targetX - transform.x) * ease
-              : transform.x;
-            const currentY = isActive
-              ? transform.y + (targetY - transform.y) * ease
-              : transform.y;
-            const currentWidth = isActive
-              ? transform.width + (targetWidth - transform.width) * ease
-              : transform.width;
-            const currentHeight = isActive
-              ? transform.height + (targetHeight - transform.height) * ease
-              : transform.height;
-
-            // Rotation fades out for active card
-            const rotationMultiplier = isActive ? (1 - ease) : 1;
-
-            // Content scale based on current width
-            const contentScale = currentWidth / 1000;
-
-            // Enable interaction when mostly zoomed
-            const isInteractive = isActive && zoomProgress > 0.7;
+            const contentScale = transform.width / 1000;
 
             return (
               <div
                 key={module.id}
                 className="absolute"
-                onClick={!isActive ? () => onModuleClick(module.id) : undefined}
-                onMouseEnter={!isActive ? () => onModuleHover(module.id) : undefined}
-                onMouseLeave={!isActive ? () => onModuleHover(null) : undefined}
+                onClick={() => onModuleClick(module.id)}
+                onMouseEnter={() => onModuleHover(module.id)}
+                onMouseLeave={() => onModuleHover(null)}
                 style={{
-                  left: currentX - currentWidth / 2,
-                  top: currentY - currentHeight / 2,
-                  width: currentWidth,
-                  height: currentHeight,
-                  opacity: cardVisible,
+                  left: transform.x - transform.width / 2,
+                  top: transform.y - transform.height / 2,
+                  width: transform.width,
+                  height: transform.height,
                   transform: `
-                    rotateY(${transform.rotateY * 0.3 * rotationMultiplier}deg)
-                    rotateX(${transform.rotateX * 0.3 * rotationMultiplier}deg)
+                    rotateY(${transform.rotateY * 0.3}deg)
+                    rotateX(${transform.rotateX * 0.3}deg)
                   `,
                   transformStyle: 'preserve-3d',
                   transformOrigin: 'center center',
-                  zIndex: isActive ? 1000 : Math.round(100 - transform.depth * 10),
-                  boxShadow: isHovered && !isActive
+                  zIndex: Math.round(100 - transform.depth * 10),
+                  boxShadow: isHovered
                     ? '0 0 40px rgba(204, 255, 0, 0.6), 0 0 80px rgba(204, 255, 0, 0.3)'
                     : '0 10px 40px rgba(0,0,0,0.5)',
-                  borderRadius: `${12 + ease * 12}px`,
-                  overflow: isInteractive ? 'auto' : 'hidden',
-                  border: isHovered && !isActive ? '2px solid #CCFF00' : '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: 12,
+                  overflow: 'hidden',
+                  border: isHovered ? '2px solid #CCFF00' : '1px solid rgba(255,255,255,0.1)',
                   background: 'rgba(0,0,0,0.95)',
-                  cursor: isActive ? 'default' : 'pointer',
-                  // Cards are clickable but wheel events pass through for scroll
+                  cursor: 'pointer',
                   pointerEvents: 'auto',
                 }}
               >
-                {/* Close button when zoomed */}
-                {isActive && zoomProgress > 0.3 && (
-                  <button
-                    onClick={(e) => { e.stopPropagation(); onClose(); }}
-                    className="absolute top-4 right-4 z-[100] w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors pointer-events-auto"
-                  >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-5 h-5">
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
-                  </button>
-                )}
-
-                {/* Content — scales from center */}
                 <div
                   className="absolute inset-0 flex items-start justify-center overflow-hidden"
-                  style={{ pointerEvents: isInteractive ? 'auto' : 'none' }}
+                  style={{ pointerEvents: 'none' }}
                 >
                   <div
                     style={{
@@ -329,13 +241,74 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
         </div>
       )}
 
-      {/* Backdrop dims when a module is zoomed */}
-      {zoomProgress > 0 && (
-        <div
-          className="fixed inset-0 z-[40] bg-black pointer-events-auto"
-          style={{ opacity: zoomProgress * 0.7 }}
-          onClick={onClose}
-        />
+      {/* Fullscreen modal - instant, no zoom animation */}
+      {modalVisible && activeModule && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-[998] bg-black transition-opacity duration-200"
+            style={{ opacity: modalOpacity * 0.85 }}
+            onClick={onClose}
+          />
+
+          {/* Modal container */}
+          <div
+            className="fixed inset-0 z-[999] flex items-start justify-center overflow-y-auto no-scrollbar transition-opacity duration-200"
+            style={{ opacity: modalOpacity }}
+          >
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="fixed top-6 right-6 z-[1001] w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border border-white/20 hover:bg-white/20 transition-colors"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" className="w-6 h-6">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Navigation arrows */}
+            {modules.length > 1 && (() => {
+              const currentIndex = modules.findIndex(m => m.id === activeModuleId);
+              const prevModule = modules[(currentIndex - 1 + modules.length) % modules.length];
+              const nextModule = modules[(currentIndex + 1) % modules.length];
+
+              return (
+                <>
+                  <button
+                    onClick={() => onModuleClick(prevModule.id)}
+                    className="fixed left-6 top-1/2 -translate-y-1/2 z-[1001] w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border border-white/20 hover:bg-[#CCFF00] hover:border-[#CCFF00] hover:text-black text-white transition-all"
+                    title={prevModule.title}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
+                      <path d="M15 18l-6-6 6-6" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => onModuleClick(nextModule.id)}
+                    className="fixed right-6 top-1/2 -translate-y-1/2 z-[1001] w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border border-white/20 hover:bg-[#CCFF00] hover:border-[#CCFF00] hover:text-black text-white transition-all"
+                    title={nextModule.title}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+                </>
+              );
+            })()}
+
+            {/* Module content - natural size, no scaling */}
+            <div
+              className="w-full max-w-5xl mx-auto my-8 bg-black/95 rounded-2xl border border-white/10 overflow-hidden"
+              style={{ minHeight: '80vh' }}
+            >
+              <activeModule.component
+                onClose={onClose}
+                onConsultation={onConsultation}
+                isPreview={false}
+              />
+            </div>
+          </div>
+        </>
       )}
     </>
   );

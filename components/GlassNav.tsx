@@ -13,7 +13,8 @@ export const GlassNav: React.FC<{
   onLogout: () => void;
   scrollProgress?: number;
   scrollDirection?: 'forward' | 'backward';
-}> = ({ activeTab, setActiveTab, onAuth, currentUser, setCurrentUser, onLogout, scrollProgress = 1, scrollDirection = 'forward' }) => {
+  moduleZoom?: number;
+}> = ({ activeTab, setActiveTab, onAuth, currentUser, setCurrentUser, onLogout, scrollProgress = 1, scrollDirection = 'forward', moduleZoom = 0 }) => {
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
   // Entrance animation
@@ -36,12 +37,19 @@ export const GlassNav: React.FC<{
 
   // Vertical position:
   // Forward: rises from below
-  // Backward: slides down off screen
-  const translateY = isBackward
-    ? (1 - scrollProgress) * 100
+  // Backward: slides down off screen (but stays in place at 0.7+)
+  // Module zoom: slides down off screen
+  // For backward: fully in position at scrollProgress >= 0.7, slides out below
+  const backwardSlide = scrollProgress >= 0.7 ? 0 : ((0.7 - scrollProgress) / 0.7) * 100;
+  const baseTranslateY = isBackward
+    ? backwardSlide
     : (1 - appear) * 60;
+  const translateY = baseTranslateY + (moduleZoom * 100);
 
-  const opacity = isBackward ? scrollProgress : appear;
+  // Opacity: fully visible at hero snap point (0.7) and above
+  // For backward: remap so 0.7+ = 1.0, below 0.7 fades to 0
+  const backwardOpacity = Math.min(1, scrollProgress / 0.7);
+  const opacity = (isBackward ? backwardOpacity : appear) * (1 - moduleZoom);
 
   const tabs = [
     { id: 'overview', icon: <Home size={20} />, label: 'WELCOME' },
