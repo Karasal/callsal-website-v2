@@ -75,7 +75,8 @@ const ProximityHeroText = () => {
   const whiteStyle = {
     color: '#ffffff',
     WebkitTextFillColor: '#ffffff',
-    textShadow: '0 0 1px rgba(0,0,0,0.5), 0 0 2px rgba(0,0,0,0.3), 1px 1px 1px rgba(0,0,0,0.2)',
+    WebkitTextStroke: '3px #000',
+    paintOrder: 'stroke fill',
   } as React.CSSProperties;
 
   return (
@@ -1109,31 +1110,19 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, s
         {/* Fixed Diorama Image - stays in place while scrolling */}
         {/* bg-neutral-100 prevents white flash before image loads */}
         {/* pointer-events-none allows scroll events to pass through */}
-        <div
-          className="fixed inset-0 z-[2] bg-neutral-100 pointer-events-none"
-          style={{
-            // Fade out entire container after black overlay is complete (0.25-0.5 scroll)
-            opacity: isMobile ? (scrollProgress >= 0.5 ? 0 : 1) : Math.max(0, 1 - Math.max(0, (scrollProgress - 0.25) * 4))
-          }}
-        >
-          {/* Desktop image */}
-          <img
-            src="/calgary-diorama.jpg"
-            alt="Calgary Skyline Diorama"
-            className="hidden lg:block w-full h-full object-cover object-center"
-          />
-          {/* Mobile image */}
-          <img
-            src="/calgary-diorama-mobile.jpg"
-            alt="Calgary Skyline Diorama"
-            className="lg:hidden w-full h-full object-cover object-center"
-          />
-          {/* Fade to black overlay (0-0.25 scroll) */}
+        {/* Mobile-only diorama fallback (desktop uses Room3D picture frame) */}
+        {isMobile && (
           <div
-            className="absolute inset-0 bg-black pointer-events-none"
-            style={{ opacity: isMobile ? (scrollProgress >= 0.25 ? 1 : scrollProgress * 4) : Math.min(1, scrollProgress * 4) }}
-          />
-        </div>
+            className="fixed inset-0 z-[2] bg-neutral-100 pointer-events-none"
+            style={{ opacity: scrollProgress >= 0.5 ? 0 : 1 }}
+          >
+            <img
+              src="/calgary-diorama-mobile.jpg"
+              alt="Calgary Skyline Diorama"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+        )}
 
 
         {/* Scroll hint - fades out as you scroll */}

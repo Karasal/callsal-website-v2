@@ -70,7 +70,7 @@ export const GlassHeader: React.FC<{
     <>
       {/* Desktop: Compact pill in top-left */}
       <header
-        className="hidden lg:flex h-14 items-center justify-center z-40 fixed top-6 left-6 rounded-full px-3"
+        className="hidden lg:flex h-14 items-center justify-center z-40 fixed top-6 left-6 rounded-full px-3 overflow-visible"
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
@@ -104,7 +104,7 @@ export const GlassHeader: React.FC<{
 
       {/* Mobile: Full-width bar */}
       <header
-        className="lg:hidden h-14 flex items-center justify-between z-40 fixed top-4 left-4 right-4 rounded-2xl px-4"
+        className="lg:hidden h-14 flex items-center justify-between z-40 fixed top-4 left-4 right-4 rounded-2xl px-4 overflow-visible"
         style={{
           opacity: isMobile ? opacity : 1,
           transform: isMobile ? `translateY(${translateY}px)` : 'none',

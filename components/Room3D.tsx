@@ -11,6 +11,7 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
   const smoothMouse = useRef({ x: 0.5, y: 0.5 });
   const frameRef = useRef<number>();
   const scrollProgressRef = useRef(scrollProgress);
+  const dioramaImageRef = useRef<HTMLImageElement | null>(null);
 
   // Update ref when prop changes
   useEffect(() => {
@@ -33,6 +34,13 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
     };
     resize();
     window.addEventListener('resize', resize);
+
+    // Load diorama image for picture frame
+    const dioramaImg = new Image();
+    dioramaImg.src = '/calgary-diorama.jpg';
+    dioramaImg.onload = () => {
+      dioramaImageRef.current = dioramaImg;
+    };
 
     const onMouse = (e: MouseEvent) => {
       mouseRef.current = {
@@ -71,12 +79,9 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       // Scroll-driven animation progress
       const sp = scrollProgressRef.current;
 
-      // Room becomes visible at sp=0.15, fully visible at sp~0.48
-      // So remap our animations to start at 0.15 and complete by 0.85
-      const adjustedProgress = Math.max(0, (sp - 0.15) / 0.7); // 0 at sp=0.15, 1 at sp=0.85
-
-      // Color interpolation: white walls/dark grey grid → black walls/dark grey grid
-      const colorProgress = Math.min(1, Math.max(0, adjustedProgress * 1.2)); // Complete by ~83% of adjusted range
+      // Color transition: white "display case" → black room
+      // Zoom first (0-70%), THEN color dissolves (70-100%)
+      const colorProgress = Math.min(1, Math.max(0, (sp - 0.7) * 3.33)); // 0 until 70%, then 0→1
 
       // Interpolate wall colors (white → black)
       const wallR = Math.round(255 * (1 - colorProgress));
@@ -84,27 +89,31 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       const wallB = Math.round(255 * (1 - colorProgress));
       const wallColor = `rgb(${wallR}, ${wallG}, ${wallB})`;
 
-      // Grid lines: dark grey (brutalist) - starts lighter, ends darker
-      // Range from rgb(80,80,80) to rgb(40,40,40)
-      const lineGrey = Math.round(80 - (40 * colorProgress));
+      // Grid lines: light grey → dark grey (matches wall darkness)
+      const lineGrey = Math.round(180 - (140 * colorProgress)); // 180 (light) → 40 (dark)
       const lineColor = `rgb(${lineGrey}, ${lineGrey}, ${lineGrey})`;
 
-      // Trace progress: lines draw in after room is visible
-      // Lines start tracing at sp=0.15, fully drawn by sp=0.6
-      const traceProgress = Math.min(1, Math.max(0, adjustedProgress * 1.5));
+      // Trace progress (not used for visibility anymore, but kept for line drawing animation)
+      const traceProgress = Math.min(1, sp * 1.5);
 
       ctx.clearRect(0, 0, w, h);
       ctx.fillStyle = wallColor;
       ctx.fillRect(0, 0, w, h);
 
-      // Camera position - fixed, centered, low near floor, inside the room
-      const camX = 0;
-      const camY = 3.8; // Low camera (floor is at y=5)
-      const camZ = 1.2; // Inside the room, close to front (culled) face
+      // Camera zoom based on scroll progress
+      // Smooth drone-like glide - gentle acceleration/deceleration
+      const zoomProgress = Math.min(1, sp);
 
-      // Camera rotation (pan/tilt) based on mouse - fluid head movement
-      const maxPan = 0.3;  // Max horizontal rotation in radians (~17 degrees)
-      const maxTilt = 0.2; // Max vertical rotation in radians (~11 degrees)
+      // Sine easing - much smoother, drone-like feel
+      const easeZoom = (1 - Math.cos(zoomProgress * Math.PI)) / 2;
+
+      const camX = 0;
+      const camY = 2.5 + (3.5 - 2.5) * easeZoom; // Subtle Y shift (less dramatic)
+      const camZ = 7.5 + (2.0 - 7.5) * easeZoom; // 7.5 → 2.0 (less extreme range)
+
+      // Camera rotation (pan/tilt) based on mouse - starts subtle, increases as we zoom out
+      const maxPan = 0.3 * easeZoom;  // No pan when zoomed in, full pan when zoomed out
+      const maxTilt = 0.2 * easeZoom;
       const panAngle = (smoothMouse.current.x - 0.5) * maxPan * 2;
       const tiltAngle = (smoothMouse.current.y - 0.5) * maxTilt * 2;
 
@@ -178,33 +187,14 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         const p2 = project(bx, by, bz, w, h, camX, camY, camZ);
         if (!p1 || !p2) return;
 
-        // Calculate line length for trace animation
-        const lineLength = Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-
-        // Stagger the trace based on line index - lines draw in sequence
-        const staggerOffset = (lineIndex / totalLines) * 0.5; // Spread over first 50% of trace
-        const lineProgress = Math.min(1, Math.max(0, (traceProgress - staggerOffset) / 0.5));
-
-        if (lineProgress <= 0) return; // Line hasn't started drawing yet
-
         // Solid lines with square caps for brutalist feel
         ctx.lineCap = 'square';
         ctx.lineJoin = 'miter';
 
-        // Trace animation - draw partial line based on progress
-        const drawnLength = lineLength * lineProgress;
-
+        // Draw full line (no trace animation - we need lines visible when zoomed in)
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
-
-        // Calculate the point along the line at drawnLength
-        const dx = p2.x - p1.x;
-        const dy = p2.y - p1.y;
-        const ratio = drawnLength / lineLength;
-        const endX = p1.x + dx * ratio;
-        const endY = p1.y + dy * ratio;
-
-        ctx.lineTo(endX, endY);
+        ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
       };
 
@@ -265,7 +255,7 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
         [halfSize, halfSize, zNear],
       ], wallColor);
 
-      // Draw grid lines - thick brutalist style with trace animation
+      // Draw grid lines - thick brutalist style
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 2;
 
@@ -340,6 +330,71 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1 
       drawLine3D(halfSize, -halfSize, zNear, halfSize, -halfSize, zFar, cornerIndex++, cornerTotal);
       drawLine3D(-halfSize, halfSize, zNear, -halfSize, halfSize, zFar, cornerIndex++, cornerTotal);
       drawLine3D(halfSize, halfSize, zNear, halfSize, halfSize, zFar, cornerIndex++, cornerTotal);
+
+      // Picture frame on back wall with diorama (drawn LAST, on top of grid)
+      // Always visible - this IS the landing page when zoomed in
+      if (dioramaImageRef.current) {
+        const frameOpacity = 1; // Always full opacity
+
+        // Frame dimensions (centered horizontally, close to floor)
+        const frameWidth = 4;
+        const frameHeight = 2.5;
+        const frameY = 2.5; // Close to floor (floor is at y=5)
+        const frameZ = zFar - 0.01; // Just in front of back wall
+
+        // Frame corners
+        const frameCorners = [
+          [-frameWidth/2, frameY - frameHeight/2, frameZ],
+          [frameWidth/2, frameY - frameHeight/2, frameZ],
+          [frameWidth/2, frameY + frameHeight/2, frameZ],
+          [-frameWidth/2, frameY + frameHeight/2, frameZ],
+        ];
+
+        // Project and rotate frame corners
+        const rotatedCorners = frameCorners.map(([x, y, z]) => rotatePoint(x, y, z));
+        const projectedCorners = rotatedCorners.map(p => project(p.x, p.y, p.z, w, h, camX, camY, camZ));
+
+        if (projectedCorners.every(p => p !== null)) {
+          const pc = projectedCorners as { x: number; y: number }[];
+
+          ctx.save();
+          ctx.globalAlpha = frameOpacity;
+
+          // Draw the diorama image inside the frame
+          ctx.beginPath();
+          ctx.moveTo(pc[0].x, pc[0].y);
+          ctx.lineTo(pc[1].x, pc[1].y);
+          ctx.lineTo(pc[2].x, pc[2].y);
+          ctx.lineTo(pc[3].x, pc[3].y);
+          ctx.closePath();
+          ctx.clip();
+
+          // Calculate bounding box for the projected quad
+          const minX = Math.min(pc[0].x, pc[1].x, pc[2].x, pc[3].x);
+          const maxX = Math.max(pc[0].x, pc[1].x, pc[2].x, pc[3].x);
+          const minY = Math.min(pc[0].y, pc[1].y, pc[2].y, pc[3].y);
+          const maxY = Math.max(pc[0].y, pc[1].y, pc[2].y, pc[3].y);
+
+          ctx.drawImage(dioramaImageRef.current, minX, minY, maxX - minX, maxY - minY);
+          ctx.restore();
+
+          // Flat black sleek bezel
+          ctx.save();
+          ctx.globalAlpha = frameOpacity;
+          ctx.strokeStyle = '#000';
+          ctx.lineWidth = 8;
+          ctx.lineCap = 'square';
+          ctx.lineJoin = 'miter';
+          ctx.beginPath();
+          ctx.moveTo(pc[0].x, pc[0].y);
+          ctx.lineTo(pc[1].x, pc[1].y);
+          ctx.lineTo(pc[2].x, pc[2].y);
+          ctx.lineTo(pc[3].x, pc[3].y);
+          ctx.closePath();
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
 
       frameRef.current = requestAnimationFrame(draw);
     };

@@ -90,7 +90,7 @@ export const GlassNav: React.FC<{
     <>
       {/* Desktop nav - full width with proper margins */}
       <aside
-        className="hidden lg:flex fixed h-20 items-center justify-between z-[100] bottom-6 left-6 right-6 rounded-2xl px-8"
+        className="hidden lg:flex fixed h-20 items-center justify-between z-[100] bottom-6 left-6 right-6 rounded-2xl px-8 overflow-visible"
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
@@ -197,7 +197,7 @@ export const GlassNav: React.FC<{
 
       {/* Mobile nav - full width at bottom */}
       <aside
-        className="lg:hidden fixed h-16 flex items-center justify-around z-[100] bottom-4 left-4 right-4 rounded-2xl px-2"
+        className="lg:hidden fixed h-16 flex items-center justify-around z-[100] bottom-4 left-4 right-4 rounded-2xl px-2 overflow-visible"
         style={{
           opacity: isMobile ? opacity : 1,
           transform: isMobile ? `translateY(${translateY}px)` : 'none',
