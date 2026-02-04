@@ -76,14 +76,16 @@ export const GlassHeader: React.FC<{
     <>
       {/* Desktop: Compact pill in top-left */}
       <header
-        className="hidden lg:flex h-14 items-center justify-center z-40 fixed top-6 left-6 rounded-full px-3 overflow-visible"
+        className="hidden lg:flex h-14 items-center justify-center z-[9999] fixed top-6 left-6 rounded-full px-3 overflow-visible"
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
           willChange: 'transform, opacity',
-          background: 'transparent',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
         <div className="flex items-center gap-3" style={{ opacity: contentFade }}>
@@ -113,13 +115,15 @@ export const GlassHeader: React.FC<{
 
       {/* Mobile: Full-width bar */}
       <header
-        className="lg:hidden h-14 flex items-center justify-between z-40 fixed top-4 left-4 right-4 rounded-2xl px-4 overflow-visible"
+        className="lg:hidden h-14 flex items-center justify-between z-[9999] fixed top-4 left-4 right-4 rounded-2xl px-4 overflow-visible"
         style={{
           opacity: isMobile ? opacity : 1,
           transform: isMobile ? `translateY(${translateY}px)` : 'none',
-          background: 'transparent',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
         <a

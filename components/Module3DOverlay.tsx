@@ -262,6 +262,9 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
               <div
                 key={module.id}
                 className="absolute"
+                onClick={!isActive ? () => onModuleClick(module.id) : undefined}
+                onMouseEnter={!isActive ? () => onModuleHover(module.id) : undefined}
+                onMouseLeave={!isActive ? () => onModuleHover(null) : undefined}
                 style={{
                   left: currentX - currentWidth / 2,
                   top: currentY - currentHeight / 2,
@@ -274,7 +277,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                   `,
                   transformStyle: 'preserve-3d',
                   transformOrigin: 'center center',
-                  zIndex: isActive ? 9999 : Math.round(1000 - transform.depth * 100),
+                  zIndex: isActive ? 1000 : Math.round(100 - transform.depth * 10),
                   boxShadow: isHovered && !isActive
                     ? '0 0 40px rgba(204, 255, 0, 0.6), 0 0 80px rgba(204, 255, 0, 0.3)'
                     : '0 10px 40px rgba(0,0,0,0.5)',
@@ -283,9 +286,8 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                   border: isHovered && !isActive ? '2px solid #CCFF00' : '1px solid rgba(255,255,255,0.1)',
                   background: 'rgba(0,0,0,0.95)',
                   cursor: isActive ? 'default' : 'pointer',
-                  // Cards don't block scroll — canvas handles clicks, this is just visual
-                  // Only enable pointer-events when zoomed/active for scrolling content
-                  pointerEvents: isActive ? 'auto' : 'none',
+                  // Cards are clickable but wheel events pass through for scroll
+                  pointerEvents: 'auto',
                 }}
               >
                 {/* Close button when zoomed */}

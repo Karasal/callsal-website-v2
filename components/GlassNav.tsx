@@ -95,14 +95,16 @@ export const GlassNav: React.FC<{
     <>
       {/* Desktop nav - full width with proper margins */}
       <aside
-        className="hidden lg:flex fixed h-20 items-center justify-between z-[100] bottom-6 left-6 right-6 rounded-2xl px-8 overflow-visible"
+        className="hidden lg:flex fixed h-20 items-center justify-between z-[9999] bottom-6 left-6 right-6 rounded-2xl px-8 overflow-visible"
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
           willChange: 'transform, opacity',
-          background: 'transparent',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
         {/* Branding - left side */}
@@ -201,13 +203,15 @@ export const GlassNav: React.FC<{
 
       {/* Mobile nav - full width at bottom */}
       <aside
-        className="lg:hidden fixed h-16 flex items-center justify-around z-[100] bottom-4 left-4 right-4 rounded-2xl px-2 overflow-visible"
+        className="lg:hidden fixed h-16 flex items-center justify-around z-[9999] bottom-4 left-4 right-4 rounded-2xl px-2 overflow-visible"
         style={{
           opacity: isMobile ? opacity : 1,
           transform: isMobile ? `translateY(${translateY}px)` : 'none',
-          background: 'transparent',
-          backdropFilter: 'blur(20px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+          background: 'rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
+          border: '1px solid rgba(255, 255, 255, 0.15)',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
         <nav

@@ -502,8 +502,8 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       className="fixed inset-0 z-0"
       style={{
         opacity,
-        cursor: viewState === 'floating' && hoveredModuleId ? 'pointer' : 'default',
-        pointerEvents: viewState === 'floating' ? 'auto' : 'none',
+        // Canvas is visual only — HTML overlay handles clicks
+        pointerEvents: 'none',
       }}
     />
   );
