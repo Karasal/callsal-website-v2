@@ -170,10 +170,15 @@ ADMIN_EMAIL=...
 - ✅ All pages functional with dark mode
 - ✅ Module clicks work without blocking scroll (HTML-based)
 - ✅ Liquid glass nav/header always visible (z-9999)
+- ✅ Smooth scroll transitions (diorama + hero title fade before modules)
 
 ### Known Issues
 - Minor scroll imprecision on modules→hero (lands ~0.75 instead of 0.70)
 - Smoothness prioritized over precision
+
+### Session 15 (Feb 4, 2026)
+- Diorama picture frame fades out 0.7→0.9 scrollProgress (invisible before modules)
+- Hero title fades out instantly 0.75→0.80 (was 0.85→1.0, eliminated overlap)
 
 ### TODO
 - [ ] Extract VideoPortfolio as `CinematicsModule.tsx`
