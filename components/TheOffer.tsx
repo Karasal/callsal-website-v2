@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import { useProximityGlow } from '../hooks/useProximityGlow';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -27,7 +26,7 @@ const VideoModal = ({ id, title, onClose, isMobile }: { id: string, title: strin
       <X size={32} />
     </button>
     <div className="max-w-6xl w-full">
-      <div className="aspect-video w-full bg-black rounded-xl overflow-hidden border border-gray-200 shadow-2xl">
+      <div className="aspect-video w-full bg-black rounded-xl overflow-hidden border border-white/10 shadow-2xl">
         <iframe
           src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`}
           title={title}
@@ -64,15 +63,6 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
   const wonderingRef = useRef<HTMLHeadingElement>(null);
   const letsMeetRef = useRef<HTMLHeadingElement>(null);
   const cinematicsRef = useRef<HTMLHeadingElement>(null);
-  const { glowStyle } = useProximityGlow(heroRef);
-  const { glowStyle: storyGlowStyle } = useProximityGlow(storyRef);
-  const { glowStyle: whatYouGetGlow } = useProximityGlow(whatYouGetRef);
-  const { glowStyle: simpleMathGlow } = useProximityGlow(simpleMathRef);
-  const { glowStyle: howItWorksGlow } = useProximityGlow(howItWorksRef);
-  const { glowStyle: perfectForYouGlow } = useProximityGlow(perfectForYouRef);
-  const { glowStyle: wonderingGlow } = useProximityGlow(wonderingRef);
-  const { glowStyle: letsMeetGlow } = useProximityGlow(letsMeetRef);
-  const { glowStyle: cinematicsGlow } = useProximityGlow(cinematicsRef);
   const { isMobile, getVariants } = useMobileAnimations();
 
   const mobileContainerVariants = getVariants(containerVariants);
@@ -93,17 +83,17 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00] shrink-0" />
               <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-body tracking-[0.2em] sm:tracking-[0.5em] uppercase font-black gradient-text">FOR CALGARY & SURROUNDING AREAS</span>
             </div>
-            <h1 ref={heroRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-[0.85]">
-              <span className="text-red-500" style={{ WebkitTextFillColor: '#CCFF00' }}>FREE</span><span style={glowStyle}> VIDEO.</span><br />
-              <span style={glowStyle}>ZERO CATCH.</span>
+            <h1 ref={heroRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.85]">
+              <span className="text-red-500" style={{ WebkitTextFillColor: '#CCFF00' }}>FREE</span><span> VIDEO.</span><br />
+              <span>ZERO CATCH.</span>
             </h1>
           </motion.div>
 
-          <motion.p variants={mobileItemVariants} className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-gray-500 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
+          <motion.p variants={mobileItemVariants} className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-gray-400 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
             A <span className="text-red-500">NETFLIX</span>-QUALITY <span className="text-red-500">CINEMATIC</span> FOR YOUR <span className="text-red-500">BUSINESS</span>.<br />
             SHOT ON A <span className="text-red-500">RED KOMODO-X</span> CINEMA CAMERA.<br />
             <span className="text-red-500">EDITED</span>, COLOUR <span className="text-red-500">GRADED</span>, AND <span className="text-red-500">SOUNDTRACKED</span>.
-            <span className="text-gray-900 font-black block mt-3 sm:mt-4">COMPLETELY FREE.</span>
+            <span className="text-white font-black block mt-3 sm:mt-4">COMPLETELY FREE.</span>
           </motion.p>
 
           <motion.div variants={mobileItemVariants} className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6">
@@ -135,8 +125,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   alt={activeProject.title}
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-20 h-20 border-2 border-gray-200 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
-                    <Play className="text-gray-900 ml-1" size={32} />
+                  <div className="w-20 h-20 border-2 border-white/10 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
+                    <Play className="text-white ml-1" size={32} />
                   </div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black to-transparent">
@@ -150,20 +140,20 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       </section>
 
       {/* ========== SECTION 2: THE STORY ========== */}
-      <section className="glass-strong rounded-2xl bg-white/95 text-black overflow-hidden relative">
+      <section className="glass-strong rounded-2xl overflow-hidden relative">
         <div className="p-6 sm:p-10 lg:p-20 space-y-8 sm:space-y-12 relative z-10">
           <motion.div variants={mobileItemVariants} className="max-w-4xl">
             <div className="flex items-center gap-4 mb-8">
-              <Heart size={24} className="text-black" />
+              <Heart size={24} className="text-white" />
               <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em] text-gray-400">A QUICK WORD FROM SAL</span>
             </div>
-            <h2 ref={storyRef} style={storyGlowStyle} className="inline-block text-2xl sm:text-4xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-[1] mb-6 sm:mb-10">
+            <h2 ref={storyRef} className="inline-block text-2xl sm:text-4xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-[1] mb-6 sm:mb-10">
               "IF YOU'RE GOING TO INVITE YOURSELF OVER —<br /><span className="bg-black text-white px-2 sm:px-3 py-1 inline-block mt-2 rounded-lg">COME BEARING GIFTS.</span>"
             </h2>
           </motion.div>
 
           <motion.div variants={mobileItemVariants} className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-500">
+            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-400">
               <p>
                 HEY, I'M <span className="text-red-500">SAL</span>. MY WIFE AND I JUST MOVED OUR <span className="text-red-500">YOUNG FAMILY OF FIVE</span> FROM ONTARIO TO <span className="text-red-500">CALGARY</span>.
                 THREE KIDS UNDER SIX, A <span className="text-red-500">DREAM</span> OF BUILDING SOMETHING <span className="text-red-500">MEANINGFUL</span>, AND <span className="text-red-500">ZERO CONNECTIONS</span> IN THIS CITY.
@@ -172,11 +162,11 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 BACK IN ONTARIO, I SPENT YEARS HELPING <span className="text-red-500">SMALL BUSINESSES</span> WITH THEIR <span className="text-red-500">DIGITAL MARKETING</span>.
                 THEIR BIGGEST <span className="text-red-500">STRUGGLE</span> WAS ALWAYS THE <span className="text-red-500">BUDGET</span> - BUT WE <span className="text-red-500">MADE IT WORK</span>!
               </p>
-              <p className="text-black font-black">
+              <p className="text-white font-black">
                 THEN <span className="text-red-500">AI</span> HAPPENED.
               </p>
             </div>
-            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-500">
+            <div className="space-y-8 text-base lg:text-lg font-display font-medium uppercase leading-relaxed tracking-wide text-gray-400">
               <p>
                 <span className="text-red-500">I REALIZED</span>: IF I <span className="text-red-500">COMBINE</span> WHAT I KNOW ABOUT <span className="text-red-500">MARKETING</span> WITH WHAT <span className="text-red-500">AI</span> CAN DO,
                 I CAN HELP <span className="text-red-500">BUSINESS OWNERS</span> IN WAYS THAT <span className="text-red-500">USED TO COST A FORTUNE</span>.
@@ -186,7 +176,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 GIVE ME <span className="text-red-500">30 MINUTES</span> OF YOUR <span className="text-red-500">TIME</span> TO <span className="text-red-500">SHOW YOU WHAT'S POSSIBLE</span>.
                 AND TO <span className="text-red-500">THANK YOU</span>, I'LL CREATE A <span className="text-red-500">FREE</span> <span className="text-red-500">CINEMATIC VIDEO</span> FOR YOUR <span className="text-red-500">BUSINESS</span>.
               </p>
-              <p className="text-black font-black border-b-4 border-black inline-block">
+              <p className="text-white font-black border-b-4 border-white inline-block">
                 MY HOPE? THAT YOU'LL BE <span className="text-red-500">IMPRESSED</span> ENOUGH TO <span className="text-red-500">WORK WITH ME</span> — OR <span className="text-red-500">TELL YOUR FRIENDS</span> TO "<span className="text-red-500">CALL SAL</span>".
               </p>
             </div>
@@ -198,7 +188,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-6">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE DEAL</span>
-          <h2 ref={whatYouGetRef} style={whatYouGetGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
+          <h2 ref={whatYouGetRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
             WHAT YOU GET.
           </h2>
         </motion.div>
@@ -208,11 +198,11 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           <motion.div variants={mobileItemVariants} className="glass rounded-2xl p-6 sm:p-10 lg:p-16 group hover:bg-black/[0.05] transition-all">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 glass rounded-xl flex items-center justify-center">
-                <Users size={24} className="text-gray-900" />
+                <Users size={24} className="text-white" />
               </div>
               <span className="text-xs sm:text-[10px] font-body font-black tracking-[0.3em] text-red-500 uppercase">PART 1: THE MEETING</span>
             </div>
-            <h3 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-8 leading-none">
+            <h3 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-8 leading-none">
               30 MINUTES<br />WITH ME.
             </h3>
             <div className="space-y-4">
@@ -225,7 +215,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-4 glass rounded-xl">
                   <CheckCircle size={16} className="text-red-500 mt-1 shrink-0" />
-                  <span className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
+                  <span className="text-gray-400 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
@@ -235,11 +225,11 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           <motion.div variants={mobileItemVariants} className="glass rounded-2xl p-6 sm:p-10 lg:p-16 border-[#CCFF00]/30 bg-[#CCFF00]/5 group">
             <div className="flex items-center gap-4 mb-8">
               <div className="w-14 h-14 bg-[#CCFF00] rounded-xl flex items-center justify-center">
-                <Gift size={24} className="text-black" />
+                <Gift size={24} className="text-white" />
               </div>
               <span className="text-xs sm:text-[10px] font-body font-black tracking-[0.3em] text-red-500 uppercase">PART 2: YOUR FREE GIFT</span>
             </div>
-            <h3 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-8 leading-none">
+            <h3 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-8 leading-none">
               A CINEMATIC<br />FOR YOUR BUSINESS.
             </h3>
             <div className="space-y-4">
@@ -253,7 +243,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               ].map((item, i) => (
                 <div key={i} className="flex items-start gap-4 p-4 bg-black/20 border border-[#CCFF00]/10 rounded-xl">
                   <CheckCircle size={16} className="text-red-500 mt-1 shrink-0" />
-                  <span className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
+                  <span className="text-gray-400 text-xs font-display font-bold uppercase leading-relaxed">{item}</span>
                 </div>
               ))}
             </div>
@@ -307,7 +297,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block mb-6">THE NUMBERS</span>
-          <h2 ref={simpleMathRef} style={simpleMathGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
+          <h2 ref={simpleMathRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
             SIMPLE MATH.
           </h2>
         </motion.div>
@@ -327,7 +317,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               <span style={{ color: item.color }} className="text-3xl sm:text-4xl lg:text-7xl font-display font-black block mb-2 sm:mb-4">
                 {item.number}
               </span>
-              <span className="text-[10px] sm:text-xs lg:text-sm font-display font-black text-gray-900 uppercase tracking-tight block mb-1 sm:mb-2">
+              <span className="text-[10px] sm:text-xs lg:text-sm font-display font-black text-white uppercase tracking-tight block mb-1 sm:mb-2">
                 {item.label}
               </span>
               <span className="text-[8px] sm:text-[9px] font-body text-gray-400 uppercase tracking-wider sm:tracking-widest font-black">
@@ -346,7 +336,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           <div className="flex-1 h-[1px] bg-gray-200" />
         </motion.div>
 
-        <h2 ref={howItWorksRef} style={howItWorksGlow} className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
+        <h2 ref={howItWorksRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
           HOW IT WORKS.
         </h2>
 
@@ -371,10 +361,10 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 </div>
               </div>
               <div className="min-w-0">
-                <h4 className="text-base sm:text-lg lg:text-2xl font-display font-black text-gray-900 uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
+                <h4 className="text-base sm:text-lg lg:text-2xl font-display font-black text-white uppercase tracking-tighter mb-2 sm:mb-4 leading-tight">
                   {item.title}
                 </h4>
-                <p className="text-gray-500 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
+                <p className="text-gray-400 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
                   {item.desc}
                 </p>
               </div>
@@ -388,7 +378,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
         <motion.div variants={mobileItemVariants} className="space-y-10">
           <div className="space-y-4">
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE FIT</span>
-            <h3 ref={perfectForYouRef} style={perfectForYouGlow} className="text-3xl lg:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter leading-none">
+            <h3 ref={perfectForYouRef}  className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">
               THIS IS PERFECT<br />FOR YOU IF...
             </h3>
           </div>
@@ -406,7 +396,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-4 p-5 glass rounded-xl transition-all">
                 <ChevronRight size={16} className="text-red-500 mt-1 shrink-0" />
-                <p className="text-gray-500 text-xs font-display font-bold uppercase leading-relaxed">{item}</p>
+                <p className="text-gray-400 text-xs font-display font-bold uppercase leading-relaxed">{item}</p>
               </div>
             ))}
           </div>
@@ -417,7 +407,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-4">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">QUESTIONS</span>
-          <h2 ref={wonderingRef} style={wonderingGlow} className="text-3xl lg:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter">
+          <h2 ref={wonderingRef}  className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter">
             YOU MIGHT BE WONDERING...
           </h2>
         </motion.div>
@@ -432,10 +422,10 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             { q: "HOW LONG IS THE FINISHED VIDEO?", a: "USUALLY 60-90 SECONDS — PERFECT FOR INSTAGRAM, TIKTOK, LINKEDIN, OR YOUR WEBSITE. LONG ENOUGH TO TELL YOUR STORY, SHORT ENOUGH TO HOLD ATTENTION." }
           ].map((item, i) => (
             <motion.div key={i} variants={mobileItemVariants} className="glass rounded-2xl p-5 sm:p-8 lg:p-10 group hover:bg-black/[0.05] transition-all">
-              <h4 className="text-sm sm:text-base lg:text-xl font-display font-black text-gray-900 uppercase tracking-tight mb-3 sm:mb-4">
+              <h4 className="text-sm sm:text-base lg:text-xl font-display font-black text-white uppercase tracking-tight mb-3 sm:mb-4">
                 {item.q}
               </h4>
-              <p className="text-gray-500 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
+              <p className="text-gray-400 text-[11px] sm:text-xs lg:text-sm font-display font-medium uppercase leading-relaxed tracking-wide">
                 {item.a}
               </p>
             </motion.div>
@@ -444,21 +434,21 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       </section>
 
       {/* ========== SECTION 10: FINAL CTA ========== */}
-      <section className="glass-strong rounded-2xl p-6 sm:p-10 lg:p-20 bg-white/95 text-black text-center">
+      <section className="glass-strong rounded-2xl p-6 sm:p-10 lg:p-20 text-center">
         <motion.div variants={mobileItemVariants} className="space-y-6 sm:space-y-10">
           <div className="flex items-center justify-center gap-4">
             <MapPin size={20} />
             <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em]">CALGARY, ALBERTA</span>
           </div>
 
-          <h3 ref={letsMeetRef} style={letsMeetGlow} className="text-2xl sm:text-4xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
+          <h3 ref={letsMeetRef}  className="text-2xl sm:text-4xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
             LET'S MEET.<br />
             LET'S TALK.<br />
             LET'S MAKE<br />
             <span className="bg-black text-white px-2 sm:px-4 inline-block mt-2 rounded-lg">SOMETHING GREAT.</span>
           </h3>
 
-          <p className="text-base lg:text-xl font-display font-medium text-gray-500 uppercase leading-relaxed tracking-wide max-w-2xl mx-auto">
+          <p className="text-base lg:text-xl font-display font-medium text-gray-400 uppercase leading-relaxed tracking-wide max-w-2xl mx-auto">
             30 MINUTES OF YOUR TIME. A FREE NETFLIX-QUALITY VIDEO. ZERO OBLIGATION.
             THE WORST THAT HAPPENS IS YOU GET A FREE VIDEO AND SOME GOOD IDEAS.
           </p>
@@ -472,13 +462,13 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             </button>
             <a
               href="tel:905-749-0266"
-              className="w-full sm:flex-1 px-6 py-5 sm:px-8 sm:py-6 lg:py-8 border-2 border-black text-black rounded-xl font-display font-black text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3 sm:gap-4"
+              className="w-full sm:flex-1 px-6 py-5 sm:px-8 sm:py-6 lg:py-8 border-2 border-white text-white rounded-xl font-display font-black text-[10px] sm:text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase hover:bg-white hover:text-black transition-all flex items-center justify-center gap-3 sm:gap-4"
             >
               <Phone size={18} /> CALL SAL NOW
             </a>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-white/10">
             <div className="flex items-center gap-2 sm:gap-3">
               <Mail size={14} className="text-gray-400" />
               <span className="text-[9px] sm:text-[10px] font-body font-black text-gray-400 uppercase tracking-wider sm:tracking-widest">INFO@CALLSAL.APP</span>
@@ -499,7 +489,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black">RECENT WORKS</span>
             <div className="w-12 h-[1px] bg-[#CCFF00]" />
           </div>
-          <h2 ref={cinematicsRef} style={cinematicsGlow} className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-gray-900 uppercase tracking-tighter">CINEMATICS.</h2>
+          <h2 ref={cinematicsRef}  className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter">CINEMATICS.</h2>
         </motion.div>
 
         <div id="offer-video-player" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 scroll-mt-20">
@@ -515,8 +505,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                 alt={activeProject.title}
               />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-20 h-20 lg:w-28 lg:h-28 border-2 border-gray-200 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
-                  <Play className="text-gray-900 ml-1" size={40} />
+                <div className="w-20 h-20 lg:w-28 lg:h-28 border-2 border-white/10 flex items-center justify-center rounded-full hover:bg-[#CCFF00] hover:border-[#CCFF00] transition-all">
+                  <Play className="text-white ml-1" size={40} />
                 </div>
               </div>
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between opacity-0 group-hover:opacity-100 transition-all">
@@ -539,8 +529,8 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
                   <span className="text-[11px] sm:text-[9px] font-body tracking-[0.3em] text-red-500 uppercase font-black">CASE STUDY</span>
                 </div>
-                <h4 className="text-2xl lg:text-4xl font-display font-black text-gray-900 uppercase tracking-tighter mb-4 leading-none">{activeProject.title}</h4>
-                <p className="text-sm lg:text-base font-display font-medium text-gray-500 uppercase leading-relaxed tracking-wide">
+                <h4 className="text-2xl lg:text-4xl font-display font-black text-white uppercase tracking-tighter mb-4 leading-none">{activeProject.title}</h4>
+                <p className="text-sm lg:text-base font-display font-medium text-gray-400 uppercase leading-relaxed tracking-wide">
                   {activeProject.description}
                 </p>
                 <div className="mt-8">
@@ -569,7 +559,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
                   className={`w-full p-4 sm:p-5 lg:p-6 text-left rounded-xl border transition-all flex items-center justify-between group ${
                     activeProject.id === p.id
                       ? 'bg-gray-900 text-white border-gray-900'
-                      : 'glass border-gray-200 text-gray-900 hover:border-gray-400'
+                      : 'glass border-white/10 text-white hover:border-gray-400'
                   }`}
                 >
                   <div className="min-w-0">

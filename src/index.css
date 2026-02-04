@@ -7,25 +7,25 @@
 
   --color-lime: #CCFF00;
   --color-cyan: #00F0FF;
-  --color-void: #FFFFFF;
+  --color-void: #000000;
 }
 
 :root {
   --lime: #CCFF00;
   --cyan: #00F0FF;
-  --void: #FFFFFF;
+  --void: #000000;
 }
 
 /* ===== Base ===== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: var(--lime) #f0f0f0;
+  scrollbar-color: var(--lime) #111;
 }
 
 body {
   margin: 0;
   background-color: var(--void);
-  color: #111111;
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   letter-spacing: -0.01em;
@@ -41,39 +41,40 @@ html {
 .font-display { font-family: 'Syne', sans-serif !important; }
 .font-body { font-family: 'Inter', sans-serif !important; }
 
-/* ===== Glassmorphism Panels (Light Mode) ===== */
+/* White text with subtle black inner stroke for visibility */
+.text-stroke {
+  text-shadow:
+    0 0 1px rgba(0,0,0,0.5),
+    0 0 2px rgba(0,0,0,0.3),
+    1px 1px 1px rgba(0,0,0,0.2);
+}
+
+/* ===== Flat Black Panels with Subtle Border ===== */
 .glass {
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(20px) saturate(150%) brightness(1.05);
-  -webkit-backdrop-filter: blur(20px) saturate(150%) brightness(1.05);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 4px 24px rgba(0, 0, 0, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 4px 24px rgba(0, 0, 0, 0.5);
 }
 
 .glass-strong {
-  background: rgba(255, 255, 255, 0.75);
-  backdrop-filter: blur(40px) saturate(200%) brightness(1.05);
-  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.05);
-  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.02),
-    0 8px 32px rgba(0, 0, 0, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.6);
 }
 
 .glass-nav {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(30px) saturate(180%) brightness(1.02);
-  -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(1.02);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 1.5rem;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    0 4px 24px rgba(0, 0, 0, 0.1);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 4px 24px rgba(0, 0, 0, 0.4);
 }
 
 /* Glass with displacement effect */
@@ -81,19 +82,69 @@ html {
   filter: url(#glass-displacement);
 }
 
-/* ===== Radiosity Glows (work on both dark and light) ===== */
+/* ===== Frosty Radiosity Halo Aura Glows ===== */
+/* Gradient-based glassmorphic glow - lime to cyan */
+.glow-aura {
+  position: relative;
+}
+.glow-aura::before {
+  content: '';
+  position: absolute;
+  inset: -30%;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(204, 255, 0, 0.25) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(0, 240, 255, 0.2) 0%, transparent 50%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+/* Subtle version for smaller elements */
+.glow-aura-subtle {
+  position: relative;
+}
+.glow-aura-subtle::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(204, 255, 0, 0.15) 0%, transparent 45%),
+    radial-gradient(ellipse at 70% 60%, rgba(0, 240, 255, 0.12) 0%, transparent 45%);
+  filter: blur(25px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Strong version for hero elements */
+.glow-aura-strong {
+  position: relative;
+}
+.glow-aura-strong::before {
+  content: '';
+  position: absolute;
+  inset: -50%;
+  background:
+    radial-gradient(ellipse at 25% 35%, rgba(204, 255, 0, 0.35) 0%, transparent 55%),
+    radial-gradient(ellipse at 75% 65%, rgba(0, 240, 255, 0.28) 0%, transparent 55%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+/* Legacy radiosity classes - updated to frosty style */
 .radiosity-lime {
   position: relative;
 }
 .radiosity-lime::before {
   content: '';
   position: absolute;
-  inset: -50%;
-  background: radial-gradient(ellipse at center, rgba(204, 255, 0, 0.5) 0%, transparent 60%);
-  filter: blur(60px);
+  inset: -40%;
+  background: radial-gradient(ellipse at center, rgba(204, 255, 0, 0.2) 0%, rgba(0, 240, 255, 0.1) 40%, transparent 70%);
+  filter: blur(50px);
   pointer-events: none;
   z-index: -1;
-  animation: pulse-glow 4s ease-in-out infinite;
 }
 
 .radiosity-cyan {
@@ -102,13 +153,11 @@ html {
 .radiosity-cyan::before {
   content: '';
   position: absolute;
-  inset: -50%;
-  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.45) 0%, transparent 60%);
-  filter: blur(60px);
+  inset: -40%;
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.2) 0%, rgba(204, 255, 0, 0.1) 40%, transparent 70%);
+  filter: blur(50px);
   pointer-events: none;
   z-index: -1;
-  animation: pulse-glow 5s ease-in-out infinite;
-  animation-delay: 1s;
 }
 
 .radiosity-mixed {
@@ -117,13 +166,13 @@ html {
 .radiosity-mixed::before {
   content: '';
   position: absolute;
-  inset: -40%;
-  background: radial-gradient(ellipse at 30% 50%, rgba(204, 255, 0, 0.4) 0%, transparent 50%),
-              radial-gradient(ellipse at 70% 50%, rgba(0, 240, 255, 0.35) 0%, transparent 50%);
-  filter: blur(50px);
+  inset: -35%;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(204, 255, 0, 0.22) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 50%, rgba(0, 240, 255, 0.18) 0%, transparent 50%);
+  filter: blur(45px);
   pointer-events: none;
   z-index: -1;
-  animation: pulse-glow 6s ease-in-out infinite;
 }
 
 /* ===== Gradient Text ===== */
@@ -160,21 +209,41 @@ html {
   pointer-events: none;
 }
 
-/* ===== Glow Effects ===== */
+/* ===== Glow Effects - Frosty Gradient Halo ===== */
 .glow-lime {
-  box-shadow: 0 0 20px rgba(204, 255, 0, 0.2), 0 0 40px rgba(204, 255, 0, 0.08);
+  box-shadow:
+    0 0 15px rgba(204, 255, 0, 0.15),
+    0 0 30px rgba(204, 255, 0, 0.08),
+    0 0 45px rgba(0, 240, 255, 0.05);
 }
 
 .glow-lime-strong {
-  box-shadow: 0 0 20px rgba(204, 255, 0, 0.35), 0 0 60px rgba(204, 255, 0, 0.15);
+  box-shadow:
+    0 0 20px rgba(204, 255, 0, 0.25),
+    0 0 40px rgba(204, 255, 0, 0.12),
+    0 0 60px rgba(0, 240, 255, 0.08);
 }
 
 .glow-cyan {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2), 0 0 40px rgba(0, 240, 255, 0.08);
+  box-shadow:
+    0 0 15px rgba(0, 240, 255, 0.15),
+    0 0 30px rgba(0, 240, 255, 0.08),
+    0 0 45px rgba(204, 255, 0, 0.05);
 }
 
 .glow-cyan-strong {
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.35), 0 0 60px rgba(0, 240, 255, 0.15);
+  box-shadow:
+    0 0 20px rgba(0, 240, 255, 0.25),
+    0 0 40px rgba(0, 240, 255, 0.12),
+    0 0 60px rgba(204, 255, 0, 0.08);
+}
+
+/* Gradient glow - lime to cyan blend */
+.glow-gradient {
+  box-shadow:
+    0 0 20px rgba(204, 255, 0, 0.2),
+    0 0 40px rgba(102, 247, 127, 0.1),
+    0 0 60px rgba(0, 240, 255, 0.15);
 }
 
 /* ===== Buttons ===== */
@@ -190,34 +259,46 @@ html {
   border: none;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 0 20px rgba(204, 255, 0, 0.3);
+  box-shadow:
+    0 0 15px rgba(204, 255, 0, 0.2),
+    0 0 30px rgba(204, 255, 0, 0.1),
+    0 0 45px rgba(0, 240, 255, 0.08);
 }
 
 .btn-primary:hover {
-  box-shadow: 0 0 35px rgba(204, 255, 0, 0.55), 0 0 60px rgba(204, 255, 0, 0.25), 0 8px 30px rgba(0, 0, 0, 0.15);
+  box-shadow:
+    0 0 25px rgba(204, 255, 0, 0.35),
+    0 0 50px rgba(204, 255, 0, 0.15),
+    0 0 75px rgba(0, 240, 255, 0.12),
+    0 8px 30px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
 }
 
 .btn-glass {
-  background: rgba(0, 0, 0, 0.04);
+  background: rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(12px);
-  color: #111;
+  color: #fff;
   font-family: 'Syne', sans-serif;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  box-shadow: 0 0 15px rgba(0, 240, 255, 0.12);
+  box-shadow:
+    0 0 12px rgba(0, 240, 255, 0.08),
+    0 0 25px rgba(204, 255, 0, 0.05);
   padding: 0.75rem 2rem;
   border-radius: 0.75rem;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .btn-glass:hover {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 240, 255, 0.5);
-  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3), 0 0 50px rgba(0, 240, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 0 20px rgba(0, 240, 255, 0.15),
+    0 0 40px rgba(204, 255, 0, 0.1),
+    0 0 60px rgba(0, 240, 255, 0.08);
   transform: translateY(-1px);
 }
 
@@ -280,13 +361,11 @@ input:focus, textarea:focus, select:focus {
   outline: none;
 }
 
-/* ===== Readability: darken light text for light mode ===== */
-/* These override Tailwind's text-white/XX to appropriate grays */
-.text-white\/20 { color: rgba(0, 0, 0, 0.5) !important; }
-.text-white\/30 { color: rgba(0, 0, 0, 0.55) !important; }
-.text-white\/40 { color: rgba(0, 0, 0, 0.45) !important; }
-.text-white\/50 { color: rgba(0, 0, 0, 0.55) !important; }
-.text-white\/60 { color: rgba(0, 0, 0, 0.65) !important; }
+/* ===== Readability: Silver-toned grays for dark mode ===== */
+/* Bright silver tones for clear readability on dark backgrounds */
+.text-gray-400 { color: #c0c0c0 !important; }
+.text-gray-500 { color: #a8a8a8 !important; }
+.text-gray-600 { color: #909090 !important; }
 
 /* Scale up tiny text */
 .text-\[8px\] { font-size: 11px !important; }
@@ -307,9 +386,13 @@ input:focus, textarea:focus, select:focus {
 
 /* ===== Glass panel hover ===== */
 .glass:hover, .glass-strong:hover {
-  border-color: rgba(0, 0, 0, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 0 20px rgba(0, 240, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 12px 40px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(204, 255, 0, 0.05),
+    0 0 60px rgba(0, 240, 255, 0.03);
 }
 
 /* ===== Reduced motion ===== */

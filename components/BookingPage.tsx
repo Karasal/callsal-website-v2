@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useProximityGlow } from '../hooks/useProximityGlow';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, Video, MapPin, Phone, ChevronLeft, ChevronRight, Check, Loader2, User, Mail, Building, MessageSquare } from 'lucide-react';
 
@@ -58,8 +57,7 @@ export const BookingPage: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const { glowStyle } = useProximityGlow(headingRef);
-
+  
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', business: '', location: '', notes: '',
   });
@@ -137,12 +135,12 @@ export const BookingPage: React.FC = () => {
           className="glass-strong rounded-2xl border-[#CCFF00]/30 p-6 sm:p-12 lg:p-16 text-center"
         >
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#CCFF00] rounded-xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
-            <Check size={32} className="text-black" />
+            <Check size={32} className="text-white" />
           </div>
-          <h2 style={glowStyle} className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-gray-900 uppercase tracking-tighter mb-4 sm:mb-6">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter mb-4 sm:mb-6">
             YOU'RE BOOKED!
           </h2>
-          <p className="text-base sm:text-lg font-display font-bold text-gray-500 uppercase tracking-wide mb-3 sm:mb-4">
+          <p className="text-base sm:text-lg font-display font-bold text-gray-400 uppercase tracking-wide mb-3 sm:mb-4">
             {formatDate(selectedDate!)} at {getTimeSlotsForType(meetingType).find(s => s.time === selectedTime)?.display}
           </p>
           <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wider">
@@ -153,7 +151,7 @@ export const BookingPage: React.FC = () => {
     );
   }
 
-  const inputClass = "w-full bg-transparent border-2 border-gray-200 rounded-xl p-4 sm:p-5 pl-10 sm:pl-14 focus:border-[#CCFF00] outline-none font-display font-bold uppercase text-xs sm:text-sm tracking-wide text-gray-900 placeholder:text-gray-400";
+  const inputClass = "w-full bg-transparent border-2 border-white/20 rounded-xl p-4 sm:p-5 pl-10 sm:pl-14 focus:border-[#CCFF00] outline-none font-display font-bold uppercase text-xs sm:text-sm tracking-wide text-white placeholder:text-gray-400";
 
   return (
     <div className="space-y-16 lg:space-y-0">
@@ -167,14 +165,14 @@ export const BookingPage: React.FC = () => {
                 FREE 30-MINUTE STRATEGY SESSION
               </span>
             </div>
-            <h1 ref={headingRef} style={glowStyle} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
-              <span className="text-gray-900">BOOK A</span><br />
-              <span className="text-gray-900">MEETING.</span><br />
+            <h1 ref={headingRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
+              <span className="text-white">BOOK A</span><br />
+              <span className="text-white">MEETING.</span><br />
               <span className="text-[#CCFF00]">GET A</span><br />
               <span className="text-[#CCFF00]">FREE VIDEO!</span>
             </h1>
           </div>
-          <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-gray-700 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
+          <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-white/80 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
             LET'S <span className="text-[#CCFF00]">TALK</span> ABOUT YOUR <span className="text-[#CCFF00]">BUSINESS</span>.<br />
             NO <span className="text-[#CCFF00]">SALES PITCH</span>, NO <span className="text-[#CCFF00]">PRESSURE</span>.<br />
             JUST A <span className="text-[#CCFF00]">REAL CONVERSATION</span> ABOUT HOW<br />
@@ -213,7 +211,7 @@ export const BookingPage: React.FC = () => {
             {/* Step 1: Meeting Type */}
             {step === 1 && (
               <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
-                <h3 className="text-xl sm:text-2xl font-display font-black text-gray-900 uppercase tracking-tight mb-2">HOW WOULD YOU LIKE TO MEET?</h3>
+                <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">HOW WOULD YOU LIKE TO MEET?</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">SELECT YOUR PREFERRED FORMAT</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   {MEETING_TYPES.map((type) => (
@@ -221,11 +219,11 @@ export const BookingPage: React.FC = () => {
                       key={type.id}
                       onClick={() => { setMeetingType(type.id); setStep(2); }}
                       className={`p-5 sm:p-8 rounded-xl border-2 text-left transition-all group ${
-                        meetingType === type.id ? 'border-[#CCFF00] bg-[#CCFF00]/10' : 'border-gray-200 hover:border-gray-300'
+                        meetingType === type.id ? 'border-[#CCFF00] bg-[#CCFF00]/10' : 'border-white/20 hover:border-gray-300'
                       }`}
                     >
                       <type.icon size={28} className={`mb-3 sm:mb-4 transition-colors ${meetingType === type.id ? 'text-[#CCFF00]' : 'text-gray-400'}`} />
-                      <h4 className="text-base sm:text-lg font-display font-black text-gray-900 uppercase tracking-tight mb-1 sm:mb-2">{type.label}</h4>
+                      <h4 className="text-base sm:text-lg font-display font-black text-white uppercase tracking-tight mb-1 sm:mb-2">{type.label}</h4>
                       <p className="text-[10px] sm:text-xs font-display text-gray-400 uppercase tracking-wide">{type.desc}</p>
                     </button>
                   ))}
@@ -236,10 +234,10 @@ export const BookingPage: React.FC = () => {
             {/* Step 2: Date Selection */}
             {step === 2 && (
               <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
-                <button onClick={() => setStep(1)} className="flex items-center gap-2 text-gray-400 hover:text-gray-900 text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
+                <button onClick={() => setStep(1)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
-                <h3 className="text-xl sm:text-2xl font-display font-black text-gray-900 uppercase tracking-tight mb-2">PICK A DATE</h3>
+                <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">PICK A DATE</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">AVAILABLE DATES FOR THE NEXT 2 WEEKS</p>
                 {loading ? (
                   <div className="flex items-center justify-center py-12"><Loader2 className="animate-spin text-[#CCFF00]" size={32} /></div>
@@ -256,11 +254,11 @@ export const BookingPage: React.FC = () => {
                           className={`p-3 sm:p-4 rounded-xl border-2 text-center transition-all ${
                             !hasAvailability ? 'border-gray-100 bg-black/[0.02] opacity-40 cursor-not-allowed'
                             : selectedDate?.toDateString() === date.toDateString() ? 'border-[#CCFF00] bg-[#CCFF00]/10'
-                            : 'border-gray-200 hover:border-gray-300'
+                            : 'border-white/20 hover:border-gray-300'
                           }`}
                         >
                           <span className="block text-[8px] sm:text-[10px] font-display font-black text-gray-400 uppercase mb-0.5 sm:mb-1">{date.toLocaleDateString('en-US', { weekday: 'short' })}</span>
-                          <span className="block text-xl sm:text-2xl font-display font-black text-gray-900">{date.getDate()}</span>
+                          <span className="block text-xl sm:text-2xl font-display font-black text-white">{date.getDate()}</span>
                           <span className="block text-[8px] sm:text-[10px] font-display text-gray-400 uppercase">{date.toLocaleDateString('en-US', { month: 'short' })}</span>
                           {!hasAvailability && <span className="block text-[7px] sm:text-[8px] font-display font-black text-red-500/60 uppercase mt-1 sm:mt-2">FULL</span>}
                         </button>
@@ -274,10 +272,10 @@ export const BookingPage: React.FC = () => {
             {/* Step 3: Time Selection */}
             {step === 3 && selectedDate && (
               <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
-                <button onClick={() => setStep(2)} className="flex items-center gap-2 text-gray-400 hover:text-gray-900 text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
+                <button onClick={() => setStep(2)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
-                <h3 className="text-xl sm:text-2xl font-display font-black text-gray-900 uppercase tracking-tight mb-2">SELECT A TIME</h3>
+                <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">SELECT A TIME</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">{formatDate(selectedDate)} — MST</p>
                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
                   {getAvailableSlots(selectedDate).map((slot) => (
@@ -288,11 +286,11 @@ export const BookingPage: React.FC = () => {
                       className={`p-3 sm:p-4 rounded-xl border-2 text-center transition-all ${
                         !slot.available ? 'border-gray-100 bg-black/[0.02] cursor-not-allowed opacity-40'
                         : selectedTime === slot.time ? 'border-[#CCFF00] bg-[#CCFF00]/10'
-                        : 'border-gray-200 hover:border-gray-300'
+                        : 'border-white/20 hover:border-gray-300'
                       }`}
                     >
-                      <span className={`block text-xs sm:text-sm font-display font-black uppercase ${slot.available ? 'text-gray-900' : 'text-gray-400 line-through'}`}>{slot.display}</span>
-                      {!slot.available && <span className="block text-[7px] sm:text-[8px] font-display font-black text-gray-300 uppercase mt-1">N/A</span>}
+                      <span className={`block text-xs sm:text-sm font-display font-black uppercase ${slot.available ? 'text-white' : 'text-gray-400 line-through'}`}>{slot.display}</span>
+                      {!slot.available && <span className="block text-[7px] sm:text-[8px] font-display font-black text-gray-500 uppercase mt-1">N/A</span>}
                     </button>
                   ))}
                 </div>
@@ -302,10 +300,10 @@ export const BookingPage: React.FC = () => {
             {/* Step 4: Contact Details */}
             {step === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
-                <button onClick={() => setStep(3)} className="flex items-center gap-2 text-gray-400 hover:text-gray-900 text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
+                <button onClick={() => setStep(3)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
-                <h3 className="text-xl sm:text-2xl font-display font-black text-gray-900 uppercase tracking-tight mb-2">YOUR DETAILS</h3>
+                <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">YOUR DETAILS</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">
                   {formatDate(selectedDate!)} @ {getTimeSlotsForType(meetingType).find(s => s.time === selectedTime)?.display} — {meetingType?.toUpperCase()}
                 </p>
@@ -355,8 +353,8 @@ export const BookingPage: React.FC = () => {
         </div>
 
         {/* Call CTA */}
-        <div className="mt-12 sm:mt-20 pt-12 sm:pt-20 border-t border-gray-200 text-center">
-          <p className="text-sm sm:text-base font-display font-medium text-gray-500 uppercase tracking-wide mb-6">Ready for a deeper dive?</p>
+        <div className="mt-12 sm:mt-20 pt-12 sm:pt-20 border-t border-white/20 text-center">
+          <p className="text-sm sm:text-base font-display font-medium text-gray-400 uppercase tracking-wide mb-6">Ready for a deeper dive?</p>
           <a href="tel:905-749-0266" className="inline-flex items-center gap-3 btn-glass px-8 py-4 sm:px-10 sm:py-5 text-xs sm:text-sm tracking-[0.2em] uppercase">
             <Phone size={18} /> CALL: 905-749-0266
           </a>

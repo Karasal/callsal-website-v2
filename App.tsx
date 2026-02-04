@@ -2,10 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileAnimations } from './hooks/useMobileAnimations';
 import { User as IUser } from './types';
-import { AmbientBackground } from './components/AmbientBackground';
-import { PerspectiveGrid } from './components/PerspectiveGrid';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
+import { Room3D } from './components/Room3D';
 import { Hero } from './components/Hero';
 import { MeetSalman } from './components/MeetSalman';
 import { TheOffer } from './components/TheOffer';
@@ -299,22 +298,19 @@ const App: React.FC = () => {
 
   // Full-page onboarding takeover for clients who haven't completed it
   if (currentUser && currentUser.role === 'client' && !currentUser.hasCompletedOnboarding) {
-    return (
-      <>
-        <PerspectiveGrid />
-        <AmbientBackground />
-        <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />
-      </>
-    );
+    return <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />;
   }
 
   return (
     <div className="relative h-screen w-screen flex flex-col bg-white overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
-      {/* Hide grid and ambient glow during entrance transition on overview page */}
-      <div style={{ opacity: activeTab === 'overview' ? scrollProgress : 1 }}>
-        <PerspectiveGrid />
-        <AmbientBackground />
-      </div>
+
+      {/* 3D Room Background - persists across all pages (desktop only) */}
+      {!isMobile && (
+        <Room3D
+          opacity={activeTab === 'overview' ? Math.min(1, Math.max(0, (scrollProgress - 0.15) * 3)) : 1}
+          scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
+        />
+      )}
 
       {/* Gradient Scroll Progress Bar - always visible, always on top */}
       <div
