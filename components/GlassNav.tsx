@@ -1,20 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { LayoutGrid, Home, User, Zap, MessageSquare, LogIn, UserPlus, LogOut } from 'lucide-react';
+import React from 'react';
+import { Home, LogIn, UserPlus, LogOut, LayoutGrid } from 'lucide-react';
 import { User as IUser } from '../types';
 import { BrandingElement } from './GlassHeader';
 
 export const GlassNav: React.FC<{
-  activeTab: string;
-  setActiveTab: (id: string) => void;
+  onHome: () => void;
   onAuth: () => void;
   currentUser: IUser | null;
   setCurrentUser: (u: IUser | null) => void;
   onLogout: () => void;
+  onDashboard?: () => void;
   scrollProgress?: number;
   scrollDirection?: 'forward' | 'backward';
   moduleZoom?: number;
-}> = ({ activeTab, setActiveTab, onAuth, currentUser, setCurrentUser, onLogout, scrollProgress = 1, scrollDirection = 'forward', moduleZoom = 0 }) => {
+}> = ({ onHome, onAuth, currentUser, onLogout, onDashboard, scrollProgress = 1, scrollDirection = 'forward', moduleZoom = 0 }) => {
   const isMobile = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
 
   // Entrance animation
@@ -22,11 +21,9 @@ export const GlassNav: React.FC<{
 
   const appearRaw = Math.max(0, Math.min(1, (scrollProgress - 0.15) / 0.25));
   const contentFadeRaw = Math.max(0, Math.min(1, (scrollProgress - 0.35) / 0.20));
-  const indicatorExpandRaw = Math.max(0, Math.min(1, (scrollProgress - 0.50) / 0.25));
 
   const appear = easeOutCubic(appearRaw);
   const contentFade = easeOutCubic(contentFadeRaw);
-  const indicatorExpand = easeOutCubic(indicatorExpandRaw);
 
   // Text color transition: black → white as room goes white → black (0.7 → 1.0)
   const colorProgress = Math.min(1, Math.max(0, (scrollProgress - 0.7) * 3.33));
@@ -35,75 +32,22 @@ export const GlassNav: React.FC<{
 
   const isBackward = scrollDirection === 'backward';
 
-  // Vertical position:
-  // Forward: rises from below
-  // Backward: slides down off screen (but stays in place at 0.7+)
-  // Module zoom: slides down off screen
-  // For backward: fully in position at scrollProgress >= 0.7, slides out below
+  // Vertical position
   const backwardSlide = scrollProgress >= 0.7 ? 0 : ((0.7 - scrollProgress) / 0.7) * 100;
   const baseTranslateY = isBackward
     ? backwardSlide
     : (1 - appear) * 60;
   const translateY = baseTranslateY + (moduleZoom * 100);
 
-  // Opacity: fully visible at hero snap point (0.7) and above
-  // For backward: remap so 0.7+ = 1.0, below 0.7 fades to 0
+  // Opacity
   const backwardOpacity = Math.min(1, scrollProgress / 0.7);
   const opacity = (isBackward ? backwardOpacity : appear) * (1 - moduleZoom);
 
-  const tabs = [
-    { id: 'overview', icon: <Home size={20} />, label: 'WELCOME' },
-    { id: 'about', icon: <User size={20} />, label: 'MEET SALMAN' },
-    { id: 'offer', icon: <Zap size={20} />, label: 'THE OFFER' },
-    { id: 'consultation', icon: <MessageSquare size={20} />, label: 'BOOK MEETING' },
-    ...(currentUser ? [{ id: 'dashboard', icon: <LayoutGrid size={20} />, label: currentUser.role === 'admin' ? 'ADMIN' : 'CLIENT HUB' }] : []),
-  ];
-
-  const navRef = useRef<HTMLElement>(null);
-  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
-
-  // Calculate indicator position based on active tab
-  useEffect(() => {
-    const updateIndicator = () => {
-      const activeIndex = tabs.findIndex(t => t.id === activeTab);
-      const activeButton = tabRefs.current[activeIndex];
-      const nav = navRef.current;
-
-      if (activeButton && nav) {
-        const navRect = nav.getBoundingClientRect();
-        const buttonRect = activeButton.getBoundingClientRect();
-
-        setIndicatorStyle({
-          left: buttonRect.left - navRect.left,
-          width: buttonRect.width,
-        });
-      }
-    };
-
-    const rafId = requestAnimationFrame(() => {
-      requestAnimationFrame(updateIndicator);
-    });
-
-    window.addEventListener('resize', updateIndicator);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener('resize', updateIndicator);
-    };
-  }, [activeTab, tabs.length, currentUser]);
-
-  const handleTabClick = (tabId: string) => {
-    if (tabId !== activeTab) {
-      setActiveTab(tabId);
-    }
-  };
-
   return (
     <>
-      {/* Desktop nav - full width with proper margins */}
+      {/* Desktop: thin pill, bottom-right */}
       <aside
-        className="hidden lg:flex fixed h-20 items-center justify-between z-[9999] bottom-6 left-6 right-6 rounded-2xl px-8 overflow-visible"
+        className="hidden lg:flex fixed h-14 items-center justify-between z-[9999] bottom-6 right-6 rounded-full px-6 gap-4"
         style={{
           opacity,
           transform: `translateY(${translateY}px)`,
@@ -115,103 +59,63 @@ export const GlassNav: React.FC<{
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
-        {/* Branding - left side */}
+        {/* Branding */}
         <div style={{ opacity: contentFade }}>
-          <BrandingElement className="w-48" textColor={dynamicTextColor} />
+          <BrandingElement className="w-auto" textColor={dynamicTextColor} />
         </div>
 
-        {/* Nav tabs - center - flat black text for white room visibility */}
-        <nav
-          ref={navRef}
-          className="flex items-center justify-center gap-6 relative"
-          aria-label="Primary Navigation"
-          style={{ opacity: contentFade }}
+        {/* Divider */}
+        <div className="w-px h-6" style={{ background: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.2)` }} />
+
+        {/* Home icon */}
+        <button
+          onClick={onHome}
+          className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/10 transition-all"
+          style={{ color: dynamicTextColor, opacity: contentFade }}
+          aria-label="Home"
         >
-          {/* Gradient Indicator - positioned under active tab */}
-          <motion.div
-            className="absolute -bottom-2 h-[3px] rounded-full pointer-events-none"
-            initial={false}
-            animate={{
-              left: indicatorStyle.left,
-              width: indicatorStyle.width,
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 30,
-            }}
-            style={{
-              opacity: indicatorExpand,
-              transform: `scaleX(${indicatorExpand})`,
-              transformOrigin: 'center center',
-            }}
-          >
-            {/* Core gradient bar */}
-            <div
-              className="absolute inset-x-3 inset-y-0 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
-              }}
-            />
-            {/* Soft glow */}
-            <div
-              className="absolute inset-x-3 -inset-y-1 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg, rgba(204, 255, 0, 0.5) 0%, rgba(0, 240, 255, 0.5) 100%)',
-                filter: 'blur(6px)',
-              }}
-            />
-          </motion.div>
+          <Home size={18} />
+        </button>
 
-          {tabs.map((tab, index) => (
-            <button
-              key={tab.id}
-              ref={(el) => { tabRefs.current[index] = el; }}
-              onClick={() => handleTabClick(tab.id)}
-              aria-label={tab.label}
-              className="flex items-center justify-center gap-3 px-4 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all duration-300"
-              style={{ color: activeTab === tab.id ? dynamicTextColor : `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.7)` }}
-            >
-              <span className={`shrink-0 transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : ''}`}>
-                {tab.icon}
-              </span>
-              <span className="font-display text-[10px] tracking-[0.12em] font-bold uppercase leading-none">
-                {tab.label}
-              </span>
-            </button>
-          ))}
-        </nav>
+        {/* Divider */}
+        <div className="w-px h-6" style={{ background: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.2)` }} />
 
-        {/* Auth section - right side - color transitions with room */}
-        <div className="flex items-center gap-4" style={{ opacity: contentFade, color: dynamicTextColor }}>
+        {/* Auth section */}
+        <div className="flex items-center gap-2" style={{ opacity: contentFade, color: dynamicTextColor }}>
           {!currentUser ? (
-            <div className="flex items-center gap-3">
-              <button onClick={onAuth} aria-label="Login" className="flex items-center gap-2 py-2 hover:opacity-80 transition-all px-4 group" style={{ color: dynamicTextColor }}>
-                <LogIn size={16} className="group-hover:scale-110 transition-transform" />
-                <span className="text-[10px] font-display font-bold tracking-widest uppercase">LOGIN</span>
+            <>
+              <button onClick={onAuth} aria-label="Login" className="flex items-center gap-1.5 py-1.5 px-3 hover:opacity-80 transition-all rounded-full" style={{ color: dynamicTextColor }}>
+                <LogIn size={14} />
+                <span className="text-[9px] font-display font-bold tracking-widest uppercase">LOGIN</span>
               </button>
-              <button onClick={onAuth} aria-label="Register" className="flex items-center gap-2 btn-primary py-2.5 px-5 text-[10px] tracking-widest rounded-xl">
-                <UserPlus size={16} />
+              <button onClick={onAuth} aria-label="Register" className="flex items-center gap-1.5 btn-primary py-2 px-4 text-[9px] tracking-widest rounded-full">
+                <UserPlus size={14} />
                 <span>REGISTER</span>
               </button>
-            </div>
+            </>
           ) : (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-3 cursor-pointer group" onClick={() => handleTabClick('dashboard')} role="button" aria-label="View Dashboard">
-                <img src={currentUser.avatar} className="w-8 h-8 rounded-full border transition-colors" style={{ borderColor: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.3)` }} alt="" />
-                <div className="text-[11px] font-display font-bold uppercase truncate max-w-[100px]" style={{ color: dynamicTextColor }}>{currentUser.name}</div>
-              </div>
-              <button onClick={onLogout} aria-label="Logout" className="flex items-center gap-2 py-2 text-red-400/80 hover:text-red-400 transition-all border border-red-400/20 hover:border-red-400/40 px-3 rounded-lg group">
-                <LogOut size={16} />
+            <>
+              {onDashboard && (
+                <button
+                  onClick={onDashboard}
+                  className="flex items-center gap-2 cursor-pointer group py-1.5 px-2 rounded-full hover:bg-white/10 transition-all"
+                  aria-label="Dashboard"
+                >
+                  <img src={currentUser.avatar} className="w-7 h-7 rounded-full border transition-colors" style={{ borderColor: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.3)` }} alt="" />
+                  <span className="text-[9px] font-display font-bold uppercase truncate max-w-[80px]" style={{ color: dynamicTextColor }}>{currentUser.name}</span>
+                </button>
+              )}
+              <button onClick={onLogout} aria-label="Logout" className="flex items-center justify-center w-8 h-8 rounded-full text-red-400/80 hover:text-red-400 transition-all border border-red-400/20 hover:border-red-400/40">
+                <LogOut size={14} />
               </button>
-            </div>
+            </>
           )}
         </div>
       </aside>
 
-      {/* Mobile nav - full width at bottom */}
+      {/* Mobile nav - keep as-is for now (full rebuild later) */}
       <aside
-        className="lg:hidden fixed h-16 flex items-center justify-around z-[9999] bottom-4 left-4 right-4 rounded-2xl px-2 overflow-visible"
+        className="lg:hidden fixed h-14 flex items-center justify-around z-[9999] bottom-4 left-4 right-4 rounded-2xl px-3"
         style={{
           opacity: isMobile ? opacity : 1,
           transform: isMobile ? `translateY(${translateY}px)` : 'none',
@@ -222,49 +126,25 @@ export const GlassNav: React.FC<{
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
-        <nav
-          ref={!isMobile ? undefined : navRef}
-          className="flex items-center justify-around w-full relative"
-          aria-label="Primary Navigation"
-        >
-          {/* Mobile gradient indicator */}
-          <motion.div
-            className="absolute -bottom-1 h-[2px] rounded-full pointer-events-none"
-            initial={false}
-            animate={{
-              left: indicatorStyle.left,
-              width: indicatorStyle.width,
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 30,
-            }}
-          >
-            <div
-              className="absolute inset-x-2 inset-y-0 rounded-full"
-              style={{
-                background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
-              }}
-            />
-          </motion.div>
-
-          {tabs.map((tab, index) => (
-            <button
-              key={tab.id}
-              ref={isMobile ? (el) => { tabRefs.current[index] = el; } : undefined}
-              onClick={() => handleTabClick(tab.id)}
-              aria-label={tab.label}
-              className={`flex flex-col items-center justify-center gap-1 px-3 py-2 group relative bg-transparent focus:outline-none rounded-lg transition-all duration-300 ${
-                activeTab === tab.id ? 'text-white' : 'text-white/70'
-              }`}
-            >
-              <span className={`shrink-0 transition-transform duration-300 ${activeTab === tab.id ? 'scale-110' : ''}`}>
-                {tab.icon}
-              </span>
+        <button onClick={onHome} aria-label="Home" className="flex items-center justify-center w-10 h-10 text-white/80">
+          <Home size={20} />
+        </button>
+        {!currentUser ? (
+          <button onClick={onAuth} aria-label="Login" className="flex items-center justify-center w-10 h-10 text-white/80">
+            <LogIn size={20} />
+          </button>
+        ) : (
+          <>
+            {onDashboard && (
+              <button onClick={onDashboard} aria-label="Dashboard" className="flex items-center justify-center w-10 h-10 text-white/80">
+                <LayoutGrid size={20} />
+              </button>
+            )}
+            <button onClick={onLogout} aria-label="Logout" className="flex items-center justify-center w-10 h-10 text-red-400/80">
+              <LogOut size={20} />
             </button>
-          ))}
-        </nav>
+          </>
+        )}
       </aside>
     </>
   );

@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   ViewState,
-  PageId,
   ModuleMetadata,
-  ModuleContentProps,
-  easeOutCubic,
 } from '../types/modules';
 
 // Import Room3DEnhanced for canvas-rendered 3D room
@@ -14,13 +11,16 @@ import { Module3DOverlay } from './Module3DOverlay';
 // Import overlays
 import { TVOverlay } from './TVOverlay';
 import { BookingOverlay } from './BookingOverlay';
-// Import actual module components
+// Import module components
 import { ArmoryModule } from './modules/ArmoryModule';
 import { CinematicsModule } from './modules/CinematicsModule';
+import { MeetSalmanModule } from './modules/MeetSalmanModule';
+import { TheOfferModule } from './modules/TheOfferModule';
+import { BookingModule } from './modules/BookingModule';
 
-// Icons for module cards
+// Icons for module selector
 const ArmoryIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-8 h-8">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
     <rect x="3" y="3" width="7" height="7" />
     <rect x="14" y="3" width="7" height="7" />
     <rect x="3" y="14" width="7" height="7" />
@@ -29,37 +29,74 @@ const ArmoryIcon = () => (
 );
 
 const VideoIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-8 h-8">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
     <polygon points="5,3 19,12 5,21" />
   </svg>
 );
 
-// Module registry - defines all modules per page
-// Room: camZ=2.0 at scroll=1.0, back wall at zFar=10.5
-// Cards need z > camZ and z < zFar to be visible inside room
+const UserIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const GiftIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+    <polyline points="20 12 20 22 4 22 4 12" />
+    <rect x="2" y="7" width="20" height="5" />
+    <line x1="12" y1="22" x2="12" y2="7" />
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  </svg>
+);
+
+const CalendarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+    <line x1="16" y1="2" x2="16" y2="6" />
+    <line x1="8" y1="2" x2="8" y2="6" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+  </svg>
+);
+
+// Module registry - all 5 modules
 const createModuleRegistry = (): ModuleMetadata[] => [
   {
     id: 'armory',
     title: 'THE ARMORY',
     icon: <ArmoryIcon />,
     component: ArmoryModule,
-    page: 'overview',
-    basePosition: { x: -2.5, y: 3, z: 6.5 },
   },
   {
     id: 'video-portfolio',
     title: 'CINEMATICS',
     icon: <VideoIcon />,
     component: CinematicsModule,
-    page: 'overview',
-    basePosition: { x: 2.5, y: 3, z: 6.5 },
+  },
+  {
+    id: 'meet-salman',
+    title: 'MEET SALMAN',
+    icon: <UserIcon />,
+    component: MeetSalmanModule,
+  },
+  {
+    id: 'the-offer',
+    title: 'THE OFFER',
+    icon: <GiftIcon />,
+    component: TheOfferModule,
+  },
+  {
+    id: 'book-meeting',
+    title: 'BOOK MEETING',
+    icon: <CalendarIcon />,
+    component: BookingModule,
   },
 ];
 
 interface ModuleManagerProps {
   scrollProgress: number;
   smoothMouse: { x: number; y: number };
-  activeTab: PageId | string;
   onConsultation: () => void;
   cinematicsMode?: boolean;
   onCloseCinematics?: () => void;
@@ -68,13 +105,11 @@ interface ModuleManagerProps {
   onZoomChange?: (zoomProgress: number) => void;
   openModuleId?: string | null;
   onOpenModuleIdConsumed?: () => void;
-  onMeetSal?: () => void;
 }
 
 export const ModuleManager: React.FC<ModuleManagerProps> = ({
   scrollProgress,
   smoothMouse,
-  activeTab,
   onConsultation,
   cinematicsMode = false,
   onCloseCinematics,
@@ -83,19 +118,15 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   onZoomChange,
   openModuleId = null,
   onOpenModuleIdConsumed,
-  onMeetSal,
 }) => {
-  // State machine
+  // State
   const [viewState, setViewState] = useState<ViewState>('diorama');
+  const [selectedModuleId, setSelectedModuleId] = useState('armory');
   const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
-  const [hoveredModuleId, setHoveredModuleId] = useState<string | null>(null);
   const [zoomProgress, setZoomProgress] = useState(0);
 
   // Module registry
   const modules = createModuleRegistry();
-
-  // Filter modules for current page
-  const pageModules = modules.filter(m => m.page === activeTab);
 
   // Determine view state based on scroll progress and active module
   useEffect(() => {
@@ -107,13 +138,6 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
       setViewState('zoomed');
     }
   }, [scrollProgress, activeModuleId]);
-
-  // Reset module selection when changing tabs
-  useEffect(() => {
-    setActiveModuleId(null);
-    setHoveredModuleId(null);
-    setZoomProgress(0);
-  }, [activeTab]);
 
   // Animate zoom progress when activeModuleId changes
   const zoomAnimationRef = useRef<number | null>(null);
@@ -131,10 +155,9 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
 
     const targetZoom = activeModuleId !== null ? 1 : 0;
     const startZoom = zoomProgressRef.current;
-    const duration = 300; // ms - fast, snappy animation
+    const duration = 300;
     let startTime: number | null = null;
 
-    // Faster ease-out for instant feel
     const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
 
     const animate = (timestamp: number) => {
@@ -163,21 +186,27 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   }, [activeModuleId]);
 
   // Handlers
-  const handleModuleClick = useCallback((id: string) => {
-    setActiveModuleId(id);
+  const handleSelectModule = useCallback((id: string) => {
+    setSelectedModuleId(id);
   }, []);
 
-  const handleModuleHover = useCallback((id: string | null) => {
-    setHoveredModuleId(id);
-  }, []);
+  const handleOpenModule = useCallback(() => {
+    setActiveModuleId(selectedModuleId);
+  }, [selectedModuleId]);
 
   const handleCloseModule = useCallback(() => {
     setActiveModuleId(null);
   }, []);
 
+  const handleOpenModuleById = useCallback((id: string) => {
+    setSelectedModuleId(id);
+    setActiveModuleId(id);
+  }, []);
+
   // Open module when openModuleId is set and we've scrolled to modules
   useEffect(() => {
     if (openModuleId && scrollProgress >= 0.8 && activeModuleId !== openModuleId) {
+      setSelectedModuleId(openModuleId);
       setActiveModuleId(openModuleId);
       onOpenModuleIdConsumed?.();
     }
@@ -185,34 +214,30 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
 
   return (
     <>
-      {/* Room3DEnhanced renders the 3D room + card FRAMES only (no content) */}
+      {/* Room3DEnhanced renders the 3D room + panel frames */}
       <Room3DEnhanced
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
-        modules={pageModules}
         viewState={viewState}
         activeModuleId={activeModuleId}
-        hoveredModuleId={hoveredModuleId}
         zoomProgress={zoomProgress}
-        onModuleClick={handleModuleClick}
-        onModuleHover={handleModuleHover}
         cinematicsMode={cinematicsMode || bookingMode}
       />
 
-      {/* Module3DOverlay renders actual HTML content positioned in 3D space */}
+      {/* Module3DOverlay renders preview panel + selector in 3D space */}
       <Module3DOverlay
-        modules={pageModules}
+        modules={modules}
         viewState={viewState}
+        selectedModuleId={selectedModuleId}
         activeModuleId={activeModuleId}
-        hoveredModuleId={hoveredModuleId}
         zoomProgress={zoomProgress}
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
-        onModuleClick={handleModuleClick}
-        onModuleHover={handleModuleHover}
+        onSelectModule={handleSelectModule}
+        onOpenModule={handleOpenModule}
+        onOpenModuleById={handleOpenModuleById}
         onClose={handleCloseModule}
         onConsultation={onConsultation}
-        onMeetSal={onMeetSal}
       />
 
       {/* TVOverlay - flip animation from diorama to video player */}

@@ -6,9 +6,6 @@ import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
 import { Hero } from './components/Hero';
 import { ModuleManager } from './components/ModuleManager';
-import { MeetSalman } from './components/MeetSalman';
-import { TheOffer } from './components/TheOffer';
-import { BookingPage } from './components/BookingPage';
 import { AuthModal } from './components/AuthModal';
 import { Dashboard } from './components/Dashboard';
 import ClientHubOnboarding from './components/ClientHubOnboarding';
@@ -24,13 +21,13 @@ const App: React.FC = () => {
   const [moduleZoom, setModuleZoom] = useState(0);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
-  // Shared mouse state for 3D parallax (syncs Room3D canvas with CSS transforms)
+  // Shared mouse state for 3D parallax
   const [smoothMouse, setSmoothMouse] = useState({ x: 0.5, y: 0.5 });
   const mouseRef = useRef({ x: 0.5, y: 0.5 });
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
   const mouseAnimationRef = useRef<number | null>(null);
 
-  // Mouse tracking with smooth interpolation (shared between Room3D and Hero)
+  // Mouse tracking with smooth interpolation
   useEffect(() => {
     if (isMobile) return;
 
@@ -48,7 +45,6 @@ const App: React.FC = () => {
       smoothMouseRef.current.x = lerp(smoothMouseRef.current.x, mouseRef.current.x, 0.06);
       smoothMouseRef.current.y = lerp(smoothMouseRef.current.y, mouseRef.current.y, 0.06);
 
-      // Only update React state if changed significantly (reduces re-renders)
       setSmoothMouse(prev => {
         const dx = Math.abs(prev.x - smoothMouseRef.current.x);
         const dy = Math.abs(prev.y - smoothMouseRef.current.y);
@@ -68,20 +64,19 @@ const App: React.FC = () => {
     };
   }, [isMobile]);
 
-  // Scroll-driven parallax state (0 = top/hero visible, 1 = fully transitioned)
+  // Scroll state
   const [scrollProgress, setScrollProgress] = useState(0);
   const [totalScrollProgress, setTotalScrollProgress] = useState(0);
-  // Track scroll direction for different enter/exit animations
   const [scrollDirection, setScrollDirection] = useState<'forward' | 'backward'>('forward');
   const lastScrollProgressRef = useRef(0);
 
-  // Snap scroll state - tracks which snap point we're at/transitioning to
+  // Snap scroll state
   const isSnappingRef = useRef(false);
   const snapTargetRef = useRef<number | null>(null);
   const lastScrollTopRef = useRef(0);
   const rafIdRef = useRef<number | null>(null);
 
-  // Reset snap state when cinematicsMode changes or module closes
+  // Reset snap state when overlays change
   const prevModuleZoomRef = useRef(0);
   useEffect(() => {
     isSnappingRef.current = false;
@@ -89,19 +84,16 @@ const App: React.FC = () => {
   }, [cinematicsMode, bookingMode]);
 
   useEffect(() => {
-    // Reset snap state when module fully closes
     const wasOpen = prevModuleZoomRef.current > 0.5;
     const isClosed = moduleZoom < 0.1;
-
     if (wasOpen && isClosed) {
       isSnappingRef.current = false;
       snapTargetRef.current = null;
     }
-
     prevModuleZoomRef.current = moduleZoom;
   }, [moduleZoom]);
 
-  // Track scroll position for parallax entrance (throttled with RAF)
+  // Track scroll position
   useEffect(() => {
     const mainContent = document.getElementById('main-content');
     if (!mainContent) return;
@@ -112,7 +104,6 @@ const App: React.FC = () => {
       const scrollTop = mainContent.scrollTop;
       const progress = Math.min(scrollTop / transitionZone, 1);
 
-      // Track direction based on progress change
       if (progress > lastScrollProgressRef.current + 0.01) {
         setScrollDirection('forward');
       } else if (progress < lastScrollProgressRef.current - 0.01) {
@@ -120,10 +111,8 @@ const App: React.FC = () => {
       }
       lastScrollProgressRef.current = progress;
 
-      // Only update state if meaningfully changed (reduces re-renders)
       setScrollProgress(prev => Math.abs(prev - progress) > 0.001 ? progress : prev);
 
-      // Total progress for the progress bar
       const scrollHeight = mainContent.scrollHeight - mainContent.clientHeight;
       const total = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
       setTotalScrollProgress(prev => Math.abs(prev - total) > 0.1 ? total : prev);
@@ -133,20 +122,14 @@ const App: React.FC = () => {
     };
 
     const onScroll = () => {
-      // Throttle with RAF for smooth 60fps updates
       if (rafIdRef.current === null) {
         rafIdRef.current = requestAnimationFrame(updateScrollProgress);
       }
     };
 
-    // Detect scroll end to sync state and unlock snapping
     const onScrollEnd = () => {
       const scrollTop = mainContent.scrollTop;
-      const progress = scrollTop / transitionZone;
-
-      // Sync snap state based on final position
       if (isSnappingRef.current && snapTargetRef.current !== null) {
-        // Check if we reached our target (within tolerance)
         const reachedTarget = Math.abs(scrollTop - snapTargetRef.current) < 20;
         if (reachedTarget) {
           isSnappingRef.current = false;
@@ -157,8 +140,6 @@ const App: React.FC = () => {
 
     mainContent.addEventListener('scroll', onScroll, { passive: true });
     mainContent.addEventListener('scrollend', onScrollEnd, { passive: true });
-
-    // Initial call
     updateScrollProgress();
 
     return () => {
@@ -168,8 +149,7 @@ const App: React.FC = () => {
     };
   }, [activeTab]);
 
-  // Snap-scroll behavior for overview page entrance
-  // Three snap points: diorama (0) → hero text (0.7) → modules (1.0)
+  // Snap-scroll behavior
   useEffect(() => {
     if (activeTab !== 'overview' || isMobile) return;
 
@@ -177,22 +157,16 @@ const App: React.FC = () => {
     if (!mainContent) return;
 
     const transitionZone = window.innerHeight * 1.5;
-    const DELTA_THRESHOLD = 15; // Ignore micro-scrolls from trackpads
+    const DELTA_THRESHOLD = 15;
 
-    // Three snap points - all snap to same hero position for consistency
     const SNAP_DIORAMA = 0;
-    const SNAP_HERO = transitionZone * 0.7;  // scrollProgress = 0.7 (white room, black text)
-    const SNAP_MODULES = transitionZone;      // scrollProgress = 1.0 (module cards)
+    const SNAP_HERO = transitionZone * 0.7;
+    const SNAP_MODULES = transitionZone;
 
-    // Snap to target position - smooth scroll both directions
     const snapTo = (target: number) => {
       isSnappingRef.current = true;
       snapTargetRef.current = target;
-
-      // Smooth scroll - UI follows scrollProgress naturally
       mainContent.scrollTo({ top: target, behavior: 'smooth' });
-
-      // Fallback timeout in case scrollend doesn't fire
       setTimeout(() => {
         if (isSnappingRef.current) {
           isSnappingRef.current = false;
@@ -201,34 +175,26 @@ const App: React.FC = () => {
       }, 800);
     };
 
-    // Find which snap point we're closest to
     const getSnapZone = (scrollTop: number): 'diorama' | 'hero' | 'modules' => {
       const heroThreshold = SNAP_HERO * 0.5;
       const modulesThreshold = SNAP_HERO + (SNAP_MODULES - SNAP_HERO) * 0.5;
-
       if (scrollTop < heroThreshold) return 'diorama';
       if (scrollTop < modulesThreshold) return 'hero';
       return 'modules';
     };
 
-    // Wheel handler on WINDOW (not mainContent) so it catches events over fixed overlays
     const handleWheel = (e: WheelEvent) => {
-      // Don't intercept scroll when overlay or module is open
       if (cinematicsMode || bookingMode || moduleZoom > 0) return;
 
       const scrollTop = mainContent.scrollTop;
       const isInEntranceZone = scrollTop < transitionZone + 50;
-
-      // Beyond entrance zone - allow normal scrolling
       if (!isInEntranceZone) return;
 
-      // Block all scroll input while snap animation is in progress
       if (isSnappingRef.current) {
         e.preventDefault();
         return;
       }
 
-      // Ignore micro-scrolls (trackpad noise)
       if (Math.abs(e.deltaY) < DELTA_THRESHOLD) {
         e.preventDefault();
         return;
@@ -238,19 +204,15 @@ const App: React.FC = () => {
       const scrollingDown = e.deltaY > 0;
       const currentZone = getSnapZone(scrollTop);
 
-      // Navigate between snap points
       if (scrollingDown) {
         if (currentZone === 'diorama') snapTo(SNAP_HERO);
         else if (currentZone === 'hero') snapTo(SNAP_MODULES);
-        // At modules - stay (no further snap points)
       } else {
         if (currentZone === 'modules') snapTo(SNAP_HERO);
         else if (currentZone === 'hero') snapTo(SNAP_DIORAMA);
-        // At diorama - already at top
       }
     };
 
-    // Touch handling for tablets/touch-enabled laptops
     let touchStartY = 0;
     const TOUCH_THRESHOLD = 50;
 
@@ -268,13 +230,11 @@ const App: React.FC = () => {
 
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
-
       if (Math.abs(deltaY) < TOUCH_THRESHOLD) return;
 
       const swipedDown = deltaY > 0;
       const currentZone = getSnapZone(scrollTop);
 
-      // Navigate between snap points (same logic as wheel)
       if (swipedDown) {
         if (currentZone === 'diorama') snapTo(SNAP_HERO);
         else if (currentZone === 'hero') snapTo(SNAP_MODULES);
@@ -284,7 +244,6 @@ const App: React.FC = () => {
       }
     };
 
-    // Listen on window to catch wheel events over fixed overlays (module cards, etc.)
     window.addEventListener('wheel', handleWheel, { passive: false });
     mainContent.addEventListener('touchstart', handleTouchStart, { passive: true });
     mainContent.addEventListener('touchend', handleTouchEnd, { passive: true });
@@ -296,21 +255,22 @@ const App: React.FC = () => {
     };
   }, [activeTab, isMobile, cinematicsMode, bookingMode, moduleZoom]);
 
-  // Hash-based deep linking
+  // Hash-based deep linking → opens modules instead of tabs
   useEffect(() => {
-    const hashToTab: Record<string, string> = {
-      '#book': 'consultation',
-      '#consultation': 'consultation',
-      '#meeting': 'consultation',
-      '#offer': 'offer',
-      '#about': 'about',
-      '#meet': 'about'
-    };
-
     const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
-      if (hash && hashToTab[hash]) {
-        setActiveTab(hashToTab[hash]);
+      const hashToModule: Record<string, string> = {
+        '#book': 'book-meeting',
+        '#consultation': 'book-meeting',
+        '#meeting': 'book-meeting',
+        '#offer': 'the-offer',
+        '#about': 'meet-salman',
+        '#meet': 'meet-salman',
+      };
+
+      if (hash && hashToModule[hash]) {
+        setActiveTab('overview');
+        setOpenModuleId(hashToModule[hash]);
       }
     };
 
@@ -353,6 +313,12 @@ const App: React.FC = () => {
     window.scrollTo(0, 0);
   };
 
+  const handleHome = () => {
+    setActiveTab('overview');
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const refreshUser = async () => {
     try {
       const res = await fetch('/api/auth/me', { credentials: 'include' });
@@ -365,18 +331,41 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} onBookNow={() => setBookingMode(true)} cinematicsMode={cinematicsMode} bookingMode={bookingMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
-      case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
-      case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
-      case 'consultation': return <BookingPage />;
+      case 'overview':
+        return (
+          <Hero
+            onStart={() => {}}
+            onConsultation={() => setOpenModuleId('book-meeting')}
+            onViewCinematics={() => setCinematicsMode(true)}
+            onBookNow={() => setBookingMode(true)}
+            cinematicsMode={cinematicsMode}
+            bookingMode={bookingMode}
+            scrollProgress={scrollProgress}
+            scrollDirection={scrollDirection}
+            smoothMouse={smoothMouse}
+          />
+        );
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} onBookNow={() => setBookingMode(true)} cinematicsMode={cinematicsMode} bookingMode={bookingMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
+      default:
+        return (
+          <Hero
+            onStart={() => {}}
+            onConsultation={() => setOpenModuleId('book-meeting')}
+            onViewCinematics={() => setCinematicsMode(true)}
+            onBookNow={() => setBookingMode(true)}
+            cinematicsMode={cinematicsMode}
+            bookingMode={bookingMode}
+            scrollProgress={scrollProgress}
+            scrollDirection={scrollDirection}
+            smoothMouse={smoothMouse}
+          />
+        );
     }
   };
 
-  // Full-page onboarding takeover for clients who haven't completed it
+  // Full-page onboarding takeover
   if (currentUser && currentUser.role === 'client' && !currentUser.hasCompletedOnboarding) {
     return <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />;
   }
@@ -384,13 +373,12 @@ const App: React.FC = () => {
   return (
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
 
-      {/* Module Manager - renders 3D room + floating module cards (desktop only) */}
+      {/* Module Manager - renders 3D room + floating module panels (desktop only) */}
       {!isMobile && (
         <ModuleManager
           scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
           smoothMouse={smoothMouse}
-          activeTab={activeTab}
-          onConsultation={() => handleNavigation('consultation')}
+          onConsultation={() => setOpenModuleId('book-meeting')}
           cinematicsMode={cinematicsMode}
           onCloseCinematics={() => setCinematicsMode(false)}
           bookingMode={bookingMode}
@@ -398,19 +386,8 @@ const App: React.FC = () => {
           onZoomChange={setModuleZoom}
           openModuleId={openModuleId}
           onOpenModuleIdConsumed={() => setOpenModuleId(null)}
-          onMeetSal={() => handleNavigation('about')}
         />
       )}
-
-      {/* Gradient Scroll Progress Bar - disabled for new 3D module system */}
-      {/* <div
-        className="fixed top-0 left-0 h-[3px] z-[999]"
-        style={{
-          width: `${totalScrollProgress}%`,
-          background: 'linear-gradient(90deg, #CCFF00 0%, #00F0FF 100%)',
-          boxShadow: '0 0 10px rgba(204, 255, 0, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)',
-        }}
-      /> */}
 
       <GlassHeader
         onAuth={() => setIsAuthOpen(true)}
@@ -444,12 +421,12 @@ const App: React.FC = () => {
         onSuccess={(user) => { setCurrentUser(user); setActiveTab('dashboard'); }}
       />
       <GlassNav
-        activeTab={activeTab}
-        setActiveTab={handleNavigation}
+        onHome={handleHome}
         onAuth={() => setIsAuthOpen(true)}
         currentUser={currentUser}
         setCurrentUser={setCurrentUser}
         onLogout={handleLogout}
+        onDashboard={currentUser ? () => handleNavigation('dashboard') : undefined}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
         moduleZoom={moduleZoom}

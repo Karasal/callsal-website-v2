@@ -1,37 +1,34 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ModuleMetadata, ViewState } from '../types/modules';
 
 interface Module3DOverlayProps {
   modules: ModuleMetadata[];
   viewState: ViewState;
+  selectedModuleId: string;
   activeModuleId: string | null;
-  hoveredModuleId: string | null;
   zoomProgress: number;
   scrollProgress: number;
   smoothMouse: { x: number; y: number };
-  onModuleClick: (id: string) => void;
-  onModuleHover: (id: string | null) => void;
+  onSelectModule: (id: string) => void;
+  onOpenModule: () => void;
+  onOpenModuleById: (id: string) => void;
   onClose: () => void;
   onConsultation: () => void;
-  onMeetSal?: () => void;
 }
 
-// Card dimensions in 3D space (must match Room3DEnhanced)
-const CARD_WIDTH = 3.5;
-const CARD_HEIGHT = 2.2;
+// 3D positions for the two panels
+const PREVIEW_POS = { x: -1.0, y: 3, z: 6.5 };
+const PREVIEW_SIZE = { w: 5.0, h: 3.0 };
+const SELECTOR_POS = { x: 3.5, y: 3, z: 6.5 };
+const SELECTOR_SIZE = { w: 2.0, h: 3.0 };
 
 // 3D projection matching Room3DEnhanced exactly
 const project3D = (
-  x: number,
-  y: number,
-  z: number,
-  screenW: number,
-  screenH: number,
-  camX: number,
-  camY: number,
-  camZ: number,
-  panAngle: number,
-  tiltAngle: number
+  x: number, y: number, z: number,
+  screenW: number, screenH: number,
+  camX: number, camY: number, camZ: number,
+  panAngle: number, tiltAngle: number
 ) => {
   let dx = x - camX;
   let dy = y - camY;
@@ -57,32 +54,79 @@ const project3D = (
   const scale = screenW / (2 * Math.tan(fov / 2));
   const screenX = screenW / 2 + (dx / dz) * scale;
   const screenY = screenH / 2 + (dy / dz) * scale;
-  const depth = dz;
 
-  return { x: screenX, y: screenY, depth };
+  return { x: screenX, y: screenY, depth: dz };
+};
+
+// Calculate projected rectangle from 3D position and size
+const projectPanel = (
+  pos: { x: number; y: number; z: number },
+  size: { w: number; h: number },
+  screenW: number, screenH: number,
+  camX: number, camY: number, camZ: number,
+  panAngle: number, tiltAngle: number
+) => {
+  const center = project3D(pos.x, pos.y, pos.z, screenW, screenH, camX, camY, camZ, panAngle, tiltAngle);
+  if (!center) return null;
+
+  const halfW = size.w / 2;
+  const halfH = size.h / 2;
+
+  const topLeft = project3D(pos.x - halfW, pos.y - halfH, pos.z, screenW, screenH, camX, camY, camZ, panAngle, tiltAngle);
+  const topRight = project3D(pos.x + halfW, pos.y - halfH, pos.z, screenW, screenH, camX, camY, camZ, panAngle, tiltAngle);
+  const bottomLeft = project3D(pos.x - halfW, pos.y + halfH, pos.z, screenW, screenH, camX, camY, camZ, panAngle, tiltAngle);
+
+  if (!topLeft || !topRight || !bottomLeft) return null;
+
+  const width = Math.sqrt(Math.pow(topRight.x - topLeft.x, 2) + Math.pow(topRight.y - topLeft.y, 2));
+  const height = Math.sqrt(Math.pow(bottomLeft.x - topLeft.x, 2) + Math.pow(bottomLeft.y - topLeft.y, 2));
+
+  const rotateY = panAngle * (180 / Math.PI) * -1;
+  const rotateX = tiltAngle * (180 / Math.PI);
+
+  return { x: center.x, y: center.y, width, height, depth: center.depth, rotateX, rotateY };
 };
 
 export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   modules,
   viewState,
+  selectedModuleId,
   activeModuleId,
-  hoveredModuleId,
   zoomProgress,
   scrollProgress,
   smoothMouse,
-  onModuleClick,
-  onModuleHover,
+  onSelectModule,
+  onOpenModule,
+  onOpenModuleById,
   onClose,
   onConsultation,
-  onMeetSal
 }) => {
   const screenW = typeof window !== 'undefined' ? window.innerWidth : 1920;
   const screenH = typeof window !== 'undefined' ? window.innerHeight : 1080;
 
-  // Get active module
-  const activeModule = activeModuleId ? modules.find(m => m.id === activeModuleId) : null;
+  // Indicator animation state
+  const [indicatorTop, setIndicatorTop] = useState(0);
+  const selectorRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-  // Camera state for floating cards (no zoom animation needed now)
+  // Update indicator position when selected module changes
+  useEffect(() => {
+    const activeIndex = modules.findIndex(m => m.id === selectedModuleId);
+    const activeItem = itemRefs.current[activeIndex];
+    const container = selectorRef.current;
+
+    if (activeItem && container) {
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = activeItem.getBoundingClientRect();
+      setIndicatorTop(itemRect.top - containerRect.top + itemRect.height / 2 - 12);
+    }
+  }, [selectedModuleId, modules]);
+
+  // Get active module for fullscreen
+  const activeModule = activeModuleId ? modules.find(m => m.id === activeModuleId) : null;
+  const selectedModule = modules.find(m => m.id === selectedModuleId);
+
+  // Camera state for panel positioning
   const cameraState = useMemo(() => {
     const sp = scrollProgress;
     const zoomProgress2 = Math.min(1, sp);
@@ -100,150 +144,153 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
     return { camX: baseCamX, camY: baseCamY, camZ: baseCamZ, panAngle, tiltAngle };
   }, [scrollProgress, smoothMouse]);
 
-  // Calculate floating card positions
-  const cardTransforms = useMemo(() => {
-    return modules.map(module => {
-      const pos = module.basePosition;
-      const center = project3D(
-        pos.x, pos.y, pos.z,
-        screenW, screenH,
-        cameraState.camX, cameraState.camY, cameraState.camZ,
-        cameraState.panAngle, cameraState.tiltAngle
-      );
+  // Calculate panel positions
+  const previewTransform = useMemo(() =>
+    projectPanel(PREVIEW_POS, PREVIEW_SIZE, screenW, screenH, cameraState.camX, cameraState.camY, cameraState.camZ, cameraState.panAngle, cameraState.tiltAngle),
+    [cameraState, screenW, screenH]
+  );
 
-      if (!center) return null;
+  const selectorTransform = useMemo(() =>
+    projectPanel(SELECTOR_POS, SELECTOR_SIZE, screenW, screenH, cameraState.camX, cameraState.camY, cameraState.camZ, cameraState.panAngle, cameraState.tiltAngle),
+    [cameraState, screenW, screenH]
+  );
 
-      const halfW = CARD_WIDTH / 2;
-      const halfH = CARD_HEIGHT / 2;
-
-      const topLeft = project3D(
-        pos.x - halfW, pos.y - halfH, pos.z,
-        screenW, screenH,
-        cameraState.camX, cameraState.camY, cameraState.camZ,
-        cameraState.panAngle, cameraState.tiltAngle
-      );
-
-      const topRight = project3D(
-        pos.x + halfW, pos.y - halfH, pos.z,
-        screenW, screenH,
-        cameraState.camX, cameraState.camY, cameraState.camZ,
-        cameraState.panAngle, cameraState.tiltAngle
-      );
-
-      const bottomLeft = project3D(
-        pos.x - halfW, pos.y + halfH, pos.z,
-        screenW, screenH,
-        cameraState.camX, cameraState.camY, cameraState.camZ,
-        cameraState.panAngle, cameraState.tiltAngle
-      );
-
-      if (!topLeft || !topRight || !bottomLeft) return null;
-
-      const projectedWidth = Math.sqrt(
-        Math.pow(topRight.x - topLeft.x, 2) + Math.pow(topRight.y - topLeft.y, 2)
-      );
-      const projectedHeight = Math.sqrt(
-        Math.pow(bottomLeft.x - topLeft.x, 2) + Math.pow(bottomLeft.y - topLeft.y, 2)
-      );
-
-      const rotateY = cameraState.panAngle * (180 / Math.PI) * -1;
-      const rotateX = cameraState.tiltAngle * (180 / Math.PI);
-
-      return {
-        moduleId: module.id,
-        x: center.x,
-        y: center.y,
-        width: projectedWidth,
-        height: projectedHeight,
-        depth: center.depth,
-        rotateX,
-        rotateY,
-      };
-    }).filter(Boolean);
-  }, [modules, cameraState, screenW, screenH]);
-
-  // Card visibility - fade out when modal opens
+  // Visibility
   const effectiveZoom = zoomProgress < 0.01 ? 0 : zoomProgress;
-  const cardsVisible = scrollProgress >= 0.8 && effectiveZoom < 0.5;
-  const cardOpacity = cardsVisible ? Math.min(1, (scrollProgress - 0.8) * 5) * (1 - effectiveZoom * 2) : 0;
+  const panelsVisible = scrollProgress >= 0.8 && effectiveZoom < 0.5;
+  const panelOpacity = panelsVisible ? Math.min(1, (scrollProgress - 0.8) * 5) * (1 - effectiveZoom * 2) : 0;
 
-  // Modal visibility - fade in when active
+  // Modal visibility
   const modalVisible = effectiveZoom > 0.3;
   const modalOpacity = Math.min(1, (effectiveZoom - 0.3) / 0.4);
 
   return (
     <>
-      {/* Floating 3D cards - fade out when modal opens */}
-      {cardOpacity > 0 && (
+      {/* Floating 3D panels */}
+      {panelOpacity > 0 && (
         <div
           className="fixed inset-0 z-[50]"
-          style={{ perspective: '2000px', pointerEvents: 'none', opacity: cardOpacity }}
+          style={{ perspective: '2000px', pointerEvents: 'none', opacity: panelOpacity }}
         >
-          {cardTransforms.map(transform => {
-            if (!transform) return null;
-            const module = modules.find(m => m.id === transform.moduleId);
-            if (!module) return null;
-
-            const isHovered = hoveredModuleId === module.id;
-            const contentScale = transform.width / 1000;
-
-            return (
+          {/* Panel A: Module Preview */}
+          {previewTransform && selectedModule && (
+            <div
+              className="absolute cursor-pointer"
+              onClick={onOpenModule}
+              style={{
+                left: previewTransform.x - previewTransform.width / 2,
+                top: previewTransform.y - previewTransform.height / 2,
+                width: previewTransform.width,
+                height: previewTransform.height,
+                transform: `rotateY(${previewTransform.rotateY * 0.3}deg) rotateX(${previewTransform.rotateX * 0.3}deg)`,
+                transformStyle: 'preserve-3d',
+                transformOrigin: 'center center',
+                zIndex: 60,
+                boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+                borderRadius: 12,
+                overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(0,0,0,0.95)',
+                pointerEvents: 'auto',
+              }}
+            >
               <div
-                key={module.id}
-                className="absolute"
-                onClick={() => onModuleClick(module.id)}
-                onMouseEnter={() => onModuleHover(module.id)}
-                onMouseLeave={() => onModuleHover(null)}
-                style={{
-                  left: transform.x - transform.width / 2,
-                  top: transform.y - transform.height / 2,
-                  width: transform.width,
-                  height: transform.height,
-                  transform: `
-                    rotateY(${transform.rotateY * 0.3}deg)
-                    rotateX(${transform.rotateX * 0.3}deg)
-                  `,
-                  transformStyle: 'preserve-3d',
-                  transformOrigin: 'center center',
-                  zIndex: Math.round(100 - transform.depth * 10),
-                  boxShadow: isHovered
-                    ? '0 0 40px rgba(204, 255, 0, 0.6), 0 0 80px rgba(204, 255, 0, 0.3)'
-                    : '0 10px 40px rgba(0,0,0,0.5)',
-                  borderRadius: 12,
-                  overflow: 'hidden',
-                  border: isHovered ? '2px solid #CCFF00' : '1px solid rgba(255,255,255,0.1)',
-                  background: 'rgba(0,0,0,0.95)',
-                  cursor: 'pointer',
-                  pointerEvents: 'auto',
-                }}
+                className="absolute inset-0 flex items-start justify-center overflow-hidden"
+                style={{ pointerEvents: 'none' }}
               >
                 <div
-                  className="absolute inset-0 flex items-start justify-center overflow-hidden"
-                  style={{ pointerEvents: 'none' }}
+                  style={{
+                    width: 1000,
+                    height: 'auto',
+                    minHeight: 700,
+                    transform: `scale(${previewTransform.width / 1000})`,
+                    transformOrigin: 'top center',
+                  }}
                 >
-                  <div
-                    style={{
-                      width: 1000,
-                      height: 'auto',
-                      minHeight: 700,
-                      transform: `scale(${contentScale})`,
-                      transformOrigin: 'top center',
-                    }}
-                  >
-                    <module.component
-                      onClose={onClose}
-                      onConsultation={onConsultation}
-                      isPreview={false}
-                    />
-                  </div>
+                  <selectedModule.component
+                    onClose={onClose}
+                    onConsultation={onConsultation}
+                    isPreview={false}
+                  />
                 </div>
               </div>
-            );
-          })}
+            </div>
+          )}
+
+          {/* Panel B: Module Selector */}
+          {selectorTransform && (
+            <div
+              ref={selectorRef}
+              className="absolute"
+              style={{
+                left: selectorTransform.x - selectorTransform.width / 2,
+                top: selectorTransform.y - selectorTransform.height / 2,
+                width: selectorTransform.width,
+                height: selectorTransform.height,
+                transform: `rotateY(${selectorTransform.rotateY * 0.3}deg) rotateX(${selectorTransform.rotateX * 0.3}deg)`,
+                transformStyle: 'preserve-3d',
+                transformOrigin: 'center center',
+                zIndex: 60,
+                boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+                borderRadius: 12,
+                overflow: 'hidden',
+                border: '1px solid rgba(255,255,255,0.1)',
+                background: 'rgba(0,0,0,0.95)',
+                pointerEvents: 'auto',
+              }}
+            >
+              {/* Gradient indicator bar */}
+              <motion.div
+                className="absolute left-0 w-[3px] h-6 rounded-r-full z-10"
+                initial={false}
+                animate={{ top: indicatorTop }}
+                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                style={{
+                  background: 'linear-gradient(180deg, #CCFF00 0%, #00F0FF 100%)',
+                  boxShadow: '0 0 8px rgba(204, 255, 0, 0.5)',
+                }}
+              />
+
+              {/* Module list */}
+              <div className="flex flex-col h-full py-2">
+                {modules.map((module, index) => {
+                  const isSelected = selectedModuleId === module.id;
+                  // Scale text based on panel width
+                  const scaleFactor = selectorTransform.width / 300;
+                  const fontSize = Math.max(8, Math.min(11, 11 * scaleFactor));
+                  const iconScale = Math.max(0.6, Math.min(1, scaleFactor));
+                  const padding = Math.max(4, Math.min(12, 12 * scaleFactor));
+
+                  return (
+                    <button
+                      key={module.id}
+                      ref={(el) => { itemRefs.current[index] = el; }}
+                      onClick={() => onSelectModule(module.id)}
+                      className="flex items-center gap-2 text-left transition-all relative"
+                      style={{
+                        padding: `${padding}px ${padding * 1.5}px`,
+                        color: isSelected ? '#CCFF00' : 'rgba(255,255,255,0.6)',
+                      }}
+                    >
+                      <span style={{ transform: `scale(${iconScale})`, transformOrigin: 'center' }} className="shrink-0">
+                        {module.icon}
+                      </span>
+                      <span
+                        className="font-display font-bold uppercase tracking-tight leading-none"
+                        style={{ fontSize: `${fontSize}px` }}
+                      >
+                        {module.title}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
-      {/* Fullscreen modal - instant, no zoom animation */}
+      {/* Fullscreen modal */}
       {modalVisible && activeModule && (
         <>
           {/* Backdrop */}
@@ -277,7 +324,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
               return (
                 <>
                   <button
-                    onClick={() => onModuleClick(prevModule.id)}
+                    onClick={() => onOpenModuleById(prevModule.id)}
                     className="fixed left-6 top-1/2 -translate-y-1/2 z-[1001] w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border border-white/20 hover:bg-[#CCFF00] hover:border-[#CCFF00] hover:text-black text-white transition-all"
                     title={prevModule.title}
                   >
@@ -286,7 +333,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                     </svg>
                   </button>
                   <button
-                    onClick={() => onModuleClick(nextModule.id)}
+                    onClick={() => onOpenModuleById(nextModule.id)}
                     className="fixed right-6 top-1/2 -translate-y-1/2 z-[1001] w-12 h-12 flex items-center justify-center rounded-full bg-black/80 border border-white/20 hover:bg-[#CCFF00] hover:border-[#CCFF00] hover:text-black text-white transition-all"
                     title={nextModule.title}
                   >
@@ -298,7 +345,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
               );
             })()}
 
-            {/* Module content - natural size, no scaling */}
+            {/* Module content */}
             <div
               className="w-full max-w-5xl mx-auto my-8 bg-black/95 rounded-2xl border border-white/10 overflow-hidden"
               style={{ minHeight: '80vh' }}
@@ -308,25 +355,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                 onConsultation={onConsultation}
                 isPreview={false}
               />
-
-              {/* Meet Sal CTA */}
-              {onMeetSal && (
-                <div className="px-6 lg:px-8 pb-8">
-                  <div className="border-t border-white/10 pt-8 text-center">
-                    <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold block mb-4">INDEPENDENT AI OPERATOR & FILMMAKER</span>
-                    <h3 className="text-2xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-4">SO WHO IS THIS SAL GUY ANYWAY?</h3>
-                    <p className="text-sm font-display font-medium text-gray-400 uppercase tracking-tight mb-6 max-w-xl mx-auto">
-                      THE FACE BEHIND THE TECH. THE HUMAN BEHIND THE AUTOMATION. GET TO KNOW YOUR NEW BUSINESS PAL.
-                    </p>
-                    <button
-                      onClick={() => { onClose(); onMeetSal(); }}
-                      className="btn-glass px-8 py-4 text-xs tracking-[0.2em]"
-                    >
-                      MEET SALMAN
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </>
