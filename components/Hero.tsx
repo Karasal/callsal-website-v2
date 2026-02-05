@@ -117,9 +117,10 @@ const SoftwareItem = ({ software, onClick }: { software: SoftwareInfo, onClick: 
       <AnimatePresence>
         {isHovered && (
           <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
             className="absolute inset-0 flex items-center justify-center text-xs font-display font-bold text-white text-center leading-none uppercase tracking-tighter"
           >
             {software.name}
@@ -759,7 +760,7 @@ const TheArmory = ({ onShowSoftware, onShowImage, onConsultation }: { onShowSoft
             </div>
             <div className="flex-1 overflow-y-auto no-scrollbar p-8 lg:p-16">
               <AnimatePresence mode="wait">
-                <motion.div key={selectedData.id} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.4 }}>
+                <motion.div key={selectedData.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}>
                   {selectedData.content}
                 </motion.div>
               </AnimatePresence>

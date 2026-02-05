@@ -180,8 +180,8 @@ export default function ClientHubOnboarding({ user, onComplete }: ClientHubOnboa
       {/* Main Content */}
       <div className="w-full max-w-xl relative z-10 flex flex-col items-center max-h-[calc(100vh-4rem)]">
         <AnimatePresence mode="wait">
-          <motion.div key={step} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} transition={{ duration: 0.25 }} className="text-center w-full flex flex-col">
-            <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }}
+          <motion.div key={step} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="text-center w-full flex flex-col">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.2 }}
               className="w-12 h-12 mx-auto mb-4 flex items-center justify-center shrink-0 glass rounded-xl border border-[#CCFF00]"
               style={{ boxShadow: '0 0 20px rgba(204, 255, 0, 0.3)' }}>
               <Icon size={22} className="text-[#CCFF00]" />

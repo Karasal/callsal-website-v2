@@ -175,21 +175,23 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
   return (
     <AnimatePresence>
       {showPanel && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 30 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed z-[100] pointer-events-auto"
-          style={{
-            left: '50%',
-            top: '50%',
-            transform: `translate(-50%, -50%) translate(${parallaxX}px, ${parallaxY}px)`,
-            width: 'min(680px, 90vw)',
-            maxHeight: '80vh',
-          }}
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center pointer-events-none"
         >
-          <div className="w-full bg-black/95 rounded-2xl border border-white/15 overflow-hidden shadow-2xl shadow-black/60">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.25 }}
+            className="pointer-events-auto"
+            style={{
+              transform: `translate(${parallaxX}px, ${parallaxY}px)`,
+              width: 'min(720px, 90vw)',
+              minHeight: 'min(520px, 70vh)',
+              maxHeight: '85vh',
+            }}
+          >
+          <div className="w-full h-full bg-black/95 rounded-2xl border border-white/15 overflow-hidden shadow-2xl shadow-black/60 flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
               <div className="flex items-center gap-3">
@@ -205,7 +207,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
             </div>
 
             {/* Scrollable content */}
-            <div className="overflow-y-auto no-scrollbar" style={{ maxHeight: 'calc(80vh - 56px)' }}>
+            <div className="overflow-y-auto no-scrollbar flex-1">
               {/* Success state */}
               {success ? (
                 <div className="p-8 lg:p-12 text-center">
@@ -238,7 +240,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
                   <AnimatePresence mode="wait">
                     {/* Step 1: Meeting Type */}
                     {step === 1 && (
-                      <motion.div key="s1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-6">
+                      <motion.div key="s1" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-6">
                         <h3 className="text-lg font-display font-black text-white uppercase tracking-tight mb-1">HOW WOULD YOU LIKE TO MEET?</h3>
                         <p className="text-[10px] font-display text-gray-500 uppercase tracking-wide mb-5">SELECT YOUR PREFERRED FORMAT</p>
                         <div className="grid grid-cols-3 gap-3">
@@ -261,7 +263,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
 
                     {/* Step 2: Date */}
                     {step === 2 && (
-                      <motion.div key="s2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-6">
+                      <motion.div key="s2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-6">
                         <button onClick={() => setStep(1)} className="flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-display font-black uppercase tracking-widest mb-4 transition-colors">
                           <ChevronLeft size={12} /> BACK
                         </button>
@@ -298,7 +300,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
 
                     {/* Step 3: Time */}
                     {step === 3 && selectedDate && (
-                      <motion.div key="s3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-6">
+                      <motion.div key="s3" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-6">
                         <button onClick={() => setStep(2)} className="flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-display font-black uppercase tracking-widest mb-4 transition-colors">
                           <ChevronLeft size={12} /> BACK
                         </button>
@@ -325,7 +327,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
 
                     {/* Step 4: Contact */}
                     {step === 4 && (
-                      <motion.div key="s4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-6">
+                      <motion.div key="s4" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-6">
                         <button onClick={() => setStep(3)} className="flex items-center gap-2 text-gray-500 hover:text-white text-[10px] font-display font-black uppercase tracking-widest mb-4 transition-colors">
                           <ChevronLeft size={12} /> BACK
                         </button>
@@ -381,6 +383,7 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
             </div>
           </div>
         </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );

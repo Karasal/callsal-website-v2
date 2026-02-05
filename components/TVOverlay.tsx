@@ -73,10 +73,10 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
     <>
       {/* TV Panel */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-        transition={{ duration: 0.4 }}
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 8 }}
+        transition={{ duration: 0.25 }}
         className="fixed z-[100] pointer-events-auto"
         style={{
           left: tvLeft + parallaxX,
@@ -137,10 +137,10 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
       <AnimatePresence>
         {showPanels && (
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 40 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.25, delay: 0.05 }}
             className="fixed z-[100] pointer-events-auto"
             style={{
               left: selectorLeft + parallaxX * 1.1,
@@ -184,10 +184,10 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
       <AnimatePresence>
         {showPanels && (
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.25, delay: 0.1 }}
             className="fixed z-[100] pointer-events-auto"
             style={{
               left: infoLeft + parallaxX * 0.9,

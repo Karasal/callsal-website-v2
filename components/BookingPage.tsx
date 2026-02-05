@@ -130,8 +130,9 @@ export const BookingPage: React.FC = () => {
     return (
       <div className="max-w-4xl mx-auto py-6 sm:py-12 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
           className="glass-strong rounded-2xl border-[#CCFF00]/30 p-6 sm:p-12 lg:p-16 text-center"
         >
           <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#CCFF00] rounded-xl flex items-center justify-center mx-auto mb-6 sm:mb-8">
@@ -210,7 +211,7 @@ export const BookingPage: React.FC = () => {
           <AnimatePresence mode="wait">
             {/* Step 1: Meeting Type */}
             {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step1" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">HOW WOULD YOU LIKE TO MEET?</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">SELECT YOUR PREFERRED FORMAT</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -233,7 +234,7 @@ export const BookingPage: React.FC = () => {
 
             {/* Step 2: Date Selection */}
             {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(1)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
@@ -271,7 +272,7 @@ export const BookingPage: React.FC = () => {
 
             {/* Step 3: Time Selection */}
             {step === 3 && selectedDate && (
-              <motion.div key="step3" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step3" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(2)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
@@ -299,7 +300,7 @@ export const BookingPage: React.FC = () => {
 
             {/* Step 4: Contact Details */}
             {step === 4 && (
-              <motion.div key="step4" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step4" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(3)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
