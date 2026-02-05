@@ -57,6 +57,11 @@ npm run preview  # Preview production build
 
 ### Modules
 - `modules/ArmoryModule.tsx` — SOFTWARE/HARDWARE tabs with detail modals
+- `modules/CinematicsModule.tsx` — Full VideoPortfolio content (videos, Hollywood Advantage, camera gear)
+
+### Overlays (Floating Panels)
+- `BookingOverlay.tsx` — Floating 4-step booking form (TVOverlay pattern)
+- `TVOverlay.tsx` — Floating TV with video selector + info bar (flip animation)
 
 ### Pages
 - `Hero.tsx` (~2000 lines) — Diorama, Wall3DTitle, TheArmory, VideoPortfolio inline
@@ -84,7 +89,9 @@ callsal-website-v2/
 │   └── lib/                ← auth helpers, storage
 ├── components/
 │   ├── modules/            ← Extracted module content
-│   │   └── ArmoryModule.tsx
+│   │   ├── ArmoryModule.tsx
+│   │   └── CinematicsModule.tsx
+│   ├── BookingOverlay.tsx
 │   ├── GlassHeader.tsx
 │   ├── GlassNav.tsx
 │   ├── Hero.tsx
@@ -163,18 +170,32 @@ ADMIN_EMAIL=...
 - Double RAF needed for nav indicator positioning (fonts must paint first)
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
-## Current State (Feb 4, 2026)
+## Current State (Feb 5, 2026)
 - ✅ 3D room with camera zoom and picture frame
 - ✅ CSS 3D hero title synced with mouse parallax
-- ✅ Module cards float in room, fly to fullscreen on click
+- ✅ 2 module cards (Armory + Cinematics) float in room, fly to fullscreen on click
 - ✅ Three-point snap scroll works both directions
 - ✅ All pages functional with dark mode
 - ✅ Module clicks work without blocking scroll (HTML-based)
 - ✅ Liquid glass nav/header always visible (z-9999)
 - ✅ Smooth scroll transitions (diorama + hero title fade before modules)
+- ✅ TVOverlay: VIEW CINEMATICS → floating TV quick-view
+- ✅ BookingOverlay: BOOK NOW → floating 4-step booking form
+- ✅ CinematicsModule: deep-dive video portfolio in module modal
+- ✅ "Meet Sal" CTA at bottom of module modals
 
 ### Known Issues
 - None currently identified
+
+### Session 18 (Feb 5, 2026)
+- **Module Consolidation**: 3 modules → 2 (removed THE SAL METHOD placeholder)
+- **CinematicsModule.tsx**: New self-contained module with ALL VideoPortfolio content (intro, video grid, Hollywood Advantage, camera gear sections, internal video/image modals)
+- **BookingOverlay.tsx**: Floating 4-step booking panel (meeting type → date → time → contact), follows TVOverlay pattern with mouse parallax
+- **Hero Buttons**: VIEW CINEMATICS → cinematicsMode (TVOverlay), BOOK NOW → bookingMode (BookingOverlay)
+- **Both overlays**: fade hero title, hide picture frame, lock scroll
+- **Module3DOverlay**: "SO WHO IS THIS SAL GUY ANYWAY?" CTA at modal bottom → navigates to about page
+- **BookingPage Fix**: Solid bg-black wrapper prevents 3D wireframe bleed-through
+- **openModuleId prop**: Allows programmatic module opening from hero or nav
 
 ### Session 17 (Feb 4, 2026)
 - **Module Modal Rewrite**: Fade-to-modal replaces jerky zoom animation
@@ -200,9 +221,7 @@ ADMIN_EMAIL=...
 - Hero title fades out instantly 0.75→0.80 (was 0.85→1.0, eliminated overlap)
 
 ### TODO
-- [ ] Extract "THE SAL METHOD" content as module
-- [ ] Extract "THE SAL METHOD" content as module
-- [ ] Visual QA on remaining pages
+- [ ] Visual QA on all overlays and modules
 - [ ] Test auth/booking flows end-to-end
 - [ ] Performance audit (Lighthouse)
 
