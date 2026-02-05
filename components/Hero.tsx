@@ -1178,7 +1178,7 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, cinematicsMode?: boolean, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, cinematicsMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, onBookNow?: () => void, cinematicsMode?: boolean, bookingMode?: boolean, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, onBookNow, cinematicsMode = false, bookingMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
@@ -1220,7 +1220,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, o
   return (
     <div className="relative">
       {/* 3D Title painted on back wall - synced to Room3D camera (desktop only) */}
-      {!isMobile && <Wall3DTitle smoothMouse={smoothMouse} scrollProgress={scrollProgress} onViewCinematics={onViewCinematics || (() => {})} onBookNow={onConsultation} cinematicsMode={cinematicsMode} />}
+      {!isMobile && <Wall3DTitle smoothMouse={smoothMouse} scrollProgress={scrollProgress} onViewCinematics={onViewCinematics || (() => {})} onBookNow={onBookNow || onConsultation} cinematicsMode={cinematicsMode || bookingMode} />}
 
       {/* Calgary Diorama Hero Section - Fixed background with overlay */}
       {/* Height is 250vh - animations complete as section ends, no dead zone */}

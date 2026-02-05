@@ -1,0 +1,26 @@
+# Call Sal Website V2 — Progress
+
+## Session 18 (Feb 5, 2026) — Module Consolidation + Overlays
+
+### Completed
+- [x] Created CinematicsModule.tsx (all VideoPortfolio content from Hero.tsx)
+- [x] Removed THE SAL METHOD placeholder module
+- [x] Consolidated from 3 modules to 2 (Armory + Cinematics)
+- [x] Created BookingOverlay.tsx (floating 4-step booking, TVOverlay pattern)
+- [x] VIEW CINEMATICS → TVOverlay (quick portfolio view)
+- [x] BOOK NOW → BookingOverlay (quick booking)
+- [x] Cinematics module card → fullscreen CinematicsModule (deep dive)
+- [x] "SO WHO IS THIS SAL GUY ANYWAY?" CTA at bottom of module modals
+- [x] Fixed BookingPage wireframe bleed-through (solid bg-black wrapper)
+- [x] Build passes clean
+
+### Architecture
+- Two hero buttons: VIEW CINEMATICS (cinematicsMode) + BOOK NOW (bookingMode)
+- Both overlays: floating panels with mouse parallax, fade hero title, lock scroll
+- Module cards: Armory + Cinematics in 3D room, fly-to-fullscreen modal on click
+- openModuleId prop: allows programmatic module opening (e.g., from hero)
+
+### Next
+- [ ] Visual QA on all overlays and modules
+- [ ] Test auth/booking flows end-to-end
+- [ ] Performance audit (Lighthouse)

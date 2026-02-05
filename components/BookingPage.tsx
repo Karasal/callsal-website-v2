@@ -128,7 +128,7 @@ export const BookingPage: React.FC = () => {
 
   if (success) {
     return (
-      <div className="max-w-4xl mx-auto py-6 sm:py-12">
+      <div className="max-w-4xl mx-auto py-6 sm:py-12 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -154,7 +154,7 @@ export const BookingPage: React.FC = () => {
   const inputClass = "w-full bg-transparent border-2 border-white/20 rounded-xl p-4 sm:p-5 pl-10 sm:pl-14 focus:border-[#CCFF00] outline-none font-display font-bold uppercase text-xs sm:text-sm tracking-wide text-white placeholder:text-gray-400";
 
   return (
-    <div className="space-y-16 lg:space-y-0">
+    <div className="space-y-16 lg:space-y-0 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen">
       {/* Hero Section */}
       <section className="min-h-[85vh] lg:min-h-0 lg:h-[calc(100dvh-144px)] max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         <div className="lg:col-span-7 space-y-6">

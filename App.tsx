@@ -19,6 +19,8 @@ const App: React.FC = () => {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
   const [cinematicsMode, setCinematicsMode] = useState(false);
+  const [bookingMode, setBookingMode] = useState(false);
+  const [openModuleId, setOpenModuleId] = useState<string | null>(null);
   const [moduleZoom, setModuleZoom] = useState(0);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
@@ -82,10 +84,9 @@ const App: React.FC = () => {
   // Reset snap state when cinematicsMode changes or module closes
   const prevModuleZoomRef = useRef(0);
   useEffect(() => {
-    // Reset when cinematics changes
     isSnappingRef.current = false;
     snapTargetRef.current = null;
-  }, [cinematicsMode]);
+  }, [cinematicsMode, bookingMode]);
 
   useEffect(() => {
     // Reset snap state when module fully closes
@@ -212,8 +213,8 @@ const App: React.FC = () => {
 
     // Wheel handler on WINDOW (not mainContent) so it catches events over fixed overlays
     const handleWheel = (e: WheelEvent) => {
-      // Don't intercept scroll when cinematics or module is open
-      if (cinematicsMode || moduleZoom > 0) return;
+      // Don't intercept scroll when overlay or module is open
+      if (cinematicsMode || bookingMode || moduleZoom > 0) return;
 
       const scrollTop = mainContent.scrollTop;
       const isInEntranceZone = scrollTop < transitionZone + 50;
@@ -258,7 +259,7 @@ const App: React.FC = () => {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (cinematicsMode || moduleZoom > 0) return;
+      if (cinematicsMode || bookingMode || moduleZoom > 0) return;
       if (isSnappingRef.current) return;
 
       const scrollTop = mainContent.scrollTop;
@@ -293,7 +294,7 @@ const App: React.FC = () => {
       mainContent.removeEventListener('touchstart', handleTouchStart);
       mainContent.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [activeTab, isMobile, cinematicsMode, moduleZoom]);
+  }, [activeTab, isMobile, cinematicsMode, bookingMode, moduleZoom]);
 
   // Hash-based deep linking
   useEffect(() => {
@@ -364,14 +365,14 @@ const App: React.FC = () => {
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} cinematicsMode={cinematicsMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
+      case 'overview': return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} onBookNow={() => setBookingMode(true)} cinematicsMode={cinematicsMode} bookingMode={bookingMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
       case 'about': return <MeetSalman onNext={() => handleNavigation('offer')} onConsultation={() => handleNavigation('consultation')} />;
       case 'offer': return <TheOffer onConsultation={() => handleNavigation('consultation')} />;
       case 'consultation': return <BookingPage />;
       case 'dashboard':
         if (!currentUser) return null;
         return <Dashboard user={currentUser} />;
-      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} cinematicsMode={cinematicsMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
+      default: return <Hero onStart={() => handleNavigation('about')} onConsultation={() => handleNavigation('consultation')} onViewCinematics={() => setCinematicsMode(true)} onBookNow={() => setBookingMode(true)} cinematicsMode={cinematicsMode} bookingMode={bookingMode} scrollProgress={scrollProgress} scrollDirection={scrollDirection} smoothMouse={smoothMouse} />;
     }
   };
 
@@ -392,7 +393,12 @@ const App: React.FC = () => {
           onConsultation={() => handleNavigation('consultation')}
           cinematicsMode={cinematicsMode}
           onCloseCinematics={() => setCinematicsMode(false)}
+          bookingMode={bookingMode}
+          onCloseBooking={() => setBookingMode(false)}
           onZoomChange={setModuleZoom}
+          openModuleId={openModuleId}
+          onOpenModuleIdConsumed={() => setOpenModuleId(null)}
+          onMeetSal={() => handleNavigation('about')}
         />
       )}
 
@@ -415,7 +421,7 @@ const App: React.FC = () => {
         moduleZoom={moduleZoom}
       />
 
-      <main id="main-content" className={`flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 ${cinematicsMode || moduleZoom > 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
+      <main id="main-content" className={`flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 ${cinematicsMode || bookingMode || moduleZoom > 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
         {isMobile ? (
           <div className="min-h-full">
             {renderContent()}

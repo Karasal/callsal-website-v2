@@ -13,6 +13,7 @@ interface Module3DOverlayProps {
   onModuleHover: (id: string | null) => void;
   onClose: () => void;
   onConsultation: () => void;
+  onMeetSal?: () => void;
 }
 
 // Card dimensions in 3D space (must match Room3DEnhanced)
@@ -72,7 +73,8 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   onModuleClick,
   onModuleHover,
   onClose,
-  onConsultation
+  onConsultation,
+  onMeetSal
 }) => {
   const screenW = typeof window !== 'undefined' ? window.innerWidth : 1920;
   const screenH = typeof window !== 'undefined' ? window.innerHeight : 1080;
@@ -306,6 +308,25 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                 onConsultation={onConsultation}
                 isPreview={false}
               />
+
+              {/* Meet Sal CTA */}
+              {onMeetSal && (
+                <div className="px-6 lg:px-8 pb-8">
+                  <div className="border-t border-white/10 pt-8 text-center">
+                    <span className="text-[10px] font-body tracking-[0.5em] text-[#CCFF00] uppercase font-bold block mb-4">INDEPENDENT AI OPERATOR & FILMMAKER</span>
+                    <h3 className="text-2xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter leading-none mb-4">SO WHO IS THIS SAL GUY ANYWAY?</h3>
+                    <p className="text-sm font-display font-medium text-gray-400 uppercase tracking-tight mb-6 max-w-xl mx-auto">
+                      THE FACE BEHIND THE TECH. THE HUMAN BEHIND THE AUTOMATION. GET TO KNOW YOUR NEW BUSINESS PAL.
+                    </p>
+                    <button
+                      onClick={() => { onClose(); onMeetSal(); }}
+                      className="btn-glass px-8 py-4 text-xs tracking-[0.2em]"
+                    >
+                      MEET SALMAN
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </>

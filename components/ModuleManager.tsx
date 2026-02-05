@@ -11,10 +11,12 @@ import {
 import { Room3DEnhanced } from './Room3DEnhanced';
 // Import Module3DOverlay for HTML content positioned in 3D space
 import { Module3DOverlay } from './Module3DOverlay';
-// Import TVOverlay for cinematics mode
+// Import overlays
 import { TVOverlay } from './TVOverlay';
+import { BookingOverlay } from './BookingOverlay';
 // Import actual module components
 import { ArmoryModule } from './modules/ArmoryModule';
+import { CinematicsModule } from './modules/CinematicsModule';
 
 // Icons for module cards
 const ArmoryIcon = () => (
@@ -32,63 +34,25 @@ const VideoIcon = () => (
   </svg>
 );
 
-const SalMethodIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-8 h-8">
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 8v4l3 3" />
-  </svg>
-);
-
-// Placeholder module for modules not yet built
-const PlaceholderModule: React.FC<ModuleContentProps & { title: string }> = ({ onClose, title, isPreview }) => {
-  if (isPreview) {
-    return (
-      <div className="w-full h-full bg-black/90 p-3 flex flex-col items-center justify-center">
-        <h3 className="text-[10px] font-display font-bold text-white uppercase tracking-tight mb-2">{title}</h3>
-        <p className="text-[6px] text-gray-400 uppercase">COMING SOON</p>
-        <div className="mt-2 p-1.5 bg-[#CCFF00] rounded text-center">
-          <p className="text-[6px] font-display font-bold text-black uppercase">CLICK TO EXPLORE</p>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="p-8">
-      <h2 className="text-3xl font-display text-white mb-4">{title}</h2>
-      <p className="text-gray-400">This module is coming soon.</p>
-      <button onClick={onClose} className="mt-8 btn-primary">Close</button>
-    </div>
-  );
-};
-
 // Module registry - defines all modules per page
 // Room: camZ=2.0 at scroll=1.0, back wall at zFar=10.5
 // Cards need z > camZ and z < zFar to be visible inside room
 const createModuleRegistry = (): ModuleMetadata[] => [
-  {
-    id: 'sal-method',
-    title: 'THE SAL METHOD',
-    icon: <SalMethodIcon />,
-    component: (props: ModuleContentProps) => <PlaceholderModule {...props} title="THE SAL METHOD" />,
-    page: 'overview',
-    basePosition: { x: -4, y: 3, z: 6 },
-  },
   {
     id: 'armory',
     title: 'THE ARMORY',
     icon: <ArmoryIcon />,
     component: ArmoryModule,
     page: 'overview',
-    basePosition: { x: 0, y: 3, z: 7 },
+    basePosition: { x: -2.5, y: 3, z: 6.5 },
   },
   {
     id: 'video-portfolio',
     title: 'CINEMATICS',
     icon: <VideoIcon />,
-    component: (props: ModuleContentProps) => <PlaceholderModule {...props} title="CINEMATICS" />,
+    component: CinematicsModule,
     page: 'overview',
-    basePosition: { x: 4, y: 3, z: 6 },
+    basePosition: { x: 2.5, y: 3, z: 6.5 },
   },
 ];
 
@@ -99,7 +63,12 @@ interface ModuleManagerProps {
   onConsultation: () => void;
   cinematicsMode?: boolean;
   onCloseCinematics?: () => void;
+  bookingMode?: boolean;
+  onCloseBooking?: () => void;
   onZoomChange?: (zoomProgress: number) => void;
+  openModuleId?: string | null;
+  onOpenModuleIdConsumed?: () => void;
+  onMeetSal?: () => void;
 }
 
 export const ModuleManager: React.FC<ModuleManagerProps> = ({
@@ -109,7 +78,12 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   onConsultation,
   cinematicsMode = false,
   onCloseCinematics,
+  bookingMode = false,
+  onCloseBooking,
   onZoomChange,
+  openModuleId = null,
+  onOpenModuleIdConsumed,
+  onMeetSal,
 }) => {
   // State machine
   const [viewState, setViewState] = useState<ViewState>('diorama');
@@ -201,6 +175,14 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
     setActiveModuleId(null);
   }, []);
 
+  // Open module when openModuleId is set and we've scrolled to modules
+  useEffect(() => {
+    if (openModuleId && scrollProgress >= 0.8 && activeModuleId !== openModuleId) {
+      setActiveModuleId(openModuleId);
+      onOpenModuleIdConsumed?.();
+    }
+  }, [openModuleId, scrollProgress, activeModuleId, onOpenModuleIdConsumed]);
+
   return (
     <>
       {/* Room3DEnhanced renders the 3D room + card FRAMES only (no content) */}
@@ -214,7 +196,7 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
         zoomProgress={zoomProgress}
         onModuleClick={handleModuleClick}
         onModuleHover={handleModuleHover}
-        cinematicsMode={cinematicsMode}
+        cinematicsMode={cinematicsMode || bookingMode}
       />
 
       {/* Module3DOverlay renders actual HTML content positioned in 3D space */}
@@ -230,12 +212,21 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
         onModuleHover={handleModuleHover}
         onClose={handleCloseModule}
         onConsultation={onConsultation}
+        onMeetSal={onMeetSal}
       />
 
       {/* TVOverlay - flip animation from diorama to video player */}
       <TVOverlay
         isActive={cinematicsMode}
         onClose={onCloseCinematics || (() => {})}
+        scrollProgress={scrollProgress}
+        smoothMouse={smoothMouse}
+      />
+
+      {/* BookingOverlay - floating booking panel */}
+      <BookingOverlay
+        isActive={bookingMode}
+        onClose={onCloseBooking || (() => {})}
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
       />
