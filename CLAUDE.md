@@ -161,6 +161,7 @@ ADMIN_EMAIL=...
 - **Sine easing** for camera zoom — smoother than quadratic
 - **Linear easing** for fly-to-fullscreen — no "pop" effect
 - **Liquid glass nav/header** — subtle white tint + blur + border, always z-[9999]
+- **Ghost-fade animation standard** — NO scale-pop, NO x-slides. Only subtle `opacity + y:6-8px` fade-up. Quick (0.15-0.25s). Scroll-driven animations are fine.
 
 ## Gotchas
 - Vite scaffold puts entry in `src/main.tsx` — we use `index.tsx` at root
@@ -186,6 +187,13 @@ ADMIN_EMAIL=...
 
 ### Known Issues
 - None currently identified
+
+### Session 19 (Feb 5, 2026)
+- **Animation Purge**: Removed ALL scale-pop and x-slide Framer Motion animations across 9 files
+- **Ghost-fade standard**: Every transition now uses subtle `opacity: 0, y: 6-8px` → visible, 0.15-0.25s duration
+- **Killed**: `scale: 0.9x` pop (6), `x: ±20/±40` slides (10), `[0.16, 1, 0.3, 1]` overshoot easing (3)
+- **BookingOverlay**: Centered on screen (flex container), min-height 520px prevents layout shifts between steps
+- **Scroll-driven animations untouched** — diorama→hero→modules transitions are smooth and stay as-is
 
 ### Session 18 (Feb 5, 2026)
 - **Module Consolidation**: 3 modules → 2 (removed THE SAL METHOD placeholder)
