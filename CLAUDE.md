@@ -58,6 +58,9 @@ npm run preview  # Preview production build
 ### Modules
 - `modules/ArmoryModule.tsx` — SOFTWARE/HARDWARE tabs with detail modals
 - `modules/CinematicsModule.tsx` — Full VideoPortfolio content (videos, Hollywood Advantage, camera gear)
+- `modules/MeetSalmanModule.tsx` — Wraps MeetSalman with preview card
+- `modules/TheOfferModule.tsx` — Wraps TheOffer with preview card
+- `modules/BookingModule.tsx` — Wraps BookingPage with preview card
 
 ### Overlays (Floating Panels)
 - `BookingOverlay.tsx` — Floating 4-step booking form (TVOverlay pattern)
@@ -139,19 +142,23 @@ ADMIN_EMAIL=...
 ### Scroll Flow (Desktop)
 1. **Diorama** (scrollProgress = 0) — Full-screen Calgary diorama image
 2. **Hero** (scrollProgress = 0.7) — Wall3DTitle with CSS 3D transforms, white room
-3. **Modules** (scrollProgress = 1.0) — Floating cards in black room
+3. **Modules** (scrollProgress = 1.0) — Preview panel + selector in black room
 
 ### Mouse Parallax
 - Shared mouse state in App.tsx (smoothMouse with lerp 0.06)
 - Passed to Room3D/Room3DEnhanced and Hero (Wall3DTitle)
 - Camera rotates ±8° based on mouse position
 
-### Module Click Flow
-1. HTML cards in Module3DOverlay handle click/hover directly (canvas is visual-only)
-2. ModuleManager sets activeModule, triggers zoomProgress animation
-3. Floating cards fade out (opacity transition)
-4. Fullscreen modal fades in instantly (pre-loaded, no scaling)
-5. Close button fades modal out, cards fade back in
+### Module System (Unified Selector)
+- **5 modules**: Armory, Cinematics, Meet Salman, The Offer, Book Meeting
+- **Preview panel** (center-left, 3D pos: x:-1.0 y:3 z:6.5, 5.0×3.0) — shows selected module content scaled down
+- **Selector panel** (right, 3D pos: x:3.5 y:3 z:6.5, 2.0×3.0) — vertical list with gradient indicator bar
+- Click selector item → swaps preview content
+- Click preview panel → opens fullscreen modal (same zoom animation as before)
+- Arrow nav in modal cycles all 5 modules and syncs selectedModuleId
+- **GlassNav** is now a thin pill (bottom-right) with branding + home + auth only
+- All page content (MeetSalman, TheOffer, BookingPage) accessed via module wrappers
+- Only `overview` and `dashboard` routes remain in App.tsx
 
 ## Key Decisions
 - **Flat black panels** instead of transparent blur — 3D room motion made blur jarring
@@ -174,19 +181,32 @@ ADMIN_EMAIL=...
 ## Current State (Feb 5, 2026)
 - ✅ 3D room with camera zoom and picture frame
 - ✅ CSS 3D hero title synced with mouse parallax
-- ✅ 2 module cards (Armory + Cinematics) float in room, fly to fullscreen on click
+- ✅ Unified module selector: preview panel + selector panel in 3D space (5 modules)
 - ✅ Three-point snap scroll works both directions
-- ✅ All pages functional with dark mode
-- ✅ Module clicks work without blocking scroll (HTML-based)
-- ✅ Liquid glass nav/header always visible (z-9999)
+- ✅ All content accessible via modules (no more tab-based page routing)
+- ✅ Thin pill nav (bottom-right) with branding + home + auth
+- ✅ Liquid glass header always visible (z-9999)
 - ✅ Smooth scroll transitions (diorama + hero title fade before modules)
 - ✅ TVOverlay: VIEW CINEMATICS → floating TV quick-view
 - ✅ BookingOverlay: BOOK NOW → floating 4-step booking form
 - ✅ CinematicsModule: deep-dive video portfolio in module modal
-- ✅ "Meet Sal" CTA at bottom of module modals
+- ✅ Hash deep links (#book, #about, #offer) open correct modules
 
 ### Known Issues
 - None currently identified
+
+### Session 20 (Feb 5, 2026)
+- **Unified Module Selector**: Replaced N floating cards with 2 fixed 3D panels (preview + selector)
+- **5 modules**: Armory, Cinematics, Meet Salman, The Offer, Book Meeting
+- **New wrappers**: MeetSalmanModule.tsx, TheOfferModule.tsx, BookingModule.tsx (preview + full modes)
+- **Selector panel**: Vertical list with spring-animated gradient indicator bar (lime→cyan)
+- **GlassNav rewrite**: Full tab bar → thin pill (bottom-right, rounded-full) with branding + home icon + auth
+- **App.tsx simplified**: Only overview + dashboard routes; MeetSalman/TheOffer/BookingPage removed from direct rendering
+- **Hash deep links**: #book → book-meeting module, #about → meet-salman, #offer → the-offer
+- **onConsultation rewired**: All callbacks now open book-meeting module instead of tab navigation
+- **Room3DEnhanced**: 2 fixed frame shadows, removed modules prop/hit detection/hover tracking
+- **types/modules.ts cleaned**: Removed PageId, page, basePosition from ModuleMetadata
+- **Pill fix**: BrandingElement `w-auto` + `px-6 gap-4` prevents copyright text bleeding into home icon
 
 ### Session 19 (Feb 5, 2026)
 - **Animation Purge**: Removed ALL scale-pop and x-slide Framer Motion animations across 9 files
