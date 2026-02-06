@@ -13,7 +13,7 @@ interface Module3DOverlayProps {
 }
 
 // Single centered panel (preview + selector bar combined)
-const PREVIEW_POS = { x: 0, y: 3.8, z: 6.5 };
+const PREVIEW_POS = { x: 0, y: 3.5, z: 6.5 };
 const PREVIEW_SIZE = { w: 6.0, h: 3.5 };
 
 // 3D projection matching Room3DEnhanced exactly

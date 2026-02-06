@@ -12,7 +12,7 @@ interface Room3DEnhancedProps {
 }
 
 // Fixed panel position and size matching Module3DOverlay
-const PREVIEW_POS = { x: 0, y: 3.8, z: 6.5 };
+const PREVIEW_POS = { x: 0, y: 3.5, z: 6.5 };
 const PREVIEW_SIZE = { w: 6.0, h: 3.5 };
 
 export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
