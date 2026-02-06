@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Play, ChevronRight, X, Activity, BookOpen, Crown, Eye, Focus, Move
@@ -508,16 +509,21 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
         </div>
       </div>
 
-      {/* Internal modals — render at module level so they appear above the module modal */}
-      <AnimatePresence>
-        {isVideoOpen && <VideoModal id={activeProject.id} title={activeProject.title} onClose={() => setIsVideoOpen(false)} />}
-      </AnimatePresence>
-      <AnimatePresence>
-        {selectedSoftware && <SoftwareDetailModal software={selectedSoftware} onClose={() => setSelectedSoftware(null)} />}
-      </AnimatePresence>
-      <AnimatePresence>
-        {selectedImage && <ImageLightbox src={selectedImage} onClose={() => setSelectedImage(null)} />}
-      </AnimatePresence>
+      {/* Internal modals — portal to body to escape transform: scale() in Module3DOverlay */}
+      {createPortal(
+        <>
+          <AnimatePresence>
+            {isVideoOpen && <VideoModal id={activeProject.id} title={activeProject.title} onClose={() => setIsVideoOpen(false)} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {selectedSoftware && <SoftwareDetailModal software={selectedSoftware} onClose={() => setSelectedSoftware(null)} />}
+          </AnimatePresence>
+          <AnimatePresence>
+            {selectedImage && <ImageLightbox src={selectedImage} onClose={() => setSelectedImage(null)} />}
+          </AnimatePresence>
+        </>,
+        document.body
+      )}
     </div>
   );
 };

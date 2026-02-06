@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -571,17 +572,20 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
         </div>
       </section>
 
-      {/* Video Modal */}
-      <AnimatePresence>
-        {isModalOpen && (
-          <VideoModal
-            id={activeProject.id}
-            title={activeProject.title}
-            onClose={() => setIsModalOpen(false)}
-            isMobile={isMobile}
-          />
-        )}
-      </AnimatePresence>
+      {/* Video Modal — portal to body to escape transform: scale() in Module3DOverlay */}
+      {createPortal(
+        <AnimatePresence>
+          {isModalOpen && (
+            <VideoModal
+              id={activeProject.id}
+              title={activeProject.title}
+              onClose={() => setIsModalOpen(false)}
+              isMobile={isMobile}
+            />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
       {/* ========== FOOTER QUOTE ========== */}
       <motion.div variants={mobileItemVariants} className="text-center pt-8">

@@ -46,7 +46,7 @@ const getTimeSlotsForType = (type: MeetingType | null) => {
   return type === 'in-person' ? TIME_SLOTS_IN_PERSON : TIME_SLOTS_REMOTE;
 };
 
-export const BookingPage: React.FC = () => {
+export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
   const [step, setStep] = useState(1);
   const [meetingType, setMeetingType] = useState<MeetingType | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -127,7 +127,7 @@ export const BookingPage: React.FC = () => {
 
   if (success) {
     return (
-      <div className="max-w-4xl mx-auto py-6 sm:py-12 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen">
+      <div className={embedded ? "max-w-4xl mx-auto py-6" : "max-w-4xl mx-auto py-6 sm:py-12 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen"}>
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -154,43 +154,45 @@ export const BookingPage: React.FC = () => {
   const inputClass = "w-full bg-transparent border-2 border-white/20 rounded-xl p-4 sm:p-5 pl-10 sm:pl-14 focus:border-[#CCFF00] outline-none font-display font-bold uppercase text-xs sm:text-sm tracking-wide text-white placeholder:text-gray-400";
 
   return (
-    <div className="space-y-16 lg:space-y-0 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen">
-      {/* Hero Section */}
-      <section className="min-h-[85vh] lg:min-h-0 lg:h-[calc(100dvh-144px)] max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        <div className="lg:col-span-7 space-y-6">
-          <div className="space-y-3">
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00] shrink-0" />
-              <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-body tracking-[0.2em] sm:tracking-[0.5em] uppercase font-black gradient-text">
-                FREE 30-MINUTE STRATEGY SESSION
-              </span>
+    <div className={embedded ? "" : "space-y-16 lg:space-y-0 relative z-10 bg-black -mx-4 sm:-mx-6 lg:-mx-12 -mt-24 lg:-mt-28 px-4 sm:px-6 lg:px-12 pt-24 lg:pt-28 min-h-screen"}>
+      {/* Hero Section — hidden when embedded in module panel */}
+      {!embedded && (
+        <section className="min-h-[85vh] lg:min-h-0 lg:h-[calc(100dvh-144px)] max-w-7xl mx-auto px-4 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="space-y-3">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00] shrink-0" />
+                <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-body tracking-[0.2em] sm:tracking-[0.5em] uppercase font-black gradient-text">
+                  FREE 30-MINUTE STRATEGY SESSION
+                </span>
+              </div>
+              <h1 className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
+                <span className="text-white">BOOK A</span><br />
+                <span className="text-white">MEETING.</span><br />
+                <span className="text-[#CCFF00]">GET A</span><br />
+                <span className="text-[#CCFF00]">FREE VIDEO!</span>
+              </h1>
             </div>
-            <h1 className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
-              <span className="text-white">BOOK A</span><br />
-              <span className="text-white">MEETING.</span><br />
-              <span className="text-[#CCFF00]">GET A</span><br />
-              <span className="text-[#CCFF00]">FREE VIDEO!</span>
-            </h1>
+            <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-white/80 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
+              LET'S <span className="text-[#CCFF00]">TALK</span> ABOUT YOUR <span className="text-[#CCFF00]">BUSINESS</span>.<br />
+              NO <span className="text-[#CCFF00]">SALES PITCH</span>, NO <span className="text-[#CCFF00]">PRESSURE</span>.<br />
+              JUST A <span className="text-[#CCFF00]">REAL CONVERSATION</span> ABOUT HOW<br />
+              <span className="text-[#CCFF00]">AI</span> AND <span className="text-[#CCFF00]">VIDEO</span> CAN <span className="text-[#CCFF00]">TRANSFORM YOUR OPERATIONS</span>.
+            </p>
           </div>
-          <p className="text-base sm:text-lg lg:text-xl xl:text-2xl font-display font-medium text-white/80 uppercase leading-tight tracking-tight border-l-4 border-[#CCFF00] pl-4 sm:pl-6 lg:pl-8">
-            LET'S <span className="text-[#CCFF00]">TALK</span> ABOUT YOUR <span className="text-[#CCFF00]">BUSINESS</span>.<br />
-            NO <span className="text-[#CCFF00]">SALES PITCH</span>, NO <span className="text-[#CCFF00]">PRESSURE</span>.<br />
-            JUST A <span className="text-[#CCFF00]">REAL CONVERSATION</span> ABOUT HOW<br />
-            <span className="text-[#CCFF00]">AI</span> AND <span className="text-[#CCFF00]">VIDEO</span> CAN <span className="text-[#CCFF00]">TRANSFORM YOUR OPERATIONS</span>.
-          </p>
-        </div>
 
-        <div className="lg:col-span-5 relative pr-3 pb-3 flex justify-end">
-          <div className="glow-lime rounded-2xl max-w-[90%]">
-            <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden glass rounded-2xl">
-              <img src="/booking-hero.png" alt="Professional video production" className="w-full h-full object-cover" />
+          <div className="lg:col-span-5 relative pr-3 pb-3 flex justify-end">
+            <div className="glow-lime rounded-2xl max-w-[90%]">
+              <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden glass rounded-2xl">
+                <img src="/booking-hero.png" alt="Professional video production" className="w-full h-full object-cover" />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Booking Section */}
-      <div className="max-w-5xl mx-auto px-4 py-12 sm:py-16">
+      <div className={embedded ? "max-w-5xl mx-auto" : "max-w-5xl mx-auto px-4 py-12 sm:py-16"}>
         {/* Progress Steps */}
         <div className="flex items-center justify-center gap-2 sm:gap-4 mb-8 sm:mb-12">
           {[1, 2, 3, 4].map((s) => (

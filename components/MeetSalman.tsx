@@ -198,7 +198,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
               <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">YEARS OF INNOVATION</p>
            </div>
            <div className="space-y-2">
-              <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#CCFF00' }}>200+</p>
+              <p className="text-4xl lg:text-6xl font-display font-black" style={{ color: '#CCFF00' }}>50+</p>
               <p className="text-[9px] font-body text-gray-400 uppercase tracking-widest font-black">STORIES TOLD</p>
            </div>
            <div className="space-y-2">

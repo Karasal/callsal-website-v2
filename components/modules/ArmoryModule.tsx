@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain, Link, ShieldCheck, MonitorPlay, Server, Video, Eye, Move,
-  Zap, Cpu, Layers, HardDrive, Hammer, Briefcase, FileCheck, ClipboardList, ChevronRight
+  Zap, Cpu, Layers, HardDrive, Hammer, Briefcase, FileCheck, ClipboardList, ChevronRight,
+  Search, Clapperboard
 } from 'lucide-react';
 import { ModuleContentProps } from '../../types/modules';
 
@@ -69,6 +70,18 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
         title: 'CINEMA PRODUCTION',
         blurb: 'Hollywood Grade Creative Tools.',
         icon: <MonitorPlay size={20} />,
+      },
+      {
+        id: 'content-factory',
+        title: 'CONTENT FACTORY',
+        blurb: 'One Shoot, 100+ Posts.',
+        icon: <Clapperboard size={20} />,
+      },
+      {
+        id: 'scout-bots',
+        title: 'FIND CUSTOMERS',
+        blurb: 'Outreach on Autopilot.',
+        icon: <Search size={20} />,
       }
     ],
     hardware: [
@@ -240,6 +253,26 @@ const ArmoryContent: React.FC<{ categoryId: string; onShowSoftware?: (s: Softwar
             </div>
           ))}
         </div>
+        <div className="pt-4 border-t border-white/20">
+          <span className="text-[8px] font-body text-[#CCFF00] uppercase block font-bold tracking-widest mb-3">APPS WE'VE BUILT</span>
+          <div className="space-y-2">
+            {[
+              { name: 'SALSPEND', desc: 'AI expense management with autonomous savings suggestions' },
+              { name: 'ROCKYVIEW REALTY', desc: 'Real estate CRM with lead scoring and AI advisor' },
+              { name: 'STAMPEDE STAFFER', desc: 'Restaurant labor scheduling and live sales tracking' },
+              { name: 'BOWVALLEY HEALTH', desc: 'Medical clinic triage queue and AI analytics' },
+              { name: '17TH AVE LAW VAULT', desc: 'Legal document automation and auto-drafting' },
+            ].map(demo => (
+              <div key={demo.name} className="p-3 glass rounded-lg flex items-center gap-3">
+                <div className="w-2 h-2 rounded-full bg-[#CCFF00] shrink-0" />
+                <div>
+                  <span className="text-[9px] font-display font-bold text-white uppercase block">{demo.name}</span>
+                  <span className="text-[8px] font-body text-gray-400 uppercase">{demo.desc}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     ),
     'content-prod': (
@@ -252,6 +285,64 @@ const ArmoryContent: React.FC<{ categoryId: string; onShowSoftware?: (s: Softwar
           {Object.values(softwareData).map(sw => (
             <SoftwareItem key={sw.name} software={sw} onClick={() => onShowSoftware?.(sw)} />
           ))}
+        </div>
+      </div>
+    ),
+    'content-factory': (
+      <div className="space-y-5">
+        <h4 className="text-2xl lg:text-3xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE CONTENT FACTORY</h4>
+        <div className="p-4 bg-[#CCFF00] text-black rounded-xl">
+          <p className="text-[10px] font-body font-bold uppercase tracking-widest leading-tight">
+            PLAIN ENGLISH: We film for 60 minutes once a month. My robots chop that into 100+ Reels, TikToks, and LinkedIn posts — with captions, music, and your logo. All automatic.
+          </p>
+        </div>
+        <p className="text-sm font-display font-medium text-white/70 uppercase leading-relaxed tracking-wide border-l-4 border-[#CCFF00] pl-4">
+          One filming session. 100+ pieces of premium content. AI handles editing, captions, music sync, and viral hooks — while you run your business.
+        </p>
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+          {[
+            { title: 'REAL ESTATE', desc: 'One walkthrough → 10 Reels, 5 YouTube videos, 20 Facebook posts.' },
+            { title: 'LOCAL TRADES', desc: 'Job photo → Before/After video, auto-posted to Google Business.' },
+            { title: 'MEDICAL & DENTAL', desc: 'Patient questions → professional video library using your AI voice.' },
+            { title: 'FITNESS & COACHING', desc: 'Workout clips → high-energy motivational ads with AI music sync.' },
+          ].map(({ title, desc }) => (
+            <div key={title} className="space-y-1">
+              <span className="text-[8px] font-body text-[#CCFF00] uppercase block font-bold tracking-widest">{title}</span>
+              <p className="text-[9px] text-gray-400 uppercase leading-tight font-bold">{desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="p-3 glass rounded-xl border-l-4 border-[#CCFF00]">
+          <span className="text-[9px] font-display font-bold text-[#CCFF00] uppercase tracking-widest">ESTIMATED LIFT: 80% MORE ENGAGEMENT</span>
+        </div>
+      </div>
+    ),
+    'scout-bots': (
+      <div className="space-y-5">
+        <h4 className="text-2xl lg:text-3xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">SCOUT BOT ARMY</h4>
+        <div className="p-4 bg-[#CCFF00] text-black rounded-xl">
+          <p className="text-[10px] font-body font-bold uppercase tracking-widest leading-tight">
+            PLAIN ENGLISH: I deploy digital scouts that search LinkedIn, Google Maps, and forums for people who need your help — then send a friendly, personalized "first hello" automatically.
+          </p>
+        </div>
+        <p className="text-sm font-display font-medium text-white/70 uppercase leading-relaxed tracking-wide border-l-4 border-[#CCFF00] pl-4">
+          Stop cold calling. My Scout-Bots find your ideal customers while you sleep and fill your inbox with people saying "Tell me more."
+        </p>
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/20">
+          {[
+            { title: 'B2B SERVICES', desc: 'Finds CEOs who just hired. Sends personalized congrats + audit offer.' },
+            { title: 'RESIDENTIAL', desc: 'Monitors home sales. Sends new homeowners a welcome offer.' },
+            { title: 'SAAS & TECH', desc: 'Scans complaints about competitors. Offers your solution instantly.' },
+            { title: 'EVENTS & VENUES', desc: 'Tracks engagement announcements. Sends VIP tour invitations.' },
+          ].map(({ title, desc }) => (
+            <div key={title} className="space-y-1">
+              <span className="text-[8px] font-body text-[#CCFF00] uppercase block font-bold tracking-widest">{title}</span>
+              <p className="text-[9px] text-gray-400 uppercase leading-tight font-bold">{desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="p-3 glass rounded-xl border-l-4 border-[#CCFF00]">
+          <span className="text-[9px] font-display font-bold text-[#CCFF00] uppercase tracking-widest">ESTIMATED LIFT: 3-5 QUALIFIED LEADS PER WEEK</span>
         </div>
       </div>
     ),

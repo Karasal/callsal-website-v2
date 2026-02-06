@@ -200,8 +200,13 @@ ADMIN_EMAIL=...
 - ~20 unused lucide-react icon imports in Hero.tsx (tree-shaken at build, cosmetic)
 - `onStart` prop on Hero wired to no-op — DISCOVER and MEET SALMAN buttons on mobile do nothing
 
-### NEXT SESSION (Session 24) — MISSION
-**Content QA & Full Flow Testing**: Compare all 5 modules to v1 content, test auth/booking/deep links end-to-end, visual QA at different screen sizes.
+### NEXT SESSION (Session 25) — MISSION
+**Continue content parity pass if needed, then full flow testing.**
+
+### Session 24 (Feb 6, 2026)
+- **Content Parity Pass**: Screenshot comparison of v1 vs v2, screen by screen
+- Method: A/B screenshot pairs (A=original, B=new site) — fix missing text, headings, layout gaps
+- Rule: Content and layout only — NO copying v1 styles/animations, keep v2 glassmorphism aesthetic
 
 ### Session 23 (Feb 5, 2026)
 - **Dead code audit**: Comprehensive codebase audit for invisible/wasteful elements
