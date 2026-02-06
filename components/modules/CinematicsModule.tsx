@@ -294,7 +294,7 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
 
   // Full interactive mode
   return (
-    <div className="p-6 lg:p-8">
+    <div className="px-6 pt-6 pb-2 lg:px-8 lg:pt-8 lg:pb-2">
       {/* Header */}
       <div className="mb-8 text-center">
         <div className="flex items-center justify-center gap-3 mb-4">

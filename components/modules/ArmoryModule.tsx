@@ -154,9 +154,9 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
 
   // Full interactive mode - complete Armory UI
   return (
-    <div className="p-6 lg:p-8">
+    <div className="px-6 pt-6 pb-2 lg:px-8 lg:pt-8 lg:pb-2">
       {/* Header */}
-      <div className="mb-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div className="mb-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE ARMORY</h2>
           <p className="text-[10px] font-body text-gray-400 tracking-[0.5em] uppercase mt-2">HIGH-END PRODUCTION AT A FRACTION OF THE COST</p>
@@ -178,7 +178,7 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
       </div>
 
       {/* Content grid */}
-      <div className="glass overflow-hidden flex flex-col lg:flex-row h-auto lg:h-[550px] rounded-xl border-t-4 border-[#CCFF00]">
+      <div className="glass overflow-hidden flex flex-col lg:flex-row rounded-xl border-t-4 border-[#CCFF00]">
         {/* Sidebar */}
         <div className="lg:w-72 border-b lg:border-b-0 lg:border-r border-white/20 flex flex-col shrink-0">
           <div className="flex-1 overflow-y-auto no-scrollbar py-2">
@@ -215,7 +215,7 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
       </div>
 
       {/* CTA */}
-      <div className="mt-8 p-6 lg:p-8 text-center bg-[#CCFF00] rounded-xl">
+      <div className="mt-4 p-4 lg:p-6 text-center bg-[#CCFF00] rounded-xl">
         <h3 className="text-xl lg:text-2xl font-display font-extrabold uppercase tracking-tighter mb-3 text-black">WANT TO SEE THIS IN ACTION?</h3>
         <p className="text-xs font-display font-bold uppercase tracking-tight mb-4 text-black/70">
           FREE 30-MIN CONSULT + FREE VIDEO SHOT ON MY RED CAMERA

@@ -45,7 +45,7 @@ export const BookingModule: React.FC<BookingModuleProps> = ({
 
   // Full interactive mode - renders existing BookingPage content
   return (
-    <div className="p-6 lg:p-8">
+    <div className="px-6 pt-6 pb-2 lg:px-8 lg:pt-8 lg:pb-2">
       <BookingPage />
     </div>
   );

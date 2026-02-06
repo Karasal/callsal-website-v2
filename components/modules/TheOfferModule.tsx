@@ -45,9 +45,11 @@ export const TheOfferModule: React.FC<TheOfferModuleProps> = ({
 
   // Full interactive mode - renders existing TheOffer content
   return (
-    <TheOffer
-      onConsultation={() => { onClose(); onConsultation?.(); }}
-    />
+    <div className="pb-8">
+      <TheOffer
+        onConsultation={() => { onClose(); onConsultation?.(); }}
+      />
+    </div>
   );
 };
 

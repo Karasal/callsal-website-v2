@@ -163,12 +163,39 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   // Track whether mouse is over the panel (for scroll behavior)
   const [isHoveringPanel, setIsHoveringPanel] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [moduleReady, setModuleReady] = useState(true);
 
   // Expose hover state to parent via data attribute on body
   useEffect(() => {
     document.body.dataset.modulePanelHover = isHoveringPanel ? 'true' : 'false';
     return () => { delete document.body.dataset.modulePanelHover; };
   }, [isHoveringPanel]);
+
+  // On module switch: hide content, scroll to top, then reveal
+  useEffect(() => {
+    setModuleReady(false);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = 0;
+    }
+    requestAnimationFrame(() => {
+      setModuleReady(true);
+    });
+  }, [selectedModuleId]);
+
+  // Track content height — transform:scale doesn't affect layout, so scroll area is too tall
+  // Use scrollHeight (captures overflow content) instead of contentRect.height
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    const measure = () => setContentHeight(el.scrollHeight);
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [selectedModuleId]);
 
   // Camera state for panel positioning
   const cameraState = useMemo(() => {
@@ -235,14 +262,18 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
             >
               {/* Scrollable content area */}
               <div
+                ref={scrollRef}
                 className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar"
                 style={{ minHeight: 0 }}
               >
                 <div
+                  ref={contentRef}
                   style={{
                     width: CONTENT_BASE_WIDTH,
                     transform: `scale(${previewTransform.width / CONTENT_BASE_WIDTH})`,
                     transformOrigin: 'top left',
+                    marginBottom: contentHeight > 0 ? -(contentHeight * (1 - previewTransform.width / CONTENT_BASE_WIDTH)) + 16 : 0,
+                    opacity: moduleReady ? 1 : 0,
                   }}
                 >
                   <selectedModule.component
