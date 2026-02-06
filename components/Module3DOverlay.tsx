@@ -14,6 +14,7 @@ interface Module3DOverlayProps {
 // Single centered panel (preview + selector bar combined)
 const PREVIEW_POS = { x: 0, y: 3.5, z: 6.5 };
 const PREVIEW_SIZE = { w: 6.0, h: 3.5 };
+const CONTENT_BASE_WIDTH = 1600;
 
 // 3D projection matching Room3DEnhanced exactly
 const project3D = (
@@ -163,7 +164,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   const panelRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [contentHeight, setContentHeight] = useState(0);
   const [moduleReady, setModuleReady] = useState(true);
 
   // Expose hover state to parent via data attribute on body
@@ -181,18 +181,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
     requestAnimationFrame(() => {
       setModuleReady(true);
     });
-  }, [selectedModuleId]);
-
-  // Track content height — transform:scale doesn't affect layout, so scroll area is too tall
-  // Use scrollHeight (captures overflow content) instead of contentRect.height
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    const measure = () => setContentHeight(el.scrollHeight);
-    measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(el);
-    return () => observer.disconnect();
   }, [selectedModuleId]);
 
   // Camera state for panel positioning
@@ -219,12 +207,30 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
     [cameraState, screenW, screenH]
   );
 
+  // Fix scroll height: transform:scale doesn't affect layout, so we correct via direct DOM
+  const updateContentMargin = useCallback(() => {
+    const el = contentRef.current;
+    if (!el || !previewTransform) return;
+    const h = el.scrollHeight;
+    const scale = previewTransform.width / CONTENT_BASE_WIDTH;
+    if (h > 0 && scale < 1) {
+      el.style.marginBottom = `${-(h * (1 - scale))}px`;
+    }
+  }, [previewTransform]);
+
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    updateContentMargin();
+    const raf = requestAnimationFrame(updateContentMargin);
+    const observer = new ResizeObserver(updateContentMargin);
+    observer.observe(el);
+    return () => { observer.disconnect(); cancelAnimationFrame(raf); };
+  }, [selectedModuleId, moduleReady, updateContentMargin]);
+
   // Panel visibility — fade in from scrollProgress 0.8 to 1.0
   const panelsVisible = scrollProgress >= 0.8;
   const panelOpacity = panelsVisible ? Math.min(1, (scrollProgress - 0.8) * 5) : 0;
-
-  // Content base width — larger = smaller content in panel
-  const CONTENT_BASE_WIDTH = 1600;
 
   return (
     <>
@@ -269,7 +275,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                     width: CONTENT_BASE_WIDTH,
                     transform: `scale(${previewTransform.width / CONTENT_BASE_WIDTH})`,
                     transformOrigin: 'top left',
-                    marginBottom: contentHeight > 0 ? -(contentHeight * (1 - previewTransform.width / CONTENT_BASE_WIDTH)) + 16 : 0,
                     opacity: moduleReady ? 1 : 0,
                   }}
                 >
