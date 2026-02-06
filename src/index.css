@@ -509,3 +509,55 @@ input:focus, textarea:focus, select:focus {
 .animate-bounce-slow {
   animation: bounce-slow 1.5s ease-in-out infinite;
 }
+
+/* Module panel border beam — traveling gradient light */
+@keyframes border-beam {
+  0% { offset-distance: 0%; }
+  100% { offset-distance: 100%; }
+}
+
+.module-panel-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.module-panel-glow::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  background: conic-gradient(
+    from var(--beam-angle, 0deg),
+    transparent 0%,
+    transparent 35%,
+    #CCFF00 42%,
+    #00F0FF 58%,
+    transparent 65%,
+    transparent 100%
+  );
+  animation: beam-rotate 4s linear infinite;
+  z-index: -1;
+}
+
+.module-panel-glow::after {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: 11px;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: -1;
+}
+
+@keyframes beam-rotate {
+  0% { --beam-angle: 0deg; }
+  100% { --beam-angle: 360deg; }
+}
+
+@property --beam-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}

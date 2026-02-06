@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Play, ChevronRight, X, Activity, BookOpen, Crown, Eye, Focus, Move
+  Play, ChevronRight, X, Activity, BookOpen, Crown, Eye, Focus, Move, Film, Share2
 } from 'lucide-react';
 import { ModuleContentProps } from '../../types/modules';
 
@@ -294,15 +294,33 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
             <BookOpen className="text-[#CCFF00] shrink-0 mt-0.5" size={18} />
             <div>
               <p className="text-xs font-display font-bold text-white uppercase mb-1">HERITAGE BRANDING</p>
-              <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">This isn't just an advertisement. It's a legacy piece that grows in value as your company matures.</p>
+              <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">This isn't just an advertisement. It's a legacy piece that grows in value as your company matures, building subconscious trust with every viewer.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <Crown className="text-[#CCFF00] shrink-0 mt-0.5" size={18} />
             <div>
               <p className="text-xs font-display font-bold text-white uppercase mb-1">UNMATCHED AUTHORITY</p>
-              <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">The visual texture of Hollywood cinema bypasses the natural skepticism of modern leads.</p>
+              <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">The visual texture of Hollywood cinema bypasses the natural skepticism of modern leads. They stop seeing a "service provider" and start seeing a "market leader."</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Netflix + Omni-Channel */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 mb-12">
+        <div className="flex items-start gap-3">
+          <Film className="text-[#CCFF00] shrink-0 mt-0.5" size={18} />
+          <div>
+            <p className="text-xs font-display font-bold text-white uppercase mb-1">GET CONTENT THAT LOOKS LIKE NETFLIX.</p>
+            <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">We add a massive professional edge to your online presence. People take this level of quality seriously — and they take the businesses who use it seriously.</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-3">
+          <Share2 className="text-[#CCFF00] shrink-0 mt-0.5" size={18} />
+          <div>
+            <p className="text-xs font-display font-bold text-white uppercase mb-1">OMNI-CHANNEL LEVERAGE.</p>
+            <p className="text-[10px] sm:text-[11px] text-gray-400 uppercase leading-relaxed font-bold">While our films engage on an emotional level, our AI neural networks take that one master film and distribute it across thousands of channels instantly.</p>
           </div>
         </div>
       </div>

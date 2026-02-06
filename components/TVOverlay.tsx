@@ -200,22 +200,27 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
               key={activeProject.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="w-full h-full glass rounded-xl px-5 flex items-center gap-4"
+              className="w-full h-full glass rounded-xl px-5 py-3 flex flex-col justify-center gap-1"
             >
-              <div className="flex items-center gap-2 shrink-0">
-                <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
-                <span className="text-[10px] font-body tracking-[0.15em] text-[#CCFF00] uppercase font-bold">
-                  NOW PLAYING
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 shrink-0">
+                  <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
+                  <span className="text-[10px] font-body tracking-[0.15em] text-[#CCFF00] uppercase font-bold">
+                    NOW PLAYING
+                  </span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="text-sm font-display font-extrabold text-white uppercase tracking-tighter leading-tight truncate">
+                    {activeProject.title}
+                  </h4>
+                </div>
+                <span className="px-3 py-1 bg-black/50 text-[9px] font-body text-[#CCFF00] uppercase tracking-wider font-bold rounded shrink-0">
+                  {activeProject.company}
                 </span>
               </div>
-              <div className="min-w-0 flex-1">
-                <h4 className="text-sm font-display font-extrabold text-white uppercase tracking-tighter leading-tight truncate">
-                  {activeProject.title}
-                </h4>
-              </div>
-              <span className="px-3 py-1 bg-black/50 text-[9px] font-body text-[#CCFF00] uppercase tracking-wider font-bold rounded shrink-0">
-                {activeProject.company}
-              </span>
+              <p className="text-[10px] font-body text-gray-400 uppercase leading-tight truncate pl-6">
+                {activeProject.description}
+              </p>
             </motion.div>
           </motion.div>
         )}

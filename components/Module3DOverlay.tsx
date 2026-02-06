@@ -236,7 +236,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
           {previewTransform && selectedModule && (
             <div
               ref={panelRef}
-              className="absolute module-3d-panel"
+              className="absolute module-3d-panel module-panel-glow"
               onMouseEnter={() => setIsHoveringPanel(true)}
               onMouseLeave={() => setIsHoveringPanel(false)}
               style={{
@@ -248,10 +248,9 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                 transformStyle: 'preserve-3d',
                 transformOrigin: 'center center',
                 zIndex: 60,
-                boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
+                boxShadow: '0 10px 60px rgba(204,255,0,0.08), 0 4px 20px rgba(0,240,255,0.06)',
                 borderRadius: 12,
                 overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.1)',
                 background: 'rgba(0,0,0,0.95)',
                 pointerEvents: 'auto',
                 display: 'flex',

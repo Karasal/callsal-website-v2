@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, LogIn, UserPlus, LogOut, LayoutGrid } from 'lucide-react';
+import { LogIn, UserPlus, LogOut, LayoutGrid } from 'lucide-react';
 import { User as IUser } from '../types';
 import { BrandingElement } from './GlassHeader';
 
@@ -67,19 +67,6 @@ export const GlassNav: React.FC<{
         {/* Divider */}
         <div className="w-px h-6" style={{ background: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.2)` }} />
 
-        {/* Home icon */}
-        <button
-          onClick={onHome}
-          className="flex items-center justify-center w-9 h-9 rounded-full hover:bg-white/10 transition-all"
-          style={{ color: dynamicTextColor, opacity: contentFade }}
-          aria-label="Home"
-        >
-          <Home size={18} />
-        </button>
-
-        {/* Divider */}
-        <div className="w-px h-6" style={{ background: `rgba(${textGrey}, ${textGrey}, ${textGrey}, 0.2)` }} />
-
         {/* Auth section */}
         <div className="flex items-center gap-2" style={{ opacity: contentFade, color: dynamicTextColor }}>
           {!currentUser ? (
@@ -126,9 +113,6 @@ export const GlassNav: React.FC<{
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
         }}
       >
-        <button onClick={onHome} aria-label="Home" className="flex items-center justify-center w-10 h-10 text-white/80">
-          <Home size={20} />
-        </button>
         {!currentUser ? (
           <button onClick={onAuth} aria-label="Login" className="flex items-center justify-center w-10 h-10 text-white/80">
             <LogIn size={20} />
