@@ -180,21 +180,45 @@ ADMIN_EMAIL=...
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
 ## Current State (Feb 5, 2026)
-- ✅ 3D room with camera zoom and picture frame
+- ✅ 3D room with camera zoom, picture frame, diorama parallax
 - ✅ CSS 3D hero title synced with mouse parallax
-- ✅ Unified module selector: preview panel + selector panel in 3D space (5 modules)
-- ✅ Three-point snap scroll works both directions
-- ✅ All content accessible via modules (no more tab-based page routing)
-- ✅ Thin pill nav (bottom-right) with branding + home + auth
-- ✅ Liquid glass header always visible (z-9999)
-- ✅ Smooth scroll transitions (diorama + hero title fade before modules)
+- ✅ Immersive centered module panel in 3D space (no modal, content IS the panel)
+- ✅ Horizontal selector bar with 5 modules + gradient indicator
+- ✅ Three-point snap scroll + smart scroll (hover panel = scroll content, outside = snap)
+- ✅ Header/Nav auto-hide at module zone
 - ✅ TVOverlay: VIEW CINEMATICS → floating TV quick-view
 - ✅ BookingOverlay: BOOK NOW → floating 4-step booking form
-- ✅ CinematicsModule: deep-dive video portfolio in module modal
-- ✅ Hash deep links (#book, #about, #offer) open correct modules
+- ✅ Hash deep links (#book, #about, #offer) auto-scroll to modules + select
 
-### Known Issues
-- None currently identified
+### Known Issues / Broken Things (needs Session 22 QA)
+- Module content needs QA pass — rebuilt aesthetic broke some layouts/content
+- Need to verify all 5 module contents match original website content
+- Auth/booking flows untested after modal removal
+- TVOverlay and BookingOverlay may need adjustments after UI hide changes
+- Module content scroll behavior inside 3D panel needs testing
+
+### NEXT SESSION (Session 22) — MISSION
+**Content QA & Fix Pass**: Use the original v1 website (callsal-website-master/) as content reference.
+Rebuild all broken module content in the new glassmorphism aesthetic:
+1. Open each module in the 3D panel, compare to v1 content
+2. Fix any broken layouts, missing content, or styling issues
+3. Ensure all 5 modules display correctly in the centered 3D panel
+4. Test auth flows, booking flows, deep links end-to-end
+5. Test TVOverlay + BookingOverlay still work with UI auto-hide
+6. Visual QA at different screen sizes
+
+### Session 21 (Feb 5, 2026)
+- **Immersive 3D Panel**: Removed fullscreen modal entirely — content lives IN the 3D panel
+- **Centered panel**: Single panel at x:0 y:3.5 z:6.5 (6.0×3.5), perfectly centered with camera
+- **Horizontal selector bar**: Replaced vertical right panel with bottom selector bar + gradient indicator
+- **Content scaling**: 1600px base width for tame content sizing inside panel
+- **Scrollable content**: Module content scrolls within the 3D panel (overflow-y-auto)
+- **Smart scroll**: body.dataset.modulePanelHover tracks hover; wheel over panel = scroll content, outside = snap
+- **Header/Nav auto-hide**: Computed uiHide from scrollProgress (0.8→1.0 fade out)
+- **Diorama parallax**: Base pan/tilt (0.05/0.03) even at scrollProgress 0 — picture frame subtly alive
+- **Deep links scroll**: openModuleId now auto-scrolls to module zone
+- **Massive cleanup**: Removed activeModuleId, zoomProgress, zoom animation, 155 lines deleted
+- **ModuleManager simplified**: No more onZoomChange, handleOpenModule, handleCloseModule
 
 ### Session 20 (Feb 5, 2026)
 - **Unified Module Selector**: Replaced N floating cards with 2 fixed 3D panels (preview + selector)
