@@ -18,7 +18,6 @@ const App: React.FC = () => {
   const [cinematicsMode, setCinematicsMode] = useState(false);
   const [bookingMode, setBookingMode] = useState(false);
   const [openModuleId, setOpenModuleId] = useState<string | null>(null);
-  const [moduleZoom, setModuleZoom] = useState(0);
   const { isMobile, pageTransitionProps } = useMobileAnimations();
 
   // Shared mouse state for 3D parallax
@@ -77,21 +76,15 @@ const App: React.FC = () => {
   const rafIdRef = useRef<number | null>(null);
 
   // Reset snap state when overlays change
-  const prevModuleZoomRef = useRef(0);
   useEffect(() => {
     isSnappingRef.current = false;
     snapTargetRef.current = null;
   }, [cinematicsMode, bookingMode]);
 
-  useEffect(() => {
-    const wasOpen = prevModuleZoomRef.current > 0.5;
-    const isClosed = moduleZoom < 0.1;
-    if (wasOpen && isClosed) {
-      isSnappingRef.current = false;
-      snapTargetRef.current = null;
-    }
-    prevModuleZoomRef.current = moduleZoom;
-  }, [moduleZoom]);
+  // UI hide progress — header/nav fade out as we approach modules zone
+  const uiHide = activeTab === 'overview' && scrollProgress >= 0.8
+    ? Math.min(1, (scrollProgress - 0.8) * 5)
+    : 0;
 
   // Track scroll position
   useEffect(() => {
@@ -149,7 +142,7 @@ const App: React.FC = () => {
     };
   }, [activeTab]);
 
-  // Snap-scroll behavior
+  // Snap-scroll behavior — smart: hovering module panel scrolls content, outside snaps
   useEffect(() => {
     if (activeTab !== 'overview' || isMobile) return;
 
@@ -184,11 +177,18 @@ const App: React.FC = () => {
     };
 
     const handleWheel = (e: WheelEvent) => {
-      if (cinematicsMode || bookingMode || moduleZoom > 0) return;
+      if (cinematicsMode || bookingMode) return;
 
       const scrollTop = mainContent.scrollTop;
       const isInEntranceZone = scrollTop < transitionZone + 50;
       if (!isInEntranceZone) return;
+
+      // If we're at modules zone and hovering the 3D panel, let the panel scroll its content
+      const isAtModules = scrollTop >= transitionZone - 20;
+      const isHoveringPanel = document.body.dataset.modulePanelHover === 'true';
+      if (isAtModules && isHoveringPanel) {
+        return; // Don't intercept — let panel content scroll
+      }
 
       if (isSnappingRef.current) {
         e.preventDefault();
@@ -221,7 +221,7 @@ const App: React.FC = () => {
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      if (cinematicsMode || bookingMode || moduleZoom > 0) return;
+      if (cinematicsMode || bookingMode) return;
       if (isSnappingRef.current) return;
 
       const scrollTop = mainContent.scrollTop;
@@ -253,9 +253,9 @@ const App: React.FC = () => {
       mainContent.removeEventListener('touchstart', handleTouchStart);
       mainContent.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [activeTab, isMobile, cinematicsMode, bookingMode, moduleZoom]);
+  }, [activeTab, isMobile, cinematicsMode, bookingMode]);
 
-  // Hash-based deep linking → opens modules instead of tabs
+  // Hash-based deep linking → selects modules and scrolls to module zone
   useEffect(() => {
     const handleHash = () => {
       const hash = window.location.hash.toLowerCase();
@@ -278,6 +278,17 @@ const App: React.FC = () => {
     window.addEventListener('hashchange', handleHash);
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  // When openModuleId is set, scroll to modules zone
+  useEffect(() => {
+    if (openModuleId && activeTab === 'overview') {
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        const transitionZone = window.innerHeight * 1.5;
+        mainContent.scrollTo({ top: transitionZone, behavior: 'smooth' });
+      }
+    }
+  }, [openModuleId, activeTab]);
 
   // Check auth on load
   useEffect(() => {
@@ -316,7 +327,10 @@ const App: React.FC = () => {
   const handleHome = () => {
     setActiveTab('overview');
     const mainContent = document.getElementById('main-content');
-    if (mainContent) mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+    if (mainContent) {
+      const heroSnap = window.innerHeight * 1.5 * 0.7;
+      mainContent.scrollTo({ top: heroSnap, behavior: 'smooth' });
+    }
   };
 
   const refreshUser = async () => {
@@ -383,7 +397,6 @@ const App: React.FC = () => {
           onCloseCinematics={() => setCinematicsMode(false)}
           bookingMode={bookingMode}
           onCloseBooking={() => setBookingMode(false)}
-          onZoomChange={setModuleZoom}
           openModuleId={openModuleId}
           onOpenModuleIdConsumed={() => setOpenModuleId(null)}
         />
@@ -395,10 +408,10 @@ const App: React.FC = () => {
         onNavigate={handleNavigation}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
-        moduleZoom={moduleZoom}
+        moduleZoom={uiHide}
       />
 
-      <main id="main-content" className={`flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 ${cinematicsMode || bookingMode || moduleZoom > 0 ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
+      <main id="main-content" className={`flex-1 overflow-x-hidden relative p-4 sm:p-6 lg:p-12 lg:pb-32 pb-28 pt-24 lg:pt-28 ${cinematicsMode || bookingMode ? 'overflow-y-hidden' : 'overflow-y-auto'}`}>
         {isMobile ? (
           <div className="min-h-full">
             {renderContent()}
@@ -429,7 +442,7 @@ const App: React.FC = () => {
         onDashboard={currentUser ? () => handleNavigation('dashboard') : undefined}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
         scrollDirection={activeTab === 'overview' ? scrollDirection : 'forward'}
-        moduleZoom={moduleZoom}
+        moduleZoom={uiHide}
       />
     </div>
   );

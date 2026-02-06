@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   ViewState,
   ModuleMetadata,
@@ -102,7 +102,6 @@ interface ModuleManagerProps {
   onCloseCinematics?: () => void;
   bookingMode?: boolean;
   onCloseBooking?: () => void;
-  onZoomChange?: (zoomProgress: number) => void;
   openModuleId?: string | null;
   onOpenModuleIdConsumed?: () => void;
 }
@@ -115,128 +114,58 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   onCloseCinematics,
   bookingMode = false,
   onCloseBooking,
-  onZoomChange,
   openModuleId = null,
   onOpenModuleIdConsumed,
 }) => {
   // State
   const [viewState, setViewState] = useState<ViewState>('diorama');
   const [selectedModuleId, setSelectedModuleId] = useState('armory');
-  const [activeModuleId, setActiveModuleId] = useState<string | null>(null);
-  const [zoomProgress, setZoomProgress] = useState(0);
 
   // Module registry
   const modules = createModuleRegistry();
 
-  // Determine view state based on scroll progress and active module
+  // Determine view state based on scroll progress
   useEffect(() => {
     if (scrollProgress < 0.8) {
       setViewState('diorama');
-    } else if (activeModuleId === null) {
-      setViewState('floating');
     } else {
-      setViewState('zoomed');
+      setViewState('floating');
     }
-  }, [scrollProgress, activeModuleId]);
-
-  // Animate zoom progress when activeModuleId changes
-  const zoomAnimationRef = useRef<number | null>(null);
-  const zoomProgressRef = useRef(zoomProgress);
-
-  useEffect(() => {
-    zoomProgressRef.current = zoomProgress;
-    onZoomChange?.(zoomProgress);
-  }, [zoomProgress, onZoomChange]);
-
-  useEffect(() => {
-    if (zoomAnimationRef.current) {
-      cancelAnimationFrame(zoomAnimationRef.current);
-    }
-
-    const targetZoom = activeModuleId !== null ? 1 : 0;
-    const startZoom = zoomProgressRef.current;
-    const duration = 300;
-    let startTime: number | null = null;
-
-    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4);
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const rawProgress = Math.min(elapsed / duration, 1);
-      const easedProgress = easeOutQuart(rawProgress);
-
-      const newZoom = startZoom + (targetZoom - startZoom) * easedProgress;
-      setZoomProgress(newZoom);
-
-      if (rawProgress < 1) {
-        zoomAnimationRef.current = requestAnimationFrame(animate);
-      } else {
-        zoomAnimationRef.current = null;
-      }
-    };
-
-    zoomAnimationRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (zoomAnimationRef.current) {
-        cancelAnimationFrame(zoomAnimationRef.current);
-      }
-    };
-  }, [activeModuleId]);
+  }, [scrollProgress]);
 
   // Handlers
   const handleSelectModule = useCallback((id: string) => {
     setSelectedModuleId(id);
   }, []);
 
-  const handleOpenModule = useCallback(() => {
-    setActiveModuleId(selectedModuleId);
-  }, [selectedModuleId]);
-
-  const handleCloseModule = useCallback(() => {
-    setActiveModuleId(null);
-  }, []);
-
-  const handleOpenModuleById = useCallback((id: string) => {
-    setSelectedModuleId(id);
-    setActiveModuleId(id);
-  }, []);
-
-  // Open module when openModuleId is set and we've scrolled to modules
+  // Select module when openModuleId is set and we've scrolled to modules
   useEffect(() => {
-    if (openModuleId && scrollProgress >= 0.8 && activeModuleId !== openModuleId) {
+    if (openModuleId && scrollProgress >= 0.8) {
       setSelectedModuleId(openModuleId);
-      setActiveModuleId(openModuleId);
       onOpenModuleIdConsumed?.();
     }
-  }, [openModuleId, scrollProgress, activeModuleId, onOpenModuleIdConsumed]);
+  }, [openModuleId, scrollProgress, onOpenModuleIdConsumed]);
 
   return (
     <>
-      {/* Room3DEnhanced renders the 3D room + panel frames */}
+      {/* Room3DEnhanced renders the 3D room + panel frame shadow */}
       <Room3DEnhanced
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
         viewState={viewState}
-        activeModuleId={activeModuleId}
-        zoomProgress={zoomProgress}
+        activeModuleId={null}
+        zoomProgress={0}
         cinematicsMode={cinematicsMode || bookingMode}
       />
 
-      {/* Module3DOverlay renders preview panel + selector in 3D space */}
+      {/* Module3DOverlay renders content panel + selector in 3D space */}
       <Module3DOverlay
         modules={modules}
         viewState={viewState}
         selectedModuleId={selectedModuleId}
-        activeModuleId={activeModuleId}
-        zoomProgress={zoomProgress}
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
         onSelectModule={handleSelectModule}
-        onOpenModule={handleOpenModule}
-        onOpenModuleById={handleOpenModuleById}
-        onClose={handleCloseModule}
         onConsultation={onConsultation}
       />
 

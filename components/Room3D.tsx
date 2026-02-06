@@ -111,8 +111,8 @@ export const Room3D: React.FC<Room3DProps> = ({ opacity = 1, scrollProgress = 1,
       const camZ = 7.5 + (2.0 - 7.5) * easeZoom; // 7.5 → 2.0 (less extreme range)
 
       // Camera rotation (pan/tilt) based on mouse - starts subtle, increases as we zoom out
-      const maxPan = 0.3 * easeZoom;  // No pan when zoomed in, full pan when zoomed out
-      const maxTilt = 0.2 * easeZoom;
+      const maxPan = 0.05 + 0.25 * easeZoom;  // Subtle base parallax + full pan when zoomed out
+      const maxTilt = 0.03 + 0.17 * easeZoom;
       const panAngle = (smoothMouseRef.current.x - 0.5) * maxPan * 2;
       const tiltAngle = (smoothMouseRef.current.y - 0.5) * maxTilt * 2;
 

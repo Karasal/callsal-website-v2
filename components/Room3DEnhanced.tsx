@@ -11,11 +11,9 @@ interface Room3DEnhancedProps {
   cinematicsMode?: boolean;
 }
 
-// Fixed panel positions and sizes matching Module3DOverlay
-const PREVIEW_POS = { x: -1.0, y: 3, z: 6.5 };
-const PREVIEW_SIZE = { w: 5.0, h: 3.0 };
-const SELECTOR_POS = { x: 3.5, y: 3, z: 6.5 };
-const SELECTOR_SIZE = { w: 2.0, h: 3.0 };
+// Fixed panel position and size matching Module3DOverlay
+const PREVIEW_POS = { x: 0, y: 3.8, z: 6.5 };
+const PREVIEW_SIZE = { w: 6.0, h: 3.5 };
 
 export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   opacity = 1,
@@ -112,7 +110,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
 
       if (zp > 0) {
         const ease = zp * zp * (3 - 2 * zp);
-        const targetCamX = PREVIEW_POS.x * 0.02;
+        const targetCamX = 0;
         const targetCamY = baseCamY;
         const targetCamZ = PREVIEW_POS.z - 3.5;
 
@@ -330,16 +328,11 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
         }
       }
 
-      // Draw 2 fixed panel frames (subtle shadow behind HTML content)
+      // Draw centered panel frame shadow (behind HTML content)
       if (sp >= 0.8 && zp < 0.5) {
         const cardOpacity = Math.min(1, (sp - 0.8) * 5) * (1 - zp * 2) * 0.3;
 
-        const panels = [
-          { pos: PREVIEW_POS, size: PREVIEW_SIZE },
-          { pos: SELECTOR_POS, size: SELECTOR_SIZE },
-        ];
-
-        panels.forEach(({ pos, size }) => {
+        [{ pos: PREVIEW_POS, size: PREVIEW_SIZE }].forEach(({ pos, size }) => {
           const halfW = size.w / 2;
           const halfH = size.h / 2;
           const cardCorners = [
