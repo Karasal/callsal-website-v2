@@ -153,7 +153,8 @@ ADMIN_EMAIL=...
 - **5 modules**: Armory, Cinematics, Meet Salman, The Offer, Book Meeting
 - **Single centered panel** (3D pos: x:0 y:3.8 z:6.5, 6.0×3.5) — content + horizontal selector bar
 - **No modal** — content lives directly in the 3D panel, scrollable within
-- Content scaled at 1600px base width for tame sizing
+- Content scaled at 1600px base width for tame sizing, negative marginBottom corrects scroll height
+- Tab switch: opacity:0 → scrollTop:0 → reveal (clean transition, no jarring flash)
 - Horizontal selector bar at bottom with spring-animated gradient indicator (lime→cyan)
 - **Smart scroll**: hover panel → scroll module content; hover outside → snap scroll to hero
 - **Header/Nav auto-hide**: fade out as scrollProgress approaches module zone (0.8→1.0)
@@ -190,22 +191,21 @@ ADMIN_EMAIL=...
 - ✅ BookingOverlay: BOOK NOW → floating 4-step booking form
 - ✅ Hash deep links (#book, #about, #offer) auto-scroll to modules + select
 
-### Known Issues / Broken Things (needs Session 22 QA)
-- Module content needs QA pass — rebuilt aesthetic broke some layouts/content
-- Need to verify all 5 module contents match original website content
+### Known Issues / Broken Things
 - Auth/booking flows untested after modal removal
 - TVOverlay and BookingOverlay may need adjustments after UI hide changes
-- Module content scroll behavior inside 3D panel needs testing
+- Need content QA pass comparing v1 vs v2 module content
 
-### NEXT SESSION (Session 22) — MISSION
-**Content QA & Fix Pass**: Use the original v1 website (callsal-website-master/) as content reference.
-Rebuild all broken module content in the new glassmorphism aesthetic:
-1. Open each module in the 3D panel, compare to v1 content
-2. Fix any broken layouts, missing content, or styling issues
-3. Ensure all 5 modules display correctly in the centered 3D panel
-4. Test auth flows, booking flows, deep links end-to-end
-5. Test TVOverlay + BookingOverlay still work with UI auto-hide
-6. Visual QA at different screen sizes
+### NEXT SESSION (Session 23) — MISSION
+**Content QA & Full Flow Testing**: Compare all 5 modules to v1 content, test auth/booking/deep links end-to-end, visual QA at different screen sizes.
+
+### Session 22 (Feb 5, 2026)
+- **Scroll height fix**: CSS `transform:scale()` doesn't affect layout — scroll area was 2x visual height
+- **Solution**: ResizeObserver tracks `scrollHeight`, applies negative `marginBottom` to match scroll area to visual content
+- **Module tab switching**: Hide content (opacity:0) → scroll to top → reveal next frame (no jarring flash)
+- **Armory compacted**: Removed fixed `lg:h-[550px]` grid height, tightened margins (mb-8→mb-4, mt-8→mt-4)
+- **Bottom padding trimmed**: Armory/Cinematics/Booking wrappers `pb-8` → `pb-2`
+- **TheOffer**: Added `pb-8` wrapper so bottom quote isn't clipped
 
 ### Session 21 (Feb 5, 2026)
 - **Immersive 3D Panel**: Removed fullscreen modal entirely — content lives IN the 3D panel
