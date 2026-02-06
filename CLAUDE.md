@@ -111,7 +111,7 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 - Double RAF needed for nav indicator positioning (fonts must paint first)
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
-## Current State (Session 24, Feb 6, 2026)
+## Current State (Session 25, Feb 6, 2026)
 - 3D room with camera zoom, picture frame, diorama parallax
 - CSS 3D hero title synced with mouse parallax
 - Immersive centered module panel (5 modules, horizontal selector bar)
@@ -119,7 +119,11 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 - TVOverlay (VIEW CINEMATICS) + BookingOverlay (BOOK NOW)
 - Hash deep links (#book, #about, #offer)
 - Dead code audit complete (~730 lines removed)
-- Content parity pass started (v1 vs v2 screenshot comparison)
+- Content parity complete: Armory + Cinematics match V1 content
+- Animated lime→cyan gradient border beam on module panel
+- Claude/Gemini AI platform logo cards in Armory
+- TVOverlay shows video descriptions in NOW PLAYING bar
+- Home button removed from GlassNav (redundant)
 
 ## Known Issues
 - Auth/booking flows untested after modal removal
