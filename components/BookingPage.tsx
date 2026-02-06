@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, Clock, Video, MapPin, Phone, ChevronLeft, ChevronRight, Check, Loader2, User, Mail, Building, MessageSquare } from 'lucide-react';
 
@@ -56,7 +56,6 @@ export const BookingPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-  const headingRef = useRef<HTMLHeadingElement>(null);
   
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', business: '', location: '', notes: '',
@@ -166,7 +165,7 @@ export const BookingPage: React.FC = () => {
                 FREE 30-MINUTE STRATEGY SESSION
               </span>
             </div>
-            <h1 ref={headingRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
+            <h1 className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
               <span className="text-white">BOOK A</span><br />
               <span className="text-white">MEETING.</span><br />
               <span className="text-[#CCFF00]">GET A</span><br />

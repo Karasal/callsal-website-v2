@@ -1,17 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion } from 'framer-motion';
 import {
   ArrowRight, Zap, TrendingUp, Clock, Film, Quote, Handshake,
   Phone, Mail, MapPin
 } from 'lucide-react';
-import { ImageModal } from './ImageModal';
 
 export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => void }> = ({ onNext, onConsultation }) => {
-  const [selectedFullImage, setSelectedFullImage] = useState<string | null>(null);
-  const heroRef = useRef<HTMLHeadingElement>(null);
-  const inviteRef = useRef<HTMLHeadingElement>(null);
-  const grandExperimentRef = useRef<HTMLHeadingElement>(null);
   const { isMobile, getVariants } = useMobileAnimations();
 
   const containerVariants = {
@@ -40,7 +35,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
               <div className="w-12 h-[1px] bg-[#CCFF00]" />
               <span className="text-[10px] lg:text-[11px] font-body tracking-[0.5em] uppercase font-black gradient-text">THE HUMAN ELEMENT</span>
             </div>
-            <h1 ref={heroRef} className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.8]">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.8]">
               <span className="text-[#CCFF00]" style={{ WebkitTextFillColor: '#CCFF00' }}>HEY</span><span> - I'M</span> <br /> <span className="text-[#CCFF00]" style={{ WebkitTextFillColor: '#CCFF00' }}>SALMAN</span><span>.</span>
             </h1>
           </motion.div>
@@ -93,7 +88,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           <div className="space-y-12">
             <motion.div variants={mobileItemVariants} className="space-y-6">
-              <h2 ref={grandExperimentRef} className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none"><span className="text-[1.2em]">THE</span> GRAND <br /><span className="text-[0.8em]">EXPERIMENT.</span></h2>
+              <h2 className="text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none"><span className="text-[1.2em]">THE</span> GRAND <br /><span className="text-[0.8em]">EXPERIMENT.</span></h2>
               <div className="w-24 h-1 bg-[#CCFF00]" />
             </motion.div>
 
@@ -172,7 +167,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
       <section className="text-center space-y-16">
         <motion.div variants={mobileItemVariants} className="max-w-4xl mx-auto space-y-8">
           <span className="text-[11px] font-body tracking-[1em] text-[#CCFF00] uppercase font-black block">THE INVITATION</span>
-          <h2 ref={inviteRef} className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none whitespace-nowrap">
+          <h2 className="text-4xl sm:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter leading-none whitespace-nowrap">
             INVITE ME IN.
           </h2>
           <p className="text-lg lg:text-2xl font-display font-medium text-gray-400 uppercase leading-relaxed tracking-wide">
@@ -217,7 +212,6 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
         </motion.div>
       </section>
 
-      <ImageModal src={selectedFullImage} onClose={() => setSelectedFullImage(null)} />
     </motion.div>
   );
 };

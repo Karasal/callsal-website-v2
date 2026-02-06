@@ -263,7 +263,6 @@ const TheArmory = ({ onShowSoftware, onShowImage, onConsultation }: { onShowSoft
   const [activeCategory, setActiveCategory] = useState<'software' | 'hardware'>('software');
   const [activeItem, setActiveItem] = useState(0);
   const { isMobile } = useMobileAnimations();
-  const armoryRef = useRef<HTMLHeadingElement>(null);
   
   const armoryData = {
     software: [
@@ -731,7 +730,7 @@ const TheArmory = ({ onShowSoftware, onShowImage, onConsultation }: { onShowSoft
         <div className="max-w-7xl mx-auto glass-strong p-6 lg:p-8 relative z-10 rounded-2xl glow-cyan">
           <div className="relative z-10 mb-12 flex flex-row items-center justify-between gap-6">
             <div>
-              <h2 ref={armoryRef} className="text-4xl lg:text-7xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE ARMORY</h2>
+              <h2 className="text-4xl lg:text-7xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE ARMORY</h2>
               <p className="text-[10px] font-body text-gray-400 tracking-[0.5em] uppercase mt-2">HIGH-END PRODUCTION AT A FRACTION OF THE COST</p>
             </div>
             <div className="flex glass-nav p-1">
@@ -783,7 +782,6 @@ const TheArmory = ({ onShowSoftware, onShowImage, onConsultation }: { onShowSoft
 };
 
 const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onConsultation: () => void, onShowSoftware: (s: SoftwareInfo) => void, onShowImage: (src: string) => void }) => {
-  const cinematicsRef = useRef<HTMLHeadingElement>(null);
   
   const projects = [
     { id: "RLwo8clXyZM", title: "THE SUPREME BARBERSHOP YYC", company: "KALEB BRUNNING", tech: ["Dynamic Text", "Fast Cuts"], impact: "300% Engagement", description: "Fast-paced, high-energy brand showcase for Calgary's premier grooming destination, focusing on precision, style, and the art of the cut." },
@@ -807,7 +805,7 @@ const VideoPortfolio = ({ onConsultation, onShowSoftware, onShowImage }: { onCon
               <span className="text-[9px] sm:text-[10px] font-body tracking-[0.4em] text-[#CCFF00] uppercase font-bold">HIGH-END DOCUMENTARY</span>
               <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00]" />
             </div>
-            <h2 ref={cinematicsRef} className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-[6rem] xl:text-[7rem] 2xl:text-[8rem] font-display font-black text-white uppercase tracking-tighter leading-none mb-4">CINEMATICS.</h2>
+            <h2 className="text-[1.85rem] sm:text-4xl md:text-5xl lg:text-[6rem] xl:text-[7rem] 2xl:text-[8rem] font-display font-black text-white uppercase tracking-tighter leading-none mb-4">CINEMATICS.</h2>
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="space-y-10 sm:space-y-12">
               <div className="flex flex-col items-center gap-0 text-center">
                 <p className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl font-display font-bold text-white uppercase tracking-wide">
@@ -1179,7 +1177,7 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, onBookNow?: () => void, cinematicsMode?: boolean, bookingMode?: boolean, scrollProgress?: number, scrollDirection?: 'forward' | 'backward', smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, onBookNow, cinematicsMode = false, bookingMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
+export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, onBookNow?: () => void, cinematicsMode?: boolean, bookingMode?: boolean, scrollProgress?: number, smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, onBookNow, cinematicsMode = false, bookingMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);

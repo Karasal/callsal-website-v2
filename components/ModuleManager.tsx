@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
-  ViewState,
   ModuleMetadata,
 } from '../types/modules';
 
@@ -118,20 +117,10 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   onOpenModuleIdConsumed,
 }) => {
   // State
-  const [viewState, setViewState] = useState<ViewState>('diorama');
   const [selectedModuleId, setSelectedModuleId] = useState('armory');
 
   // Module registry
   const modules = createModuleRegistry();
-
-  // Determine view state based on scroll progress
-  useEffect(() => {
-    if (scrollProgress < 0.8) {
-      setViewState('diorama');
-    } else {
-      setViewState('floating');
-    }
-  }, [scrollProgress]);
 
   // Handlers
   const handleSelectModule = useCallback((id: string) => {
@@ -152,16 +141,12 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
       <Room3DEnhanced
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}
-        viewState={viewState}
-        activeModuleId={null}
-        zoomProgress={0}
         cinematicsMode={cinematicsMode || bookingMode}
       />
 
       {/* Module3DOverlay renders content panel + selector in 3D space */}
       <Module3DOverlay
         modules={modules}
-        viewState={viewState}
         selectedModuleId={selectedModuleId}
         scrollProgress={scrollProgress}
         smoothMouse={smoothMouse}

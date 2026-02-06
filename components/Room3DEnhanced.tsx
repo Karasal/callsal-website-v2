@@ -1,13 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { ViewState } from '../types/modules';
-
 interface Room3DEnhancedProps {
   opacity?: number;
   scrollProgress?: number;
   smoothMouse?: { x: number; y: number };
-  viewState: ViewState;
-  activeModuleId: string | null;
-  zoomProgress: number;
   cinematicsMode?: boolean;
 }
 
@@ -19,9 +14,6 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   opacity = 1,
   scrollProgress = 1,
   smoothMouse: smoothMouseProp,
-  viewState,
-  activeModuleId,
-  zoomProgress,
   cinematicsMode = false,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -29,12 +21,10 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
   const scrollProgressRef = useRef(scrollProgress);
   const smoothMouseRef = useRef({ x: 0.5, y: 0.5 });
   const dioramaImageRef = useRef<HTMLImageElement | null>(null);
-  const zoomProgressRef = useRef(zoomProgress);
   const cinematicsModeRef = useRef(cinematicsMode);
 
   useEffect(() => { scrollProgressRef.current = scrollProgress; }, [scrollProgress]);
   useEffect(() => { if (smoothMouseProp) smoothMouseRef.current = smoothMouseProp; }, [smoothMouseProp]);
-  useEffect(() => { zoomProgressRef.current = zoomProgress; }, [zoomProgress]);
   useEffect(() => { cinematicsModeRef.current = cinematicsMode; }, [cinematicsMode]);
 
   useEffect(() => {
@@ -79,7 +69,6 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       const w = window.innerWidth;
       const h = window.innerHeight;
       const sp = scrollProgressRef.current;
-      const zp = zoomProgressRef.current;
 
       // Color transition
       const colorProgress = Math.min(1, Math.max(0, (sp - 0.7) * 3.33));
@@ -103,25 +92,13 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       const baseCamY = 2.5 + (3.5 - 2.5) * easeZoom;
       const baseCamZ = 7.5 + (2.0 - 7.5) * easeZoom;
 
-      // When a module is active, fly camera toward preview panel center
-      let camX = baseCamX;
-      let camY = baseCamY;
-      let camZ = baseCamZ;
-
-      if (zp > 0) {
-        const ease = zp * zp * (3 - 2 * zp);
-        const targetCamX = 0;
-        const targetCamY = baseCamY;
-        const targetCamZ = PREVIEW_POS.z - 3.5;
-
-        camX = baseCamX + (targetCamX - baseCamX) * ease;
-        camY = targetCamY;
-        camZ = baseCamZ + (targetCamZ - baseCamZ) * ease;
-      }
+      const camX = baseCamX;
+      const camY = baseCamY;
+      const camZ = baseCamZ;
 
       // Camera rotation
-      const maxPan = 0.08 * easeZoom * (1 - zp);
-      const maxTilt = 0.05 * easeZoom * (1 - zp);
+      const maxPan = 0.08 * easeZoom;
+      const maxTilt = 0.05 * easeZoom;
       const panAngle = (smoothMouseRef.current.x - 0.5) * maxPan * 2;
       const tiltAngle = (smoothMouseRef.current.y - 0.5) * maxTilt * 2;
 
@@ -329,8 +306,8 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
       }
 
       // Draw centered panel frame shadow (behind HTML content)
-      if (sp >= 0.8 && zp < 0.5) {
-        const cardOpacity = Math.min(1, (sp - 0.8) * 5) * (1 - zp * 2) * 0.3;
+      if (sp >= 0.8) {
+        const cardOpacity = Math.min(1, (sp - 0.8) * 5) * 0.3;
 
         [{ pos: PREVIEW_POS, size: PREVIEW_SIZE }].forEach(({ pos, size }) => {
           const halfW = size.w / 2;

@@ -65,7 +65,6 @@ const App: React.FC = () => {
 
   // Scroll state
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [totalScrollProgress, setTotalScrollProgress] = useState(0);
   const [scrollDirection, setScrollDirection] = useState<'forward' | 'backward'>('forward');
   const lastScrollProgressRef = useRef(0);
 
@@ -105,10 +104,6 @@ const App: React.FC = () => {
       lastScrollProgressRef.current = progress;
 
       setScrollProgress(prev => Math.abs(prev - progress) > 0.001 ? progress : prev);
-
-      const scrollHeight = mainContent.scrollHeight - mainContent.clientHeight;
-      const total = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-      setTotalScrollProgress(prev => Math.abs(prev - total) > 0.1 ? total : prev);
 
       lastScrollTopRef.current = scrollTop;
       rafIdRef.current = null;
@@ -355,7 +350,6 @@ const App: React.FC = () => {
             cinematicsMode={cinematicsMode}
             bookingMode={bookingMode}
             scrollProgress={scrollProgress}
-            scrollDirection={scrollDirection}
             smoothMouse={smoothMouse}
           />
         );
@@ -372,7 +366,6 @@ const App: React.FC = () => {
             cinematicsMode={cinematicsMode}
             bookingMode={bookingMode}
             scrollProgress={scrollProgress}
-            scrollDirection={scrollDirection}
             smoothMouse={smoothMouse}
           />
         );

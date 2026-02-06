@@ -7,7 +7,6 @@ import {
 import { ModuleContentProps } from '../../types/modules';
 
 interface ArmoryModuleProps extends ModuleContentProps {
-  isPreview?: boolean; // true = scaled-down card preview, false = full interactive
   onShowSoftware?: (s: SoftwareInfo) => void;
   onShowImage?: (src: string) => void;
 }
@@ -37,7 +36,6 @@ const SoftwareItem = ({ software, onClick }: { software: SoftwareInfo; onClick: 
 );
 
 export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
-  isPreview = false,
   onClose,
   onConsultation,
   onShowSoftware,
@@ -52,25 +50,25 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
         id: 'agentic-logic',
         title: 'AI HELPER BOTS',
         blurb: 'Autonomous Thinking Machines.',
-        icon: <Brain size={isPreview ? 12 : 20} />,
+        icon: <Brain size={20} />,
       },
       {
         id: 'automation-glue',
         title: 'WORKFLOW AUTOMATION',
         blurb: 'The Invisible Glue of Success.',
-        icon: <Link size={isPreview ? 12 : 20} />,
+        icon: <Link size={20} />,
       },
       {
         id: 'customer-ops',
         title: 'CUSTOM CRM DEVELOPMENT',
         blurb: 'Bespoke Business Command Centers.',
-        icon: <ShieldCheck size={isPreview ? 12 : 20} />,
+        icon: <ShieldCheck size={20} />,
       },
       {
         id: 'content-prod',
         title: 'CINEMA PRODUCTION',
         blurb: 'Hollywood Grade Creative Tools.',
-        icon: <MonitorPlay size={isPreview ? 12 : 20} />,
+        icon: <MonitorPlay size={20} />,
       }
     ],
     hardware: [
@@ -78,79 +76,31 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
         id: 'workstation',
         title: 'THE NEURAL FOUNDRY',
         blurb: 'Pure Computational Horsepower.',
-        icon: <Server size={isPreview ? 12 : 20} />,
+        icon: <Server size={20} />,
       },
       {
         id: 'filmmaking',
         title: 'RED DIGITAL CINEMA',
         blurb: 'Hollywood Capture Systems.',
-        icon: <Video size={isPreview ? 12 : 20} />,
+        icon: <Video size={20} />,
       },
       {
         id: 'optical-glass',
         title: 'ANAMORPHIC GLASS',
         blurb: 'The Soul is in the Lens.',
-        icon: <Eye size={isPreview ? 12 : 20} />,
+        icon: <Eye size={20} />,
       },
       {
         id: 'gimbal-lidar',
         title: 'GIMBAL & LIDAR',
         blurb: 'Surgical Motion Control.',
-        icon: <Move size={isPreview ? 12 : 20} />,
+        icon: <Move size={20} />,
       }
     ]
   };
 
   const currentItems = armoryData[activeCategory];
   const selectedData = currentItems[activeItem];
-
-  // Preview mode - simplified mini version for 3D card
-  if (isPreview) {
-    return (
-      <div className="w-full h-full bg-black/90 p-3 flex flex-col overflow-hidden">
-        {/* Mini header */}
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-[10px] font-display font-bold text-white uppercase tracking-tight">THE ARMORY</h3>
-          <div className="flex gap-1">
-            <button
-              onClick={(e) => { e.stopPropagation(); setActiveCategory('software'); setActiveItem(0); }}
-              className={`px-2 py-0.5 text-[6px] font-display font-bold uppercase rounded ${activeCategory === 'software' ? 'bg-[#CCFF00] text-black' : 'text-gray-400'}`}
-            >
-              SW
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); setActiveCategory('hardware'); setActiveItem(0); }}
-              className={`px-2 py-0.5 text-[6px] font-display font-bold uppercase rounded ${activeCategory === 'hardware' ? 'bg-[#CCFF00] text-black' : 'text-gray-400'}`}
-            >
-              HW
-            </button>
-          </div>
-        </div>
-
-        {/* Mini item list */}
-        <div className="flex-1 flex flex-col gap-1 overflow-hidden">
-          {currentItems.map((item, idx) => (
-            <button
-              key={item.id}
-              onClick={(e) => { e.stopPropagation(); setActiveItem(idx); }}
-              className={`flex items-center gap-2 p-1.5 rounded text-left transition-all ${activeItem === idx ? 'bg-[#CCFF00]/20 border-l-2 border-[#CCFF00]' : 'hover:bg-white/5'}`}
-            >
-              <div className={activeItem === idx ? 'text-[#CCFF00]' : 'text-gray-500'}>{item.icon}</div>
-              <div className="min-w-0 flex-1">
-                <p className={`text-[7px] font-display font-bold uppercase truncate ${activeItem === idx ? 'text-[#CCFF00]' : 'text-gray-300'}`}>{item.title}</p>
-                <p className="text-[5px] text-gray-500 uppercase truncate">{item.blurb}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Mini CTA */}
-        <div className="mt-2 p-1.5 bg-[#CCFF00] rounded text-center">
-          <p className="text-[6px] font-display font-bold text-black uppercase">CLICK TO EXPLORE</p>
-        </div>
-      </div>
-    );
-  }
 
   // Full interactive mode - complete Armory UI
   return (

@@ -5,9 +5,7 @@ import {
 } from 'lucide-react';
 import { ModuleContentProps } from '../../types/modules';
 
-interface CinematicsModuleProps extends ModuleContentProps {
-  isPreview?: boolean;
-}
+type CinematicsModuleProps = ModuleContentProps;
 
 interface SoftwareInfo {
   id: string;
@@ -251,7 +249,6 @@ const ImageLightbox = ({ src, onClose }: { src: string; onClose: () => void }) =
 );
 
 export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
-  isPreview = false,
   onClose,
   onConsultation,
 }) => {
@@ -259,38 +256,6 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
   const [isVideoOpen, setIsVideoOpen] = useState(false);
   const [selectedSoftware, setSelectedSoftware] = useState<SoftwareInfo | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  // Preview mode - compact card for 3D space
-  if (isPreview) {
-    return (
-      <div className="w-full h-full bg-black/90 p-3 flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between mb-2">
-          <h3 className="text-[10px] font-display font-bold text-white uppercase tracking-tight">CINEMATICS</h3>
-          <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-        </div>
-        {/* Mini thumbnail */}
-        <div className="flex-1 relative overflow-hidden rounded-lg border border-white/10">
-          <img
-            src={`https://img.youtube.com/vi/${projects[0].id}/mqdefault.jpg`}
-            className="w-full h-full object-cover opacity-80"
-            alt=""
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-6 h-6 border border-white/60 flex items-center justify-center rounded-full bg-black/40">
-              <Play size={8} className="text-white ml-0.5" />
-            </div>
-          </div>
-          <div className="absolute bottom-1 left-1 right-1">
-            <p className="text-[5px] font-display font-bold text-white uppercase truncate">{projects[0].title}</p>
-          </div>
-        </div>
-        {/* Mini CTA */}
-        <div className="mt-2 p-1.5 bg-[#CCFF00] rounded text-center">
-          <p className="text-[6px] font-display font-bold text-black uppercase">CLICK TO EXPLORE</p>
-        </div>
-      </div>
-    );
-  }
 
   // Full interactive mode
   return (

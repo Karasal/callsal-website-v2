@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -54,15 +54,6 @@ const itemVariants = {
 export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultation }) => {
   const [activeProject, setActiveProject] = useState(videoProjects[0]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const heroRef = useRef<HTMLHeadingElement>(null);
-  const storyRef = useRef<HTMLHeadingElement>(null);
-  const whatYouGetRef = useRef<HTMLHeadingElement>(null);
-  const simpleMathRef = useRef<HTMLHeadingElement>(null);
-  const howItWorksRef = useRef<HTMLHeadingElement>(null);
-  const perfectForYouRef = useRef<HTMLHeadingElement>(null);
-  const wonderingRef = useRef<HTMLHeadingElement>(null);
-  const letsMeetRef = useRef<HTMLHeadingElement>(null);
-  const cinematicsRef = useRef<HTMLHeadingElement>(null);
   const { isMobile, getVariants } = useMobileAnimations();
 
   const mobileContainerVariants = getVariants(containerVariants);
@@ -83,7 +74,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               <div className="w-8 sm:w-12 h-[1px] bg-[#CCFF00] shrink-0" />
               <span className="text-[9px] sm:text-[10px] lg:text-[11px] font-body tracking-[0.2em] sm:tracking-[0.5em] uppercase font-black gradient-text">FOR CALGARY & SURROUNDING AREAS</span>
             </div>
-            <h1 ref={heroRef} className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.85]">
+            <h1 className="text-5xl sm:text-7xl lg:text-7xl xl:text-8xl font-display font-black text-white uppercase tracking-tighter leading-[0.85]">
               <span className="text-red-500" style={{ WebkitTextFillColor: '#CCFF00' }}>FREE</span><span> VIDEO.</span><br />
               <span>ZERO CATCH.</span>
             </h1>
@@ -147,7 +138,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
               <Heart size={24} className="text-white" />
               <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em] text-gray-400">A QUICK WORD FROM SAL</span>
             </div>
-            <h2 ref={storyRef} className="inline-block text-2xl sm:text-4xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-[1] mb-6 sm:mb-10">
+            <h2 className="inline-block text-2xl sm:text-4xl lg:text-7xl font-display font-black uppercase tracking-tighter leading-[1] mb-6 sm:mb-10">
               "IF YOU'RE GOING TO INVITE YOURSELF OVER —<br /><span className="bg-black text-white px-2 sm:px-3 py-1 inline-block mt-2 rounded-lg">COME BEARING GIFTS.</span>"
             </h2>
           </motion.div>
@@ -188,7 +179,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-6">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE DEAL</span>
-          <h2 ref={whatYouGetRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+          <h2 className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
             WHAT YOU GET.
           </h2>
         </motion.div>
@@ -297,7 +288,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block mb-6">THE NUMBERS</span>
-          <h2 ref={simpleMathRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+          <h2 className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
             SIMPLE MATH.
           </h2>
         </motion.div>
@@ -336,7 +327,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
           <div className="flex-1 h-[1px] bg-gray-200" />
         </motion.div>
 
-        <h2 ref={howItWorksRef}  className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
+        <h2 className="text-4xl sm:text-6xl lg:text-8xl font-display font-black text-white uppercase tracking-tighter leading-none">
           HOW IT WORKS.
         </h2>
 
@@ -378,7 +369,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
         <motion.div variants={mobileItemVariants} className="space-y-10">
           <div className="space-y-4">
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">THE FIT</span>
-            <h3 ref={perfectForYouRef}  className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">
+            <h3 className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter leading-none">
               THIS IS PERFECT<br />FOR YOU IF...
             </h3>
           </div>
@@ -407,7 +398,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
       <section className="space-y-12">
         <motion.div variants={mobileItemVariants} className="text-center space-y-4">
           <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black block">QUESTIONS</span>
-          <h2 ref={wonderingRef}  className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter">
+          <h2 className="text-3xl lg:text-6xl font-display font-black text-white uppercase tracking-tighter">
             YOU MIGHT BE WONDERING...
           </h2>
         </motion.div>
@@ -441,7 +432,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <span className="text-xs sm:text-[10px] font-body font-black uppercase tracking-[0.4em]">CALGARY, ALBERTA</span>
           </div>
 
-          <h3 ref={letsMeetRef}  className="text-2xl sm:text-4xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
+          <h3 className="text-2xl sm:text-4xl lg:text-8xl font-display font-black uppercase tracking-tighter leading-[0.85]">
             LET'S MEET.<br />
             LET'S TALK.<br />
             LET'S MAKE<br />
@@ -489,7 +480,7 @@ export const TheOffer: React.FC<{ onConsultation: () => void }> = ({ onConsultat
             <span className="text-xs sm:text-[10px] font-body tracking-[0.5em] text-red-500 uppercase font-black">RECENT WORKS</span>
             <div className="w-12 h-[1px] bg-[#CCFF00]" />
           </div>
-          <h2 ref={cinematicsRef}  className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter">CINEMATICS.</h2>
+          <h2 className="text-4xl sm:text-6xl lg:text-7xl font-display font-black text-white uppercase tracking-tighter">CINEMATICS.</h2>
         </motion.div>
 
         <div id="offer-video-player" className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 scroll-mt-20">

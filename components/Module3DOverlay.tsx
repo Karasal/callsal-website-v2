@@ -1,10 +1,9 @@
 import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { ModuleMetadata, ViewState } from '../types/modules';
+import { ModuleMetadata } from '../types/modules';
 
 interface Module3DOverlayProps {
   modules: ModuleMetadata[];
-  viewState: ViewState;
   selectedModuleId: string;
   scrollProgress: number;
   smoothMouse: { x: number; y: number };
@@ -148,7 +147,6 @@ const SelectorBar: React.FC<{
 
 export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   modules,
-  viewState,
   selectedModuleId,
   scrollProgress,
   smoothMouse,
@@ -279,7 +277,6 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                   <selectedModule.component
                     onClose={() => {}}
                     onConsultation={onConsultation}
-                    isPreview={false}
                   />
                 </div>
               </div>
