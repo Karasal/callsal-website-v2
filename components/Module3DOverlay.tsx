@@ -239,10 +239,10 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
           className="fixed inset-0 z-[50]"
           style={{ perspective: '2000px', pointerEvents: 'none', opacity: panelOpacity }}
         >
-          {previewTransform && selectedModule && (
+          {previewTransform && selectedModule && (<>
             <div
               ref={panelRef}
-              className="absolute module-3d-panel module-panel-glow"
+              className="absolute module-3d-panel"
               onMouseEnter={() => setIsHoveringPanel(true)}
               onMouseLeave={() => setIsHoveringPanel(false)}
               style={{
@@ -297,8 +297,21 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                   compact={previewTransform.width < 500}
                 />
               </div>
+
             </div>
-          )}
+
+            {/* Border beam — sibling outside panel transform, no 3D rotation glitch */}
+            <div
+              className="module-border-beam"
+              style={{
+                position: 'absolute',
+                left: previewTransform.x - previewTransform.width / 2,
+                top: previewTransform.y - previewTransform.height / 2,
+                width: previewTransform.width,
+                height: previewTransform.height,
+              }}
+            />
+          </>)}
         </div>
       )}
     </>

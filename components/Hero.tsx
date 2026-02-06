@@ -1121,12 +1121,13 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
           transformOrigin: 'center center -300px', // Pivot point on the wall
           opacity: titleOpacity,
           willChange: 'transform, opacity',
+          textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 6px 30px rgba(0,0,0,0.3)',
         }}
       >
         {/* Subtitle */}
         <div className="mb-3 flex items-center gap-3">
           <div className="w-10 h-[2px] bg-[#CCFF00]" />
-          <span className="text-[12px] font-body tracking-[0.3em] uppercase font-bold text-[#00F0FF]">
+          <span className="text-[12px] font-body tracking-[0.3em] uppercase font-bold text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>
             HOW I HELP YOU GROW
           </span>
         </div>
@@ -1135,25 +1136,25 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
         <h1 className="text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5.5vw] xl:text-[5vw] font-display font-extrabold leading-[0.9] tracking-tighter uppercase mb-6">
           <span className="block whitespace-nowrap">
             <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>"</span>
-            <span style={{ color: '#CCFF00' }}>HI</span>
+            <span style={{ color: '#CCFF00', WebkitTextStroke: '1px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>HI</span>
             <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}> - IT'S</span>
           </span>
           <span className="block whitespace-nowrap" style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>YOUR NEW</span>
           <span className="block whitespace-nowrap">
             <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>PAL, </span>
-            <span style={{ color: '#CCFF00' }}>SAL</span>
+            <span style={{ color: '#CCFF00', WebkitTextStroke: '1px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>SAL</span>
             <span style={{ color: '#ffffff', WebkitTextStroke: '3px #000', paintOrder: 'stroke fill' } as React.CSSProperties}>!"</span>
           </span>
         </h1>
 
         {/* Blurb with blue accent line - color transitions black → white with room */}
         <div
-          className="text-[2vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.2vw] font-display font-medium leading-relaxed mb-8 border-l-2 border-[#00F0FF] pl-5"
-          style={{ color: dynamicTextColor }}
+          className="text-[2vw] sm:text-[1.6vw] md:text-[1.4vw] lg:text-[1.2vw] font-display font-medium leading-relaxed mb-8 border-l-2 border-[#CCFF00] pl-5"
+          style={{ color: dynamicTextColor, textShadow: '0 1px 4px rgba(0,0,0,0.5)' }}
         >
-          <span className="block"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
-          <span className="block">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
-          <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
+          <span className="block"><span className="text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>AI</span> IS CHANGING <span className="text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>EVERYTHING</span>.</span>
+          <span className="block">YOUR <span className="text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>COMPETITION</span> IS ALREADY <span className="text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>PREPARING</span>.</span>
+          <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#CCFF00]" style={{ textShadow: '-1px 0 0 #000, 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000' }}>GET THERE FIRST</span>.</span>
         </div>
 
         {/* Buttons */}
@@ -1265,19 +1266,19 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, o
           >
             <div className="max-w-7xl w-full mx-auto">
               <div className="flex flex-col items-start justify-center relative">
-                <div className="z-10 w-full text-left">
+                <div className="z-10 w-full text-left" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.6), 0 6px 30px rgba(0,0,0,0.3)' }}>
                   <div>
                     <div className="mb-3 flex items-center gap-3 cursor-pointer group" onClick={() => setShowOperatorDeepDive(true)}>
                       <div className="w-8 h-[2px] bg-[#CCFF00]" />
-                      <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline text-[#00F0FF]">
+                      <span className="text-[8px] sm:text-[10px] font-body tracking-[0.25em] sm:tracking-[0.3em] uppercase font-bold block leading-tight group-hover:underline text-[#CCFF00]">
                         HOW I HELP YOU GROW [?]
                       </span>
                     </div>
                     <ProximityHeroText />
-                    <div className="text-[3vw] sm:text-base text-white mb-5 leading-snug font-display font-medium border-l-2 border-[#00F0FF] pl-4 sm:pl-6 flex flex-col items-start gap-0.5 text-stroke">
-                      <span className="block"><span className="text-[#00F0FF]">AI</span> IS CHANGING <span className="text-[#00F0FF]">EVERYTHING</span>.</span>
-                      <span className="block">YOUR <span className="text-[#00F0FF]">COMPETITION</span> IS ALREADY <span className="text-[#00F0FF]">PREPARING</span>.</span>
-                      <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#00F0FF]">GET THERE FIRST</span>.</span>
+                    <div className="text-[3vw] sm:text-base text-white mb-5 leading-snug font-display font-medium border-l-2 border-[#CCFF00] pl-4 sm:pl-6 flex flex-col items-start gap-0.5 text-stroke">
+                      <span className="block"><span className="text-[#CCFF00]">AI</span> IS CHANGING <span className="text-[#CCFF00]">EVERYTHING</span>.</span>
+                      <span className="block">YOUR <span className="text-[#CCFF00]">COMPETITION</span> IS ALREADY <span className="text-[#CCFF00]">PREPARING</span>.</span>
+                      <span className="block">I'M HERE TO MAKE SURE YOU <span className="text-[#CCFF00]">GET THERE FIRST</span>.</span>
                     </div>
                     <div className="flex flex-row gap-3 mb-3">
                       <button onClick={onStart} className="flex-1 btn-primary px-4 py-2.5 text-[10px] tracking-[0.15em]">
