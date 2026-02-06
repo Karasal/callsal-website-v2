@@ -149,14 +149,15 @@ ADMIN_EMAIL=...
 - Passed to Room3D/Room3DEnhanced and Hero (Wall3DTitle)
 - Camera rotates ±8° based on mouse position
 
-### Module System (Unified Selector)
+### Module System (Immersive 3D Panel)
 - **5 modules**: Armory, Cinematics, Meet Salman, The Offer, Book Meeting
-- **Preview panel** (center-left, 3D pos: x:-1.0 y:3 z:6.5, 5.0×3.0) — shows selected module content scaled down
-- **Selector panel** (right, 3D pos: x:3.5 y:3 z:6.5, 2.0×3.0) — vertical list with gradient indicator bar
-- Click selector item → swaps preview content
-- Click preview panel → opens fullscreen modal (same zoom animation as before)
-- Arrow nav in modal cycles all 5 modules and syncs selectedModuleId
-- **GlassNav** is now a thin pill (bottom-right) with branding + home + auth only
+- **Single centered panel** (3D pos: x:0 y:3.8 z:6.5, 6.0×3.5) — content + horizontal selector bar
+- **No modal** — content lives directly in the 3D panel, scrollable within
+- Content scaled at 1600px base width for tame sizing
+- Horizontal selector bar at bottom with spring-animated gradient indicator (lime→cyan)
+- **Smart scroll**: hover panel → scroll module content; hover outside → snap scroll to hero
+- **Header/Nav auto-hide**: fade out as scrollProgress approaches module zone (0.8→1.0)
+- **GlassNav** is a thin pill (bottom-right) with branding + home + auth only
 - All page content (MeetSalman, TheOffer, BookingPage) accessed via module wrappers
 - Only `overview` and `dashboard` routes remain in App.tsx
 
@@ -166,15 +167,15 @@ ADMIN_EMAIL=...
 - **HTML-only clicks** for modules — canvas renders room, HTML cards handle all interaction (allows scroll passthrough)
 - **Three snap points** — smoother UX than two (diorama → hero → modules)
 - **Sine easing** for camera zoom — smoother than quadratic
-- **Linear easing** for fly-to-fullscreen — no "pop" effect
-- **Liquid glass nav/header** — subtle white tint + blur + border, always z-[9999]
+- **No modal, content in 3D** — panel IS the experience, no click-to-open fullscreen
+- **Liquid glass nav/header** — subtle white tint + blur + border, auto-hide at module zone
 - **Ghost-fade animation standard** — NO scale-pop, NO x-slides. Only subtle `opacity + y:6-8px` fade-up. Quick (0.15-0.25s). Scroll-driven animations are fine.
 
 ## Gotchas
 - Vite scaffold puts entry in `src/main.tsx` — we use `index.tsx` at root
 - tsconfig strict mode OFF — v1 code wasn't written for it
 - `font-heading` → `font-display`, `font-mono` → `font-body`
-- Z-index layering: Room3D (z-0) < Diorama (z-[2]) < Modules (z-50-100) < Zoomed (z-1000) < Nav/Header (z-9999)
+- Z-index layering: Room3D (z-0) < Diorama (z-[2]) < Modules (z-50-60) < Nav/Header (z-9999)
 - Double RAF needed for nav indicator positioning (fonts must paint first)
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
