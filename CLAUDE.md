@@ -49,8 +49,7 @@ npm run preview  # Preview production build
 - `GlassNav.tsx` — Bottom nav (5 tabs, auth, gradient indicator)
 
 ### 3D System (Desktop Only)
-- `Room3D.tsx` — Canvas 3D wireframe room with camera zoom + picture frame
-- `Room3DEnhanced.tsx` — Room3D + module card rendering + hit detection
+- `Room3DEnhanced.tsx` — Canvas 3D wireframe room with camera zoom + picture frame + panel shadow
 - `ModuleManager.tsx` — State machine (diorama → floating → zoomed)
 - `Module3DOverlay.tsx` — HTML cards positioned in 3D space, fly-to-fullscreen
 - `TVOverlay.tsx` — Cinematics mode: flip animation, video player, selector, info bar
@@ -146,7 +145,7 @@ ADMIN_EMAIL=...
 
 ### Mouse Parallax
 - Shared mouse state in App.tsx (smoothMouse with lerp 0.06)
-- Passed to Room3D/Room3DEnhanced and Hero (Wall3DTitle)
+- Passed to Room3DEnhanced and Hero (Wall3DTitle)
 - Camera rotates ±8° based on mouse position
 
 ### Module System (Immersive 3D Panel)
@@ -190,14 +189,29 @@ ADMIN_EMAIL=...
 - ✅ TVOverlay: VIEW CINEMATICS → floating TV quick-view
 - ✅ BookingOverlay: BOOK NOW → floating 4-step booking form
 - ✅ Hash deep links (#book, #about, #offer) auto-scroll to modules + select
+- ✅ Dead code audit: ~730 lines removed (Session 23)
 
 ### Known Issues / Broken Things
 - Auth/booking flows untested after modal removal
 - TVOverlay and BookingOverlay may need adjustments after UI hide changes
 - Need content QA pass comparing v1 vs v2 module content
+- Duplicate content: TheArmory/VideoPortfolio exist in both Hero.tsx (mobile) and module files (desktop 3D) — ~1500 lines of duplication (design decision needed)
+- Duplicate logic: BookingOverlay.tsx vs BookingPage.tsx — same 4-step booking flow in two presentations
+- ~20 unused lucide-react icon imports in Hero.tsx (tree-shaken at build, cosmetic)
+- `onStart` prop on Hero wired to no-op — DISCOVER and MEET SALMAN buttons on mobile do nothing
 
-### NEXT SESSION (Session 23) — MISSION
+### NEXT SESSION (Session 24) — MISSION
 **Content QA & Full Flow Testing**: Compare all 5 modules to v1 content, test auth/booking/deep links end-to-end, visual QA at different screen sizes.
+
+### Session 23 (Feb 5, 2026)
+- **Dead code audit**: Comprehensive codebase audit for invisible/wasteful elements
+- **Deleted Room3D.tsx**: 421 lines, never imported (fully replaced by Room3DEnhanced)
+- **Removed dead state/props**: totalScrollProgress, scrollDirection→Hero, viewState/zoomProgress/activeModuleId across App/Room3DEnhanced/ModuleManager/Module3DOverlay
+- **Stripped isPreview mode**: All 5 module components had dead preview card code (~200 lines) — isPreview was always false
+- **Removed 15 dead useRefs**: MeetSalman (3), TheOffer (9), BookingPage (1), Hero (2) — assigned to DOM but never read
+- **Cleaned types/modules.ts**: Removed ViewState, Position3D, ModuleManagerState, Room3DEnhancedProps, easing functions
+- **Removed dead ImageModal**: MeetSalman had import + state + JSX for image lightbox that was never triggered
+- **Net result**: -773 lines, +39 lines. Zero behavior change. Build verified clean.
 
 ### Session 22 (Feb 5, 2026)
 - **Scroll height fix**: CSS `transform:scale()` doesn't affect layout — scroll area was 2x visual height
