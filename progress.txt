@@ -1,26 +1,28 @@
 # Call Sal Website V2 — Progress
 
-## Session 18 (Feb 5, 2026) — Module Consolidation + Overlays
+## Session 28 (Feb 6, 2026) — Performance Optimization + Hollywood Advantage
 
 ### Completed
-- [x] Created CinematicsModule.tsx (all VideoPortfolio content from Hero.tsx)
-- [x] Removed THE SAL METHOD placeholder module
-- [x] Consolidated from 3 modules to 2 (Armory + Cinematics)
-- [x] Created BookingOverlay.tsx (floating 4-step booking, TVOverlay pattern)
-- [x] VIEW CINEMATICS → TVOverlay (quick portfolio view)
-- [x] BOOK NOW → BookingOverlay (quick booking)
-- [x] Cinematics module card → fullscreen CinematicsModule (deep dive)
-- [x] "SO WHO IS THIS SAL GUY ANYWAY?" CTA at bottom of module modals
-- [x] Fixed BookingPage wireframe bleed-through (solid bg-black wrapper)
+- [x] React.lazy: ModuleManager, Dashboard, ClientHubOnboarding, 5 module components
+- [x] React.memo on Hero + ModuleManager, useCallback on all App.tsx handler props
+- [x] Remove 24 unused lucide-react icon imports from Hero.tsx
+- [x] Remove 213 lines of unused CSS (glow-aura, radiosity, orb, 9 keyframe animations)
+- [x] Initial JS bundle: 125KB → 84KB gzipped (-33%)
+- [x] Hollywood Advantage: software icons under text, RED KOMODO-X image on right
+- [x] Image optimized: 287KB PNG → 46KB WebP (red-komodo-x.webp)
+- [x] Module panel animations: stagger + y-slide → quick opacity-only fade (150ms)
+- [x] Fix moduleReady flash on first mount (skip useEffect on initial render)
+- [x] Preload all lazy module chunks immediately (no pop-in on scroll)
 - [x] Build passes clean
 
-### Architecture
-- Two hero buttons: VIEW CINEMATICS (cinematicsMode) + BOOK NOW (bookingMode)
-- Both overlays: floating panels with mouse parallax, fade hero title, lock scroll
-- Module cards: Armory + Cinematics in 3D room, fly-to-fullscreen modal on click
-- openModuleId prop: allows programmatic module opening (e.g., from hero)
+### Performance Summary
+- Initial JS: 189KB → 147KB gzipped (22% smaller initial load)
+- Main chunk: 125KB → 84KB gzipped (-33%)
+- 8 lazy-loaded chunks for deferred content
+- Hero no longer re-renders on every mouse frame (React.memo)
+- CSS: 571 → 358 lines
 
 ### Next
 - [ ] Visual QA on all overlays and modules
-- [ ] Test auth/booking flows end-to-end
-- [ ] Performance audit (Lighthouse)
+- [ ] Lighthouse performance audit (now that lazy loading is in place)
+- [ ] Consider replacing simple framer-motion fades with CSS transitions
