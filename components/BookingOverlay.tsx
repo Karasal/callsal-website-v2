@@ -188,11 +188,9 @@ export const BookingOverlay: React.FC<BookingOverlayProps> = ({
             style={{
               transform: `translate(${parallaxX}px, ${parallaxY}px)`,
               width: 'min(720px, 90vw)',
-              minHeight: 'min(520px, 70vh)',
-              maxHeight: '85vh',
             }}
           >
-          <div className="w-full h-full bg-black/95 rounded-2xl border border-white/15 overflow-hidden shadow-2xl shadow-black/60 flex flex-col">
+          <div className="w-full max-h-[85vh] bg-black/95 rounded-2xl border border-white/15 overflow-hidden shadow-2xl shadow-black/60 flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
               <div className="flex items-center gap-3">
