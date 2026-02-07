@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Calendar, Clock, Video, MapPin, Phone, ChevronLeft, ChevronRight, Check, Loader2, User, Mail, Building, MessageSquare } from 'lucide-react';
 
 type MeetingType = 'zoom' | 'in-person' | 'phone';
@@ -61,11 +61,12 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
     name: '', email: '', phone: '', business: '', location: '', notes: '',
   });
 
-  const dates = Array.from({ length: 14 }, (_, i) => {
+  const dates = React.useMemo(() => Array.from({ length: 14 }, (_, i) => {
     const date = new Date();
+    date.setHours(0, 0, 0, 0);
     date.setDate(date.getDate() + i + 2);
     return date;
-  }).filter(d => d.getDay() !== 0 && d.getDay() !== 6);
+  }).filter(d => d.getDay() !== 0 && d.getDay() !== 6), []);
 
   useEffect(() => { fetchAvailability(); }, []);
 
@@ -209,10 +210,9 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
 
         {/* Booking Panel */}
         <div className="glass-strong rounded-2xl overflow-hidden">
-          <AnimatePresence mode="wait">
             {/* Step 1: Meeting Type */}
             {step === 1 && (
-              <motion.div key="step1" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step1" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <h3 className="text-xl sm:text-2xl font-display font-black text-white uppercase tracking-tight mb-2">HOW WOULD YOU LIKE TO MEET?</h3>
                 <p className="text-xs sm:text-sm font-display text-gray-400 uppercase tracking-wide mb-6 sm:mb-8">SELECT YOUR PREFERRED FORMAT</p>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
@@ -235,7 +235,7 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
 
             {/* Step 2: Date Selection */}
             {step === 2 && (
-              <motion.div key="step2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step2" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(1)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
@@ -273,7 +273,7 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
 
             {/* Step 3: Time Selection */}
             {step === 3 && selectedDate && (
-              <motion.div key="step3" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step3" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(2)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
@@ -301,7 +301,7 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
 
             {/* Step 4: Contact Details */}
             {step === 4 && (
-              <motion.div key="step4" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
+              <motion.div key="step4" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="p-5 sm:p-8 lg:p-12">
                 <button onClick={() => setStep(3)} className="flex items-center gap-2 text-gray-400 hover:text-white text-[10px] sm:text-xs font-display font-black uppercase tracking-widest mb-4 sm:mb-6 transition-colors">
                   <ChevronLeft size={14} /> BACK
                 </button>
@@ -351,7 +351,6 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
                 </div>
               </motion.div>
             )}
-          </AnimatePresence>
         </div>
 
         {/* Call CTA */}

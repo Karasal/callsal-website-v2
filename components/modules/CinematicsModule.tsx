@@ -325,47 +325,6 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
         </div>
       </div>
 
-      {/* Video Player Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
-        <div className="lg:col-span-8">
-          <div className="relative group cursor-pointer aspect-video overflow-hidden rounded-xl border border-white/20 bg-black glow-cyan" onClick={() => setIsVideoOpen(true)}>
-            <img src={`https://img.youtube.com/vi/${activeProject.id}/maxresdefault.jpg`} className="w-full h-full object-cover transition-all duration-700" alt="" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 sm:w-24 sm:h-24 border border-white/40 flex items-center justify-center rounded-full group-hover:bg-[#CCFF00] group-hover:border-[#CCFF00] transition-all">
-                <Play className="text-white group-hover:text-black ml-1" size={32} />
-              </div>
-            </div>
-          </div>
-          <motion.div key={activeProject.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="mt-8 p-8 lg:p-12 glass rounded-xl">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-2 h-2 bg-[#CCFF00] rounded-full animate-pulse" />
-              <span className="text-[10px] font-body tracking-[0.3em] text-[#CCFF00] uppercase font-bold">CASE STUDY</span>
-            </div>
-            <h4 className="text-xl sm:text-2xl lg:text-4xl font-display font-extrabold text-white uppercase tracking-tighter mb-4 leading-tight">{activeProject.title}</h4>
-            <p className="text-sm lg:text-lg font-body font-medium text-gray-400 uppercase leading-relaxed tracking-wide">{activeProject.description}</p>
-            <div className="mt-6 sm:mt-8 flex flex-wrap gap-4">
-              <span className="px-3 py-1 glass text-[8px] sm:text-[9px] font-body text-[#CCFF00] uppercase tracking-widest font-bold rounded-lg whitespace-nowrap">PROJECT FOR: {activeProject.company}</span>
-            </div>
-          </motion.div>
-        </div>
-        <div className="lg:col-span-4 flex flex-col gap-3">
-          <div className="space-y-2 sm:space-y-3">
-            {projects.map(p => (
-              <button key={p.id} onClick={() => setActiveProject(p)} className={`w-full p-3 sm:p-5 text-left rounded-xl border transition-all flex items-center justify-between group ${activeProject.id === p.id ? 'bg-[#CCFF00] text-black border-[#CCFF00]' : 'glass text-white hover:border-white/20'}`}>
-                <div className="min-w-0">
-                  <p className={`text-[8px] sm:text-[9px] font-body font-bold uppercase mb-0.5 sm:mb-1 ${activeProject.id === p.id ? 'text-black/40' : 'text-gray-400'}`}>{p.company}</p>
-                  <p className="font-display font-bold uppercase text-[11px] sm:text-sm truncate">{p.title}</p>
-                </div>
-                <ChevronRight size={14} className={`shrink-0 transition-transform ${activeProject.id === p.id ? 'translate-x-1' : ''}`} />
-              </button>
-            ))}
-          </div>
-          <button onClick={() => { onClose(); onConsultation?.(); }} className="w-full py-5 sm:py-8 btn-primary text-[10px] sm:text-xs tracking-[0.2em] mt-3 sm:mt-4">
-            BOOK A CHAT
-          </button>
-        </div>
-      </div>
-
       {/* Hollywood Advantage */}
       <div className="glass-strong overflow-hidden rounded-2xl mb-12">
         <div className="glass-strong p-6 sm:p-10 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 sm:gap-10 relative overflow-hidden">
@@ -506,6 +465,82 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
                 <p className="text-[11px] font-body font-bold text-gray-400 uppercase leading-relaxed border-t border-white/20 pt-4 sm:pt-6">
                   Our LiDAR system maps the environment in 3D using lasers, keeping you in perfect focus regardless of lighting conditions—we never miss "The Moment."
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Video Player Grid */}
+          <div className="space-y-8 sm:space-y-12 border-b border-gray-100 pb-10 sm:pb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-12">
+              {/* Video Thumbnail */}
+              <div className="lg:col-span-7">
+                <div
+                  className="aspect-video relative overflow-hidden rounded-xl border border-white/20 bg-black cursor-pointer group"
+                  onClick={() => setIsVideoOpen(true)}
+                >
+                  <img
+                    src={`https://img.youtube.com/vi/${activeProject.id}/maxresdefault.jpg`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-1000"
+                    alt={activeProject.title}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#CCFF00] flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <Play className="text-black ml-1" size={28} />
+                    </div>
+                  </div>
+                  <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
+                    <span className="text-[9px] sm:text-[10px] font-body font-bold text-[#CCFF00] uppercase block mb-1">{activeProject.company}</span>
+                    <p className="text-sm sm:text-lg font-display font-extrabold text-white uppercase tracking-tighter">{activeProject.title}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Case Study Card + Project Selector */}
+              <div className="lg:col-span-5 flex flex-col gap-4 sm:gap-6">
+                {/* Case study info */}
+                <div className="glass p-6 sm:p-8 rounded-xl flex-1">
+                  <span className="text-[9px] sm:text-[10px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.3em] block mb-3">CASE STUDY</span>
+                  <h4 className="text-lg sm:text-xl font-display font-extrabold text-white uppercase tracking-tighter leading-tight mb-3">{activeProject.title}</h4>
+                  <p className="text-[10px] sm:text-xs font-body font-bold text-gray-400 uppercase leading-relaxed mb-4">{activeProject.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {activeProject.tech.map((t, i) => (
+                      <span key={i} className="text-[8px] sm:text-[9px] font-body font-bold text-white/70 uppercase tracking-wider px-2 py-1 bg-white/10 rounded">{t}</span>
+                    ))}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Eye className="text-[#CCFF00] shrink-0" size={14} />
+                    <span className="text-[10px] font-display font-bold text-white uppercase">{activeProject.impact}</span>
+                  </div>
+                </div>
+
+                {/* Project selector list */}
+                <div className="space-y-1">
+                  {projects.map((project) => (
+                    <button
+                      key={project.id}
+                      onClick={() => setActiveProject(project)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left ${
+                        activeProject.id === project.id
+                          ? 'bg-white/10 border border-white/20'
+                          : 'hover:bg-white/5'
+                      }`}
+                    >
+                      <ChevronRight className={`shrink-0 transition-colors ${activeProject.id === project.id ? 'text-[#CCFF00]' : 'text-gray-600'}`} size={14} />
+                      <div className="min-w-0">
+                        <p className={`text-[10px] sm:text-[11px] font-display font-bold uppercase tracking-tight truncate ${activeProject.id === project.id ? 'text-white' : 'text-gray-400'}`}>{project.title}</p>
+                        <p className="text-[8px] sm:text-[9px] font-body text-gray-500 uppercase truncate">{project.company}</p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  onClick={() => { onClose(); onConsultation?.(); }}
+                  className="btn-primary w-full py-4 text-[9px] sm:text-[10px] tracking-[0.3em]"
+                >
+                  BOOK A CHAT
+                </button>
               </div>
             </div>
           </div>

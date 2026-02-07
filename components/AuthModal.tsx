@@ -63,7 +63,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
           <motion.div {...fadeProps} className="absolute inset-0 bg-black/95 backdrop-blur-xl" onClick={onClose} />
           <motion.div {...modalProps} className="relative w-full max-w-xl glass-strong rounded-2xl overflow-hidden">
-            <div className="p-8 border-b border-white/20 flex items-center justify-between bg-gray-50">
+            <div className="p-8 border-b border-white/20 flex items-center justify-between bg-black">
               <h2 className="text-3xl font-display font-black uppercase tracking-tighter text-white">
                 {mode === 'login' ? 'ACCESS HUB' : 'PRIVATE VAULT'}
               </h2>

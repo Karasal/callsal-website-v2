@@ -266,7 +266,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
               {/* Scrollable content area */}
               <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar"
+                className="flex-1 overflow-y-auto overflow-x-hidden module-scrollbar"
                 style={{ minHeight: 0 }}
               >
                 <div

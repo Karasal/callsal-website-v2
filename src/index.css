@@ -260,16 +260,14 @@ html {
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow:
-    0 0 15px rgba(204, 255, 0, 0.2),
-    0 0 30px rgba(204, 255, 0, 0.1),
-    0 0 45px rgba(0, 240, 255, 0.08);
+    0 0 20px rgba(204, 255, 0, 0.4),
+    0 0 40px rgba(0, 240, 255, 0.2);
 }
 
 .btn-primary:hover {
   box-shadow:
-    0 0 25px rgba(204, 255, 0, 0.35),
-    0 0 50px rgba(204, 255, 0, 0.15),
-    0 0 75px rgba(0, 240, 255, 0.12),
+    0 0 30px rgba(204, 255, 0, 0.5),
+    0 0 60px rgba(0, 240, 255, 0.3),
     0 8px 30px rgba(0, 0, 0, 0.2);
   transform: translateY(-2px);
 }
@@ -340,6 +338,27 @@ html {
 * { scrollbar-width: none; }
 
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Module panel gradient scrollbar */
+.module-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #CCFF00 transparent;
+}
+.module-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 4px;
+}
+.module-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.module-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #CCFF00, #00F0FF);
+  border-radius: 4px;
+}
+.module-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #CCFF00, #00F0FF);
+  box-shadow: 0 0 6px rgba(204, 255, 0, 0.4);
+}
 
 /* ===== Selection ===== */
 ::selection {

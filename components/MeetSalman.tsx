@@ -25,7 +25,7 @@ export const MeetSalman: React.FC<{ onNext: () => void; onConsultation: () => vo
       variants={mobileContainerVariants}
       initial={isMobile ? false : "hidden"}
       animate="visible"
-      className="max-w-7xl mx-auto px-4 py-12 lg:py-0 space-y-32 overflow-visible"
+      className="max-w-7xl mx-auto px-4 py-12 lg:pt-0 pb-16 space-y-32 overflow-visible"
     >
       {/* 1. HERO / INTRODUCTION */}
       <section className="min-h-[75vh] lg:min-h-0 lg:h-[calc(100dvh-144px)] grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
