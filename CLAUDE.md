@@ -111,31 +111,36 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 - Double RAF needed for nav indicator positioning (fonts must paint first)
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
-## Current State (Session 25, Feb 6, 2026)
+## Current State (Session 26, Feb 6, 2026)
 - 3D room with camera zoom, picture frame, diorama parallax
 - CSS 3D hero title synced with mouse parallax
 - Immersive centered module panel (5 modules, horizontal selector bar)
 - Three-point snap scroll + smart scroll
 - TVOverlay (VIEW CINEMATICS) + BookingOverlay (BOOK NOW)
 - Hash deep links (#book, #about, #offer)
-- Dead code audit complete (~730 lines removed)
+- Dead code audit complete (~730 lines removed, +1011 demoContent.ts)
 - Content parity complete: Armory + Cinematics match V1 content
 - Animated lime→cyan gradient border beam on module panel
 - Claude/Gemini AI platform logo cards in Armory
 - TVOverlay shows video descriptions in NOW PLAYING bar
 - Home button removed from GlassNav (redundant)
+- Booking flow fully working (date/time/contact steps)
+- Module panel gradient scrollbar (lime→cyan)
+- Cinematics video player grid moved above footer CTA
+- Auth modal header fixed (black bg)
+- Hero text: lime accents, black stroke, text shadows
+- BookingOverlay mobile scroll fix
 
 ## Known Issues
-- Auth/booking flows untested after modal removal
-- TVOverlay and BookingOverlay may need adjustments after UI hide changes
 - Duplicate content: TheArmory/VideoPortfolio in Hero.tsx (mobile) AND module files (desktop) — ~1500 lines
 - Duplicate logic: BookingOverlay.tsx vs BookingPage.tsx — same 4-step flow in two presentations
 - `onStart` prop on Hero wired to no-op — DISCOVER/MEET SALMAN buttons on mobile do nothing
+- Auth login requires server-side API (Vercel serverless functions)
 
 ## TODO
 - [ ] Visual QA on all overlays and modules
-- [ ] Test auth/booking flows end-to-end
 - [ ] Performance audit (Lighthouse)
+- [ ] Auth flow end-to-end testing on Vercel
 
 ## Session History
 See [SESSION_LOG.md](SESSION_LOG.md) for detailed session-by-session development history.
