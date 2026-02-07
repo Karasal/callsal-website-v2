@@ -380,10 +380,10 @@ const App: React.FC = () => {
   return (
     <div className="relative h-screen w-screen flex flex-col bg-black overflow-hidden selection:bg-[#CCFF00] selection:text-black font-body noise-overlay">
 
-      {/* Module Manager - renders 3D room + floating module panels (desktop only) */}
-      {!isMobile && (
+      {/* Module Manager - renders 3D room + floating module panels (desktop only, overview only) */}
+      {!isMobile && activeTab === 'overview' && (
         <ModuleManager
-          scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
+          scrollProgress={scrollProgress}
           smoothMouse={smoothMouse}
           onConsultation={() => setOpenModuleId('book-meeting')}
           cinematicsMode={cinematicsMode}
