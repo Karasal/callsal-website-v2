@@ -1232,7 +1232,7 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, o
             style={{ opacity: scrollProgress >= 0.5 ? 0 : 1 }}
           >
             <img
-              src="/calgary-diorama-mobile.jpg"
+              src="/calgary-diorama-mobile.webp"
               alt="Calgary Skyline Diorama"
               className="w-full h-full object-cover object-center"
             />

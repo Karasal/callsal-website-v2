@@ -185,7 +185,7 @@ export const BookingPage: React.FC<{ embedded?: boolean }> = ({ embedded = false
           <div className="lg:col-span-5 relative pr-3 pb-3 flex justify-end">
             <div className="glow-lime rounded-2xl max-w-[90%]">
               <div className="relative aspect-[4/5] lg:aspect-[3/4] overflow-hidden glass rounded-2xl">
-                <img src="/booking-hero.png" alt="Professional video production" className="w-full h-full object-cover" />
+                <img src="/booking-hero.webp" alt="Professional video production" className="w-full h-full object-cover" />
               </div>
             </div>
           </div>

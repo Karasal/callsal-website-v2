@@ -18,12 +18,28 @@ import { TheOfferModule } from './modules/TheOfferModule';
 import { BookingModule } from './modules/BookingModule';
 
 // Icons for module selector
-const ArmoryIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-    <rect x="3" y="3" width="7" height="7" />
-    <rect x="14" y="3" width="7" height="7" />
-    <rect x="3" y="14" width="7" height="7" />
-    <rect x="14" y="14" width="7" height="7" />
+// Brutalist Cyberpunk Knight Emblem - Sword, Shield & Helmet (from v1)
+const ArmoryIcon = ({ size = 20, className = "w-5 h-5" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+    {/* Shield - angular brutalist shape */}
+    <path d="M8 8L24 4L40 8V24C40 32 32 40 24 44C16 40 8 32 8 24V8Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2" strokeLinejoin="bevel" />
+    {/* Shield inner border - tech detail */}
+    <path d="M12 11L24 8L36 11V23C36 29 30 35 24 38C18 35 12 29 12 23V11Z" stroke="currentColor" strokeWidth="1" strokeOpacity="0.4" strokeLinejoin="bevel" />
+    {/* Helmet visor - angular slit */}
+    <path d="M16 16H32L30 20H18L16 16Z" fill="currentColor" fillOpacity="0.3" />
+    <path d="M18 17H30" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+    {/* Helmet crest - mohawk style */}
+    <path d="M24 6V14" stroke="currentColor" strokeWidth="3" strokeLinecap="square" />
+    {/* Sword - central blade */}
+    <path d="M24 18V42" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
+    {/* Sword crossguard */}
+    <path d="M18 26H30" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
+    {/* Sword grip segments */}
+    <path d="M23 30H25M23 33H25M23 36H25" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.6" />
+    {/* Blade edge highlights */}
+    <path d="M24 18L26 22M24 18L22 22" stroke="currentColor" strokeWidth="1" strokeOpacity="0.5" />
+    {/* Tech circuit lines on shield */}
+    <path d="M14 14L14 20M34 14L34 20" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3" strokeDasharray="2 2" />
   </svg>
 );
 

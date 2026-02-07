@@ -7,6 +7,22 @@ import {
 } from 'lucide-react';
 import { ModuleContentProps } from '../../types/modules';
 
+// Brutalist Cyberpunk Knight Emblem - Sword, Shield & Helmet (from v1)
+const ArmoryEmblem = ({ size = 40, className = "" }: { size?: number; className?: string }) => (
+  <svg width={size} height={size} viewBox="0 0 48 48" fill="none" className={className}>
+    <path d="M8 8L24 4L40 8V24C40 32 32 40 24 44C16 40 8 32 8 24V8Z" fill="currentColor" fillOpacity="0.15" stroke="currentColor" strokeWidth="2" strokeLinejoin="bevel" />
+    <path d="M12 11L24 8L36 11V23C36 29 30 35 24 38C18 35 12 29 12 23V11Z" stroke="currentColor" strokeWidth="1" strokeOpacity="0.4" strokeLinejoin="bevel" />
+    <path d="M16 16H32L30 20H18L16 16Z" fill="currentColor" fillOpacity="0.3" />
+    <path d="M18 17H30" stroke="currentColor" strokeWidth="2" strokeLinecap="square" />
+    <path d="M24 6V14" stroke="currentColor" strokeWidth="3" strokeLinecap="square" />
+    <path d="M24 18V42" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
+    <path d="M18 26H30" stroke="currentColor" strokeWidth="2.5" strokeLinecap="square" />
+    <path d="M23 30H25M23 33H25M23 36H25" stroke="currentColor" strokeWidth="1.5" strokeOpacity="0.6" />
+    <path d="M24 18L26 22M24 18L22 22" stroke="currentColor" strokeWidth="1" strokeOpacity="0.5" />
+    <path d="M14 14L14 20M34 14L34 20" stroke="currentColor" strokeWidth="1" strokeOpacity="0.3" strokeDasharray="2 2" />
+  </svg>
+);
+
 interface ArmoryModuleProps extends ModuleContentProps {
   onShowSoftware?: (s: SoftwareInfo) => void;
   onShowImage?: (src: string) => void;
@@ -118,9 +134,12 @@ export const ArmoryModule: React.FC<ArmoryModuleProps> = ({
     <div className="px-6 pt-6 pb-2 lg:px-8 lg:pt-8 lg:pb-2">
       {/* Header */}
       <div className="mb-4 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-        <div>
-          <h2 className="text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE ARMORY</h2>
-          <p className="text-[10px] font-body text-gray-400 tracking-[0.5em] uppercase mt-2">HIGH-END PRODUCTION AT A FRACTION OF THE COST</p>
+        <div className="flex items-center gap-4">
+          <ArmoryEmblem className="text-[#CCFF00]" size={40} />
+          <div>
+            <h2 className="text-3xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-none">THE ARMORY</h2>
+            <p className="text-[10px] font-body text-gray-400 tracking-[0.5em] uppercase mt-2">HIGH-END PRODUCTION AT A FRACTION OF THE COST</p>
+          </div>
         </div>
         <div className="flex glass-nav p-1">
           <button
@@ -215,7 +234,7 @@ const ArmoryContent: React.FC<{ categoryId: string; onShowSoftware?: (s: Softwar
         </p>
         <div className="grid grid-cols-2 gap-4">
           <div className="p-4 glass rounded-xl flex flex-col items-center text-center gap-3">
-            <img src="/claude-logo.png" className="h-10 w-auto object-contain" alt="Claude" />
+            <img src="/claude-logo.webp" className="h-10 w-auto object-contain" alt="Claude" />
             <div>
               <p className="text-[10px] font-display font-bold text-[#E07A5F] uppercase">CLAUDE OPUS MAX</p>
               <p className="text-[8px] font-body text-gray-400 uppercase tracking-wider mt-1">BY ANTHROPIC</p>
@@ -223,7 +242,7 @@ const ArmoryContent: React.FC<{ categoryId: string; onShowSoftware?: (s: Softwar
             </div>
           </div>
           <div className="p-4 glass rounded-xl flex flex-col items-center text-center gap-3">
-            <img src="/gemini-logo.png" className="h-10 w-auto object-contain" alt="Gemini" />
+            <img src="/gemini-logo.webp" className="h-10 w-auto object-contain" alt="Gemini" />
             <div>
               <p className="text-[10px] font-display font-bold text-[#4285F4] uppercase">GEMINI PRO</p>
               <p className="text-[8px] font-body text-gray-400 uppercase tracking-wider mt-1">BY GOOGLE</p>

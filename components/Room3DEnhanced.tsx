@@ -49,7 +49,7 @@ export const Room3DEnhanced: React.FC<Room3DEnhancedProps> = ({
 
     // Load diorama image for picture frame
     const dioramaImg = new Image();
-    dioramaImg.src = '/calgary-diorama.jpg';
+    dioramaImg.src = '/calgary-diorama.webp';
     dioramaImg.onload = () => { dioramaImageRef.current = dioramaImg; };
 
     // 3D to 2D projection with 90 FOV

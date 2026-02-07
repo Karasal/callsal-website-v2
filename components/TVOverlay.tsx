@@ -100,7 +100,7 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
             style={{ backfaceVisibility: 'hidden' }}
           >
             <img
-              src="/calgary-diorama.jpg"
+              src="/calgary-diorama.webp"
               alt="Calgary Diorama"
               className="w-full h-full object-cover"
             />
