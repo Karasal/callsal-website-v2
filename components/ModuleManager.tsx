@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import {
   ModuleMetadata,
 } from '../types/modules';
@@ -10,12 +10,26 @@ import { Module3DOverlay } from './Module3DOverlay';
 // Import overlays
 import { TVOverlay } from './TVOverlay';
 import { BookingOverlay } from './BookingOverlay';
-// Import module components
-import { ArmoryModule } from './modules/ArmoryModule';
-import { CinematicsModule } from './modules/CinematicsModule';
-import { MeetSalmanModule } from './modules/MeetSalmanModule';
-import { TheOfferModule } from './modules/TheOfferModule';
-import { BookingModule } from './modules/BookingModule';
+
+// Lazy load module content components (only rendered inside the 3D panel)
+const armoryImport = () => import('./modules/ArmoryModule');
+const cinematicsImport = () => import('./modules/CinematicsModule');
+const meetSalmanImport = () => import('./modules/MeetSalmanModule');
+const theOfferImport = () => import('./modules/TheOfferModule');
+const bookingImport = () => import('./modules/BookingModule');
+
+const ArmoryModule = React.lazy(armoryImport);
+const CinematicsModule = React.lazy(cinematicsImport);
+const MeetSalmanModule = React.lazy(meetSalmanImport);
+const TheOfferModule = React.lazy(theOfferImport);
+const BookingModule = React.lazy(bookingImport);
+
+// Preload all module chunks immediately so they're ready before the panel appears
+armoryImport();
+cinematicsImport();
+meetSalmanImport();
+theOfferImport();
+bookingImport();
 
 // Icons for module selector
 // Brutalist Cyberpunk Knight Emblem - Sword, Shield & Helmet (from v1)
@@ -121,7 +135,7 @@ interface ModuleManagerProps {
   onOpenModuleIdConsumed?: () => void;
 }
 
-export const ModuleManager: React.FC<ModuleManagerProps> = ({
+const ModuleManagerInner: React.FC<ModuleManagerProps> = ({
   scrollProgress,
   smoothMouse,
   onConsultation,
@@ -189,4 +203,5 @@ export const ModuleManager: React.FC<ModuleManagerProps> = ({
   );
 };
 
+export const ModuleManager = React.memo(ModuleManagerInner);
 export default ModuleManager;

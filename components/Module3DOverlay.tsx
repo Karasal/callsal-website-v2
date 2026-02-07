@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useEffect, useState, useCallback } from 'react';
+import React, { useMemo, useRef, useEffect, useState, useCallback, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ModuleMetadata } from '../types/modules';
 
@@ -165,6 +165,7 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   const contentRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const [moduleReady, setModuleReady] = useState(true);
+  const isFirstMount = useRef(true);
 
   // Expose hover state to parent via data attribute on body
   useEffect(() => {
@@ -173,7 +174,12 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
   }, [isHoveringPanel]);
 
   // On module switch: hide content, scroll to top, then reveal
+  // Skip the flash on initial mount — content should just be visible
   useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
     setModuleReady(false);
     if (scrollRef.current) {
       scrollRef.current.scrollTop = 0;
@@ -278,10 +284,12 @@ export const Module3DOverlay: React.FC<Module3DOverlayProps> = ({
                     opacity: moduleReady ? 1 : 0,
                   }}
                 >
-                  <selectedModule.component
-                    onClose={() => {}}
-                    onConsultation={onConsultation}
-                  />
+                  <Suspense fallback={null}>
+                    <selectedModule.component
+                      onClose={() => {}}
+                      onConsultation={onConsultation}
+                    />
+                  </Suspense>
                 </div>
               </div>
 

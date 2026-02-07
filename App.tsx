@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileAnimations } from './hooks/useMobileAnimations';
 import { User as IUser } from './types';
 import { GlassHeader } from './components/GlassHeader';
 import { GlassNav } from './components/GlassNav';
 import { Hero } from './components/Hero';
-import { ModuleManager } from './components/ModuleManager';
 import { AuthModal } from './components/AuthModal';
-import { Dashboard } from './components/Dashboard';
-import ClientHubOnboarding from './components/ClientHubOnboarding';
+
+// Lazy load heavy components that aren't needed on initial paint
+const ModuleManager = React.lazy(() => import('./components/ModuleManager'));
+const Dashboard = React.lazy(() => import('./components/Dashboard').then(m => ({ default: m.Dashboard })));
+const ClientHubOnboarding = React.lazy(() => import('./components/ClientHubOnboarding'));
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -303,32 +305,34 @@ const App: React.FC = () => {
     checkAuth();
   }, []);
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     try {
       await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
     } catch (err) {}
     setCurrentUser(null);
     setActiveTab('overview');
-  };
+  }, []);
 
-  const handleNavigation = (tabId: string) => {
-    if (tabId === activeTab) return;
-    setActiveTab(tabId);
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) mainContent.scrollTop = 0;
-    window.scrollTo(0, 0);
-  };
+  const handleNavigation = useCallback((tabId: string) => {
+    setActiveTab(prev => {
+      if (prev === tabId) return prev;
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) mainContent.scrollTop = 0;
+      window.scrollTo(0, 0);
+      return tabId;
+    });
+  }, []);
 
-  const handleHome = () => {
+  const handleHome = useCallback(() => {
     setActiveTab('overview');
     const mainContent = document.getElementById('main-content');
     if (mainContent) {
       const heroSnap = window.innerHeight * 1.5 * 0.7;
       mainContent.scrollTo({ top: heroSnap, behavior: 'smooth' });
     }
-  };
+  }, []);
 
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     try {
       const res = await fetch('/api/auth/me', { credentials: 'include' });
       const data = await res.json();
@@ -336,17 +340,29 @@ const App: React.FC = () => {
         setCurrentUser(data.user);
       }
     } catch (err) {}
-  };
+  }, []);
+
+  // Memoized callbacks to prevent re-renders in children
+  const handleOpenBookMeeting = useCallback(() => setOpenModuleId('book-meeting'), []);
+  const handleViewCinematics = useCallback(() => setCinematicsMode(true), []);
+  const handleBookNow = useCallback(() => setBookingMode(true), []);
+  const handleCloseCinematics = useCallback(() => setCinematicsMode(false), []);
+  const handleCloseBooking = useCallback(() => setBookingMode(false), []);
+  const handleConsumeModuleId = useCallback(() => setOpenModuleId(null), []);
+  const handleOpenAuth = useCallback(() => setIsAuthOpen(true), []);
+  const handleCloseAuth = useCallback(() => setIsAuthOpen(false), []);
+  const handleAuthSuccess = useCallback((user: IUser) => { setCurrentUser(user); setActiveTab('dashboard'); }, []);
+  const noOp = useCallback(() => {}, []);
 
   const renderContent = () => {
     switch (activeTab) {
       case 'overview':
         return (
           <Hero
-            onStart={() => {}}
-            onConsultation={() => setOpenModuleId('book-meeting')}
-            onViewCinematics={() => setCinematicsMode(true)}
-            onBookNow={() => setBookingMode(true)}
+            onStart={noOp}
+            onConsultation={handleOpenBookMeeting}
+            onViewCinematics={handleViewCinematics}
+            onBookNow={handleBookNow}
             cinematicsMode={cinematicsMode}
             bookingMode={bookingMode}
             scrollProgress={scrollProgress}
@@ -355,14 +371,18 @@ const App: React.FC = () => {
         );
       case 'dashboard':
         if (!currentUser) return null;
-        return <Dashboard user={currentUser} />;
+        return (
+          <Suspense fallback={null}>
+            <Dashboard user={currentUser} />
+          </Suspense>
+        );
       default:
         return (
           <Hero
-            onStart={() => {}}
-            onConsultation={() => setOpenModuleId('book-meeting')}
-            onViewCinematics={() => setCinematicsMode(true)}
-            onBookNow={() => setBookingMode(true)}
+            onStart={noOp}
+            onConsultation={handleOpenBookMeeting}
+            onViewCinematics={handleViewCinematics}
+            onBookNow={handleBookNow}
             cinematicsMode={cinematicsMode}
             bookingMode={bookingMode}
             scrollProgress={scrollProgress}
@@ -374,7 +394,11 @@ const App: React.FC = () => {
 
   // Full-page onboarding takeover
   if (currentUser && currentUser.role === 'client' && !currentUser.hasCompletedOnboarding) {
-    return <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />;
+    return (
+      <Suspense fallback={null}>
+        <ClientHubOnboarding user={currentUser} onComplete={refreshUser} />
+      </Suspense>
+    );
   }
 
   return (
@@ -382,21 +406,23 @@ const App: React.FC = () => {
 
       {/* Module Manager - renders 3D room + floating module panels (desktop only, overview only) */}
       {!isMobile && activeTab === 'overview' && (
-        <ModuleManager
-          scrollProgress={scrollProgress}
-          smoothMouse={smoothMouse}
-          onConsultation={() => setOpenModuleId('book-meeting')}
-          cinematicsMode={cinematicsMode}
-          onCloseCinematics={() => setCinematicsMode(false)}
-          bookingMode={bookingMode}
-          onCloseBooking={() => setBookingMode(false)}
-          openModuleId={openModuleId}
-          onOpenModuleIdConsumed={() => setOpenModuleId(null)}
-        />
+        <Suspense fallback={null}>
+          <ModuleManager
+            scrollProgress={scrollProgress}
+            smoothMouse={smoothMouse}
+            onConsultation={handleOpenBookMeeting}
+            cinematicsMode={cinematicsMode}
+            onCloseCinematics={handleCloseCinematics}
+            bookingMode={bookingMode}
+            onCloseBooking={handleCloseBooking}
+            openModuleId={openModuleId}
+            onOpenModuleIdConsumed={handleConsumeModuleId}
+          />
+        </Suspense>
       )}
 
       <GlassHeader
-        onAuth={() => setIsAuthOpen(true)}
+        onAuth={handleOpenAuth}
         currentUser={currentUser}
         onNavigate={handleNavigation}
         scrollProgress={activeTab === 'overview' ? scrollProgress : 1}
@@ -423,12 +449,12 @@ const App: React.FC = () => {
       </main>
       <AuthModal
         isOpen={isAuthOpen}
-        onClose={() => setIsAuthOpen(false)}
-        onSuccess={(user) => { setCurrentUser(user); setActiveTab('dashboard'); }}
+        onClose={handleCloseAuth}
+        onSuccess={handleAuthSuccess}
       />
       <GlassNav
         onHome={handleHome}
-        onAuth={() => setIsAuthOpen(true)}
+        onAuth={handleOpenAuth}
         currentUser={currentUser}
         setCurrentUser={setCurrentUser}
         onLogout={handleLogout}

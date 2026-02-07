@@ -327,16 +327,15 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
 
       {/* Hollywood Advantage */}
       <div className="glass-strong overflow-hidden rounded-2xl mb-12">
-        <div className="glass-strong p-6 sm:p-10 lg:p-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-6 sm:gap-10 relative overflow-hidden">
-          <div className="relative z-10 max-w-2xl">
+        <div className="glass-strong p-6 sm:p-10 lg:p-16 flex flex-col lg:flex-row justify-between items-start gap-6 sm:gap-10 relative overflow-hidden">
+          <div className="relative z-10 flex-1 min-w-0">
             <span className="text-[9px] sm:text-[10px] font-body tracking-[0.3em] sm:tracking-[0.5em] text-white/70 uppercase font-bold block mb-4 sm:mb-6 px-2 sm:px-3 py-1 bg-white/10 inline-block rounded">NARRATIVE-DRIVEN BRAND STORIES</span>
             <h4 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-extrabold text-white uppercase tracking-tighter leading-[0.85] mb-4 sm:mb-6">THE HOLLYWOOD <br /> ADVANTAGE.</h4>
-            <p className="text-sm sm:text-base lg:text-xl font-display font-bold text-white/80 uppercase tracking-tight max-w-xl leading-snug">
+            <p className="text-sm sm:text-base lg:text-xl font-display font-bold text-white/80 uppercase tracking-tight max-w-xl leading-snug mb-6 sm:mb-8">
               WE USE THE SAME TOOLS AS <span className="text-red-600">NETFLIX MASTERPIECES</span>. WHY? BECAUSE YOUR BUSINESS DESERVES TO LOOK LIKE A GLOBAL LEADER, NOT A STARTUP.
             </p>
-          </div>
-          <div className="relative z-10 flex flex-col items-start sm:items-end w-full sm:w-auto">
-            <div className="px-4 sm:px-6 py-4 sm:py-6 bg-black text-white font-body font-bold text-[9px] sm:text-[10px] lg:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] rounded-xl flex flex-col items-center justify-center gap-3 sm:gap-4 w-full sm:w-auto">
+            {/* Production software — under the text */}
+            <div className="px-4 sm:px-6 py-4 sm:py-6 bg-black/60 text-white font-body font-bold text-[9px] sm:text-[10px] lg:text-xs uppercase tracking-[0.15em] sm:tracking-[0.2em] rounded-xl flex flex-col items-center justify-center gap-3 sm:gap-4">
               <span className="opacity-60 text-[8px] sm:text-[9px] tracking-[0.2em] sm:tracking-[0.3em]">PRODUCTION SOFTWARE</span>
               <div className="flex items-center gap-2">
                 <SoftwareItemButton software={softwareData.davinci} onClick={() => setSelectedSoftware(softwareData.davinci)} />
@@ -346,6 +345,14 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
               </div>
               <span className="text-[8px] sm:text-[9px] font-body text-gray-400 uppercase tracking-widest">CLICK FOR INTEL</span>
             </div>
+          </div>
+          {/* RED KOMODO-X camera image */}
+          <div className="relative z-10 lg:w-[45%] shrink-0 flex items-center justify-center">
+            <img
+              src="/red-komodo-x.webp"
+              alt="RED KOMODO-X 6K Cinema Camera"
+              className="w-full max-w-md object-contain drop-shadow-[0_0_40px_rgba(204,255,0,0.15)]"
+            />
           </div>
         </div>
         <div className="p-6 sm:p-8 lg:p-16 space-y-10 sm:space-y-16">

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, ChevronRight, X, Activity, Target, Terminal, Cpu, Layers, Database, Shield, Bot, GitBranch, TrendingUp, MonitorPlay, Heart, Radio, Camera, Award, Star, Info, Zap, Settings, HardDrive, Share2, Eye, Focus, Move, Film, UserCheck, Clapperboard, Monitor, Sparkles, Smile as SmileIcon, Box, Compass, MousePointer2, MessageSquare, Hammer, Laptop, Video, Smartphone, CheckCircle, Code, Server, Link, ShieldCheck, Search, Globe, Brain, ShieldAlert, FileCheck, ClipboardList, Briefcase, BookOpen, Crown } from 'lucide-react';
+import { Play, ChevronRight, X, Activity, Target, Cpu, Layers, Bot, GitBranch, TrendingUp, MonitorPlay, Camera, Star, Info, Zap, HardDrive, Eye, Focus, Move, Film, Hammer, Video, Server, Link, ShieldCheck, Brain, FileCheck, ClipboardList, Briefcase, BookOpen, Crown } from 'lucide-react';
 import { ImageModal } from './ImageModal';
 
 interface SoftwareInfo {
@@ -1175,7 +1175,7 @@ const Wall3DTitle: React.FC<{ smoothMouse: { x: number; y: number }; scrollProgr
   );
 };
 
-export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, onBookNow?: () => void, cinematicsMode?: boolean, bookingMode?: boolean, scrollProgress?: number, smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, onBookNow, cinematicsMode = false, bookingMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
+const HeroInner: React.FC<{ onStart: () => void, onConsultation: () => void, onViewCinematics?: () => void, onBookNow?: () => void, cinematicsMode?: boolean, bookingMode?: boolean, scrollProgress?: number, smoothMouse?: { x: number; y: number } }> = ({ onStart, onConsultation, onViewCinematics, onBookNow, cinematicsMode = false, bookingMode = false, scrollProgress = 1, smoothMouse = { x: 0.5, y: 0.5 } }) => {
   const portfolioRef = useRef<HTMLDivElement>(null);
   const [showOperatorDeepDive, setShowOperatorDeepDive] = useState(false);
   const [expandedHelpIndex, setExpandedHelpIndex] = useState<number | null>(null);
@@ -1380,3 +1380,5 @@ export const Hero: React.FC<{ onStart: () => void, onConsultation: () => void, o
     </div>
   );
 };
+
+export const Hero = React.memo(HeroInner);
