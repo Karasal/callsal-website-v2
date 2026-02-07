@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMobileAnimations } from '../hooks/useMobileAnimations';
 import { User as IUser } from '../types';
 
-const BrandingElement = ({ className = "", textColor = "#000000" }: { className?: string; textColor?: string }) => {
+const BrandingElement = ({ className = "", textColor = "#000000", onHome }: { className?: string; textColor?: string; onHome?: () => void }) => {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <div
@@ -22,7 +22,11 @@ const BrandingElement = ({ className = "", textColor = "#000000" }: { className?
         {isHovered ? '2026' : 'MMXXVI'}
       </motion.span>
       <span>©</span>
-      <span className="ml-2">CALL SAL .</span>
+      {onHome ? (
+        <button onClick={onHome} className="ml-2 cursor-pointer hover:text-[#CCFF00] transition-colors">CALL SAL .</button>
+      ) : (
+        <span className="ml-2">CALL SAL .</span>
+      )}
     </div>
   );
 };

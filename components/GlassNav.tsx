@@ -61,7 +61,7 @@ export const GlassNav: React.FC<{
       >
         {/* Branding */}
         <div style={{ opacity: contentFade }}>
-          <BrandingElement className="w-auto" textColor={dynamicTextColor} />
+          <BrandingElement className="w-auto" textColor={dynamicTextColor} onHome={onHome} />
         </div>
 
         {/* Divider */}
