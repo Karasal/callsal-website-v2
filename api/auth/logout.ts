@@ -36,9 +36,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Clear the auth cookie
+  // Clear the auth cookie — match domain to origin
   const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
-  const domain = isProduction ? '; Domain=.callsal.app' : '';
+  const isCallsalDomain = origin.includes('callsal.app') && !origin.includes('vercel.app');
+  const domain = isCallsalDomain ? '; Domain=.callsal.app' : '';
   res.setHeader('Set-Cookie', [
     `${COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0${isProduction ? '; Secure' : ''}${domain}`
   ]);

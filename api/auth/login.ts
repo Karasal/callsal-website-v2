@@ -121,9 +121,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       { expiresIn: '7d' }
     );
 
-    // Set httpOnly cookie
+    // Set httpOnly cookie — only set Domain for callsal.app origins
     const isProduction = process.env.NODE_ENV === 'production' || process.env.VERCEL === '1';
-    const domain = isProduction ? '; Domain=.callsal.app' : '';
+    const isCallsalDomain = origin.includes('callsal.app') && !origin.includes('vercel.app');
+    const domain = isCallsalDomain ? '; Domain=.callsal.app' : '';
     res.setHeader('Set-Cookie', [
       `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${COOKIE_MAX_AGE}${isProduction ? '; Secure' : ''}${domain}`
     ]);
