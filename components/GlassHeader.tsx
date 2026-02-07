@@ -100,7 +100,7 @@ export const GlassHeader: React.FC<{
           {/* Logo with phone icon - clickable to call */}
           <a
             href="tel:905-749-0266"
-            className="bg-[#CCFF00] pl-2.5 pr-3 py-1.5 text-black font-display font-extrabold text-sm tracking-tight uppercase cursor-pointer rounded-full shadow-[0_0_15px_rgba(204,255,0,0.25),0_0_30px_rgba(204,255,0,0.1),0_0_45px_rgba(0,240,255,0.08)] hover:shadow-[0_0_25px_rgba(204,255,0,0.35),0_0_50px_rgba(204,255,0,0.15),0_0_75px_rgba(0,240,255,0.12)] transition-all flex items-center gap-2"
+            className="bg-[#CCFF00] pl-2.5 pr-3 py-1.5 text-black font-display font-extrabold text-sm tracking-tight uppercase cursor-pointer rounded-full shadow-[0_0_10px_rgba(204,255,0,0.15)] hover:shadow-[0_0_20px_rgba(204,255,0,0.5),0_0_40px_rgba(0,240,255,0.3),0_0_60px_rgba(204,255,0,0.15)] hover:-translate-y-0.5 transition-all flex items-center gap-2"
           >
             <Phone size={14} strokeWidth={2.5} />
             <span>CALL SAL</span>

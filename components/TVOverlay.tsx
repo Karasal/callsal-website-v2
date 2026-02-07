@@ -65,7 +65,7 @@ export const TVOverlay: React.FC<TVOverlayProps> = ({
 
   // Info bar: spans TV + selector, below both
   const infoWidth = tvWidth + selectorWidth + 16;
-  const infoHeight = 44;
+  const infoHeight = 72;
   const infoLeft = tvLeft;
   const infoTop = tvTop + tvHeight + 12;
 
