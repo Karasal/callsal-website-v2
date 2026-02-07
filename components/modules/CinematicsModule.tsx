@@ -496,9 +496,8 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
                 </div>
               </div>
 
-              {/* Case Study Card + Project Selector */}
+              {/* Case Study Card */}
               <div className="lg:col-span-5 flex flex-col gap-4 sm:gap-6">
-                {/* Case study info */}
                 <div className="glass p-6 sm:p-8 rounded-xl flex-1">
                   <span className="text-[9px] sm:text-[10px] font-body font-bold text-[#CCFF00] uppercase tracking-[0.3em] block mb-3">CASE STUDY</span>
                   <h4 className="text-lg sm:text-xl font-display font-extrabold text-white uppercase tracking-tighter leading-tight mb-3">{activeProject.title}</h4>
@@ -514,27 +513,6 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
                   </div>
                 </div>
 
-                {/* Project selector list */}
-                <div className="space-y-1">
-                  {projects.map((project) => (
-                    <button
-                      key={project.id}
-                      onClick={() => setActiveProject(project)}
-                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all text-left ${
-                        activeProject.id === project.id
-                          ? 'bg-white/10 border border-white/20'
-                          : 'hover:bg-white/5'
-                      }`}
-                    >
-                      <ChevronRight className={`shrink-0 transition-colors ${activeProject.id === project.id ? 'text-[#CCFF00]' : 'text-gray-600'}`} size={14} />
-                      <div className="min-w-0">
-                        <p className={`text-[10px] sm:text-[11px] font-display font-bold uppercase tracking-tight truncate ${activeProject.id === project.id ? 'text-white' : 'text-gray-400'}`}>{project.title}</p>
-                        <p className="text-[8px] sm:text-[9px] font-body text-gray-500 uppercase truncate">{project.company}</p>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-
                 <button
                   onClick={() => { onClose(); onConsultation?.(); }}
                   className="btn-primary w-full py-4 text-[9px] sm:text-[10px] tracking-[0.3em]"
@@ -542,6 +520,27 @@ export const CinematicsModule: React.FC<CinematicsModuleProps> = ({
                   BOOK A CHAT
                 </button>
               </div>
+            </div>
+
+            {/* Project selector — underneath video player */}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {projects.map((project) => (
+                <button
+                  key={project.id}
+                  onClick={() => setActiveProject(project)}
+                  className={`flex items-center gap-2 px-4 py-3 rounded-lg transition-all text-left ${
+                    activeProject.id === project.id
+                      ? 'bg-white/10 border border-white/20'
+                      : 'hover:bg-white/5 border border-transparent'
+                  }`}
+                >
+                  <ChevronRight className={`shrink-0 transition-colors ${activeProject.id === project.id ? 'text-[#CCFF00]' : 'text-gray-600'}`} size={14} />
+                  <div className="min-w-0">
+                    <p className={`text-[10px] sm:text-[11px] font-display font-bold uppercase tracking-tight truncate ${activeProject.id === project.id ? 'text-white' : 'text-gray-400'}`}>{project.title}</p>
+                    <p className="text-[8px] sm:text-[9px] font-body text-gray-500 uppercase truncate">{project.company}</p>
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
 
