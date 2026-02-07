@@ -111,7 +111,7 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 - Double RAF needed for nav indicator positioning (fonts must paint first)
 - OKLCH color space prevents muddy gradients (hue 118° = lime, hue 190° = cyan)
 
-## Current State (Session 26, Feb 6, 2026)
+## Current State (Session 27, Feb 6, 2026)
 - 3D room with camera zoom, picture frame, diorama parallax
 - CSS 3D hero title synced with mouse parallax
 - Immersive centered module panel (5 modules, horizontal selector bar)
@@ -130,6 +130,11 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 - Auth modal header fixed (black bg)
 - Hero text: lime accents, black stroke, text shadows
 - BookingOverlay mobile scroll fix
+- **Dashboard fix**: ModuleManager no longer renders on dashboard tab (was overlaying everything)
+- **Auth cookie fix**: Cookie domain now matches origin (was hardcoded to `.callsal.app`, rejected by browser on `vercel.app`)
+- "CALL SAL ." branding in nav is clickable → navigates home from dashboard
+- Module scrollbar inset from border beam (transparent border-right trick)
+- Cinematics project selector moved to horizontal bar under video player
 
 ## Known Issues
 - Duplicate content: TheArmory/VideoPortfolio in Hero.tsx (mobile) AND module files (desktop) — ~1500 lines
@@ -140,7 +145,8 @@ REDIS_URL, JWT_SECRET, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, ADMIN_EMAIL
 ## TODO
 - [ ] Visual QA on all overlays and modules
 - [ ] Performance audit (Lighthouse)
-- [ ] Auth flow end-to-end testing on Vercel
+- [x] Auth flow end-to-end testing on Vercel (cookie domain fixed)
+- [x] Admin dashboard accessible and functional
 
 ## Session History
 See [SESSION_LOG.md](SESSION_LOG.md) for detailed session-by-session development history.
